@@ -29,13 +29,15 @@ namespace MergeBoard
         private const float GuidePulseInterval = 1.5f;
 
         /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
-        private void Start()
+        private IEnumerator Start()
         {
             // PC에서 창 포커스를 잃어도 생성기 시간과 제출 피드백은 계속 진행한다.
             Application.runInBackground = true;
             // OS 동적 글꼴의 런타임 Material은 직렬화되지 않으므로 실행 시 다시 생성한다.
             if (textFont == null) throw new System.InvalidOperationException("TMP 한글 폰트가 연결되지 않았습니다.");
             foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true)) text.font = textFont;
+            yield return UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation;
+            ApplyStaticText();
             string saveKey = LocalSaveService.DefaultSaveKey;
 #if UNITY_EDITOR
             // 검증은 사용자 저장과 분리하며, SessionState는 Play Mode 재진입에도 유지된다.
@@ -66,7 +68,7 @@ namespace MergeBoard
             if (!result.Success && result.Message.Length > 0)
             {
                 if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
-                else AnimatorFeedback.ShowFloatingMessage(screenRoot, ItemWorldCenter(BoardModel.IsValidIndex(destination) ? destination : source), result.Message, textFont);
+                else AnimatorFeedback.ShowFloatingMessage(screenRoot, ItemWorldCenter(BoardModel.IsValidIndex(destination) ? destination : source), GameText.Get(result.Message), textFont);
             }
             if (result.Merged) AnimatorFeedback.PlayScale(boardView.Cells[destination].Icon.transform, "Merge");
         }
@@ -86,7 +88,7 @@ namespace MergeBoard
                 AnimatorFeedback.Fly(screenRoot, generatorWorld, ItemWorldCenter(destination), ItemStage.Seed, 2f);
                 StartCoroutine(ShowGeneratedItem(destination));
             }
-            ShowResult(result.Success ? "" : result.Message);
+            ShowResult(result.Success ? "" : GameText.Get(result.Message));
         }
 
         /// <summary>생성 비행이 끝난 뒤 도착 칸의 씨앗을 표시하고 짧게 확대한다.</summary>
@@ -123,7 +125,15 @@ namespace MergeBoard
                 AnimatorFeedback.ShowReward(screenRoot, card.TransformPoint(new Vector3(72, -78, 0)), result.Reward, textFont);
             }
             RefreshViews();
-            ShowResult(result.Success ? "+" + result.Reward + " 코인!" : "주문에 필요한 아이템이 부족합니다.");
+            ShowResult(result.Success ? GameText.Get("message.order_completed", result.Reward) : GameText.Get("message.order_insufficient"));
+        }
+
+        /// <summary>장면에 직렬화된 제목·가이드 문구를 문자열 테이블 값으로 갱신합니다.</summary>
+        private void ApplyStaticText()
+        {
+            var title = screenRoot.Find("제목")?.GetComponent<TextMeshProUGUI>();
+            if (title != null) title.text = GameText.Get("title");
+            hud.LocalizeStaticText();
         }
 
         private void ShowResult(string message) => hud.ShowMessage(Controller.SaveMessage.Length > 0 ? Controller.SaveMessage : message);

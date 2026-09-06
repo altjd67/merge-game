@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MergeBoard_en
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.StringTable
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: b7eb564827173c14ca05f8eb8e17b3fc, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 1122136064
+    m_Localized: Little Garden
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050624
+    m_Localized: Seed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050625
+    m_Localized: Sprout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050626
+    m_Localized: Flower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050627
+    m_Localized: Seed Pack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050628
+    m_Localized: '{0} Coins'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050629
+    m_Localized: Energy {0}/{1}
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050630
+    m_Localized: Max
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050631
+    m_Localized: '{0} {1}/{2}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050632
+    m_Localized: +{0} Coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050633
+    m_Localized: Get
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050634
+    m_Localized: Tap the seed pack to make a seed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050635
+    m_Localized: The device time is invalid.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050636
+    m_Localized: Tap the seed pack.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050637
+    m_Localized: Board is full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050638
+    m_Localized: Not enough energy.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050639
+    m_Localized: The seed is ready to grow.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050640
+    m_Localized: Place it on the board.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050641
+    m_Localized: An empty cell cannot be moved.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050642
+    m_Localized: Flower is the maximum level.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050643
+    m_Localized: Merge two seeds or sprouts of the same stage.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050644
+    m_Localized: Not enough items for this order.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050645
+    m_Localized: +{0} Coins!
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []

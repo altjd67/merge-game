@@ -49,7 +49,7 @@ namespace MergeBoard.Editor
             Assert(!controller.Move(3, 3).Success && !controller.Move(3, -1).Success && !controller.Move(0, 1).Success, "자기 칸·보드 밖·빈 원본 거절");
             var flowerCells = new ItemStage[63]; flowerCells[0] = flowerCells[1] = ItemStage.Flower;
             var maximumLevelRejected = new MergeGameController(new BoardModel(flowerCells)).Move(0, 1);
-            Assert(!maximumLevelRejected.Success && maximumLevelRejected.Message == "꽃은 최대 레벨입니다.", "최종 단계 합성 거절 안내");
+            Assert(!maximumLevelRejected.Success && maximumLevelRejected.Message == "message.flower_maximum", "최종 단계 합성 거절 안내 키");
             var generatorCells = new ItemStage[63]; generatorCells[31] = ItemStage.SeedPack;
             var generator = new MergeGameController(new BoardModel(generatorCells));
             Assert(generator.Generate(31, 1000).Success && generator.Board[23] == ItemStage.Seed, "체비쇼프 대각선과 동률 인덱스");
@@ -62,7 +62,7 @@ namespace MergeBoard.Editor
             fullCells[31] = ItemStage.SeedPack;
             var fullBoard = new MergeGameController(new BoardModel(fullCells));
             var rejected = fullBoard.Generate(31, 1000);
-            Assert(!rejected.Success && rejected.Message == "보드 가득 참" && fullBoard.State.Energy == 100 && fullBoard.State.EnergyRecoveryAnchorUtcSeconds == 0, "가득 찬 보드와 에너지 불변");
+            Assert(!rejected.Success && rejected.Message == "message.board_full" && fullBoard.State.Energy == 100 && fullBoard.State.EnergyRecoveryAnchorUtcSeconds == 0, "가득 찬 보드와 에너지 불변");
             fullCells[0] = ItemStage.Empty;
             var distant = new MergeGameController(new BoardModel(fullCells));
             Assert(distant.Generate(31, 1000).Success && distant.Board[0] == ItemStage.Seed, "멀리 있는 유일 빈 칸");

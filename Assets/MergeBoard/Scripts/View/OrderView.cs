@@ -71,9 +71,9 @@ namespace MergeBoard
         public void Render(int index, OrderModel order, int availableCount, bool canSubmit)
         {
             requiredItems[index].Stage = order.RequiredStage;
-            statusLabels[index].text = $"{BoardView.StageName(order.RequiredStage)} {availableCount}/{order.RequiredCount}";
-            rewardLabels[index].text = "+" + order.Reward + " 코인";
-            buttonLabels[index].text = "Get";
+            statusLabels[index].text = GameText.Get("order.status", BoardView.StageName(order.RequiredStage), availableCount, order.RequiredCount);
+            rewardLabels[index].text = GameText.Get("order.reward", order.Reward);
+            buttonLabels[index].text = GameText.Get("order.get");
             getButtons[index].interactable = canSubmit;
         }
     }

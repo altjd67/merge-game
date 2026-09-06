@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MergeBoard Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: MergeBoard
+  m_TableCollectionNameGuidString: b7eb564827173c14ca05f8eb8e17b3fc
+  m_Entries:
+  - m_Id: 1122136064
+    m_Key: title
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050624
+    m_Key: item.seed
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050625
+    m_Key: item.sprout
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050626
+    m_Key: item.flower
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050627
+    m_Key: item.seed_pack
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050628
+    m_Key: hud.coins
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050629
+    m_Key: hud.energy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050630
+    m_Key: hud.maximum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050631
+    m_Key: order.status
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050632
+    m_Key: order.reward
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050633
+    m_Key: order.get
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050634
+    m_Key: guide.generator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050635
+    m_Key: message.invalid_time
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050636
+    m_Key: message.tap_generator
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050637
+    m_Key: message.board_full
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050638
+    m_Key: message.not_enough_energy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050639
+    m_Key: message.generated
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050640
+    m_Key: message.drop_on_board
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050641
+    m_Key: message.empty_cannot_move
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050642
+    m_Key: message.flower_maximum
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050643
+    m_Key: message.merge_same_stage
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050644
+    m_Key: message.order_insufficient
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1185050645
+    m_Key: message.order_completed
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 1300713602064842802
+  references:
+    version: 2
+    RefIds:
+    - rid: 1300713602064842802
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1788702397273

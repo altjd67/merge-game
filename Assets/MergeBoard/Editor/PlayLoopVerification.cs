@@ -134,7 +134,7 @@ namespace MergeBoard.Editor
             }
             int remainingEnergy = game.Controller.State.Energy;
             ClickCell(game, 32);
-            MergeBoardVerification.Assert(game.HUD.MessageText == "보드 가득 참" && game.HUD.IsToastVisible && game.Controller.State.Energy == remainingEnergy, "가득 찬 보드 토스트와 에너지 불변");
+            MergeBoardVerification.Assert(game.HUD.MessageText == GameText.Get("message.board_full") && game.HUD.IsToastVisible && game.Controller.State.Energy == remainingEnergy, "가득 찬 보드 토스트와 에너지 불변");
             yield return 1;
             yield return 1.2;
             MergeBoardVerification.Assert(!game.HUD.IsToastVisible, "토스트 자동 숨김");

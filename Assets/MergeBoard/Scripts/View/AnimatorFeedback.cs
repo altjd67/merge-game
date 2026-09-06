@@ -47,7 +47,7 @@ namespace MergeBoard
             var text = pool.AcquireReward();
             text.font = font;
             text.fontSize = 22;
-            text.text = "+" + reward + " 코인";
+            text.text = GameText.Get("order.reward", reward);
             text.color = new Color32(174, 109, 29, 255);
             var position = (Vector2)overlay.InverseTransformPoint(targetWorld);
             return StartMotion(text.GetComponent<AnimatorFeedback>(), pool, text.rectTransform,

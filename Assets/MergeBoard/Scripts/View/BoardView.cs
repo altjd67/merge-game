@@ -99,9 +99,6 @@ namespace MergeBoard
         private void OnDisable() => CancelDrag();
 
         /// <summary>아이템 단계의 한국어 표시 이름을 반환한다.</summary>
-        public static string StageName(ItemStage stage) => stage switch
-        {
-            ItemStage.Seed => "씨앗", ItemStage.Sprout => "새싹", ItemStage.Flower => "꽃", ItemStage.SeedPack => "씨앗팩", _ => ""
-        };
+        public static string StageName(ItemStage stage) => GameText.StageName(stage);
     }
 }

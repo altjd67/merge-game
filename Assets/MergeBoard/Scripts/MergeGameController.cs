@@ -84,19 +84,19 @@ namespace MergeBoard
         /// <summary>씨앗팩 근처 빈 칸에 씨앗을 만들고 성공당 에너지 1을 차감한다. 생성 쿨타임은 없다.</summary>
         public MoveResult Generate(int generatorIndex, long now)
         {
-            if (!IsValidTime(now)) return new MoveResult(false, false, "잘못된 시간입니다.");
+            if (!IsValidTime(now)) return new MoveResult(false, false, "message.invalid_time");
             if (!BoardModel.IsValidIndex(generatorIndex) || Board[generatorIndex] != ItemStage.SeedPack)
-                return new MoveResult(false, false, "씨앗팩을 눌러주세요.");
+                return new MoveResult(false, false, "message.tap_generator");
             RefreshEnergy(now);
             int destination = Board.FindNearestEmptyCell(generatorIndex);
-            if (destination < 0) return new MoveResult(false, false, "보드 가득 참");
-            if (State.Energy == 0) return new MoveResult(false, false, "에너지가 부족합니다.");
+            if (destination < 0) return new MoveResult(false, false, "message.board_full");
+            if (State.Energy == 0) return new MoveResult(false, false, "message.not_enough_energy");
             Board.SetCell(destination, ItemStage.Seed);
             if (State.Energy == GameState.MaxEnergy) State.EnergyRecoveryAnchorUtcSeconds = now;
             State.Energy--;
             State.GeneratorGuideCompleted = true;
             Persist();
-            return new MoveResult(true, false, "씨앗이 자랄 준비를 마쳤어요.");
+            return new MoveResult(true, false, "message.generated");
         }
 
         private static bool IsValidTime(long now) => now > 0 && now <= MaximumUtcSeconds;
@@ -138,15 +138,15 @@ namespace MergeBoard
         /// <returns>이동·합성 여부와 사용자 안내.</returns>
         public MoveResult Move(int source, int destination)
         {
-            if (!BoardModel.IsValidIndex(source) || !BoardModel.IsValidIndex(destination)) return new MoveResult(false, false, "보드 안에 놓아주세요.");
+            if (!BoardModel.IsValidIndex(source) || !BoardModel.IsValidIndex(destination)) return new MoveResult(false, false, "message.drop_on_board");
             var stage = Board[source];
-            if (stage == ItemStage.Empty) return new MoveResult(false, false, "빈 칸은 이동할 수 없습니다.");
+            if (stage == ItemStage.Empty) return new MoveResult(false, false, "message.empty_cannot_move");
             if (source == destination) return new MoveResult(false, false, "");
             if (stage == ItemStage.Flower && Board[destination] == ItemStage.Flower)
-                return new MoveResult(false, false, "꽃은 최대 레벨입니다.");
+                return new MoveResult(false, false, "message.flower_maximum");
             bool merged = Board[destination] == stage && stage < ItemStage.Flower;
             if (Board[destination] != ItemStage.Empty && !merged)
-                return new MoveResult(false, false, "같은 단계의 씨앗이나 새싹을 겹쳐주세요.");
+                return new MoveResult(false, false, "message.merge_same_stage");
             Board.SetCell(destination, merged ? stage + 1 : stage);
             Board.SetCell(source, ItemStage.Empty);
             Persist();
