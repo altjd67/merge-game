@@ -57,7 +57,7 @@ namespace MergeBoard
         {
             var result = Controller.Move(source, destination);
             RefreshViews();
-            ShowResult(result.Merged ? BoardView.StageName(Board[destination]) + " 합성!" : result.Message);
+            ShowResult(result.Message);
             if (result.Merged) AnimatorFeedback.PlayScale(boardView.Cells[destination].Icon.transform, "Merge");
         }
 

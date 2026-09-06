@@ -73,7 +73,7 @@ namespace MergeBoard.Editor
             yield return 0.4;
             MergeBoardVerification.Drag(game, 7, -1);
             MergeBoardVerification.Assert(game.Board[7] == ItemStage.Seed, "보드 밖 드롭 복귀");
-            yield return 0.4;
+            yield return 2.2;
             for (int orderIndex = 0; orderIndex < 3; orderIndex++)
             {
                 var order = game.Controller.State.Orders[orderIndex];
@@ -87,6 +87,7 @@ namespace MergeBoard.Editor
                         MergeBoardVerification.Drag(game, matching[0], matching[1]);
                         var animator = game.BoardView.Cells[matching[1]].Icon.GetComponent<Animator>();
                         MergeBoardVerification.Assert(animator.GetCurrentAnimatorStateInfo(0).IsName("Merge"), "합성 Animator 재생");
+                        MergeBoardVerification.Assert(!game.HUD.MessageText.Contains("합성!"), "합성 성공 토스트 없음");
                         yield return 0.5;
                         merged = true;
                         break;

@@ -1,17 +1,17 @@
 # 작은 정원 · Merge Board MVP
 
-Unity uGUI로 만든 7열 × 9행 머지 보드입니다. 씨앗을 생성하고 합성해 주문을 완료하면 코인을 받습니다. 보드·코인·주문 완료 상태는 로컬 JSON으로 저장됩니다.
+Unity uGUI로 만든 7열 × 9행 머지 보드입니다. 씨앗을 생성하고 합성해 주문을 완료하면 코인을 받습니다. 보드·코인·주문·에너지는 로컬 JSON으로 저장되며 종료 중에도 에너지가 회복됩니다.
 
-![실제 플레이: 생성, 합성, Get 제출, Animator 피드백](docs/media/merge-board-mvp.gif)
+![실제 플레이: 씨앗팩, 에너지, 합성, Get 제출, 보드 가득 참 토스트](docs/media/merge-board-mvp.gif)
 
-실제 Play Mode에서 uGUI 이벤트로 세 주문을 완료한 기록입니다. GIF는 360×640, 약 27초이며 원본 캡처를 5fps로 묶었습니다.
+실제 Play Mode에서 uGUI 이벤트로 씨앗팩을 이동하고 세 주문을 완료한 기록입니다. 마지막에는 보드를 채워 `보드 가득 참` 토스트를 확인합니다. GIF는 360×640, 92프레임·18.4초이며 원본 캡처를 5fps로 묶었습니다.
 
 ## 실행 방법
 
 1. Unity Hub에서 이 저장소를 **Unity 6000.3.21f1**로 엽니다. 검증 환경은 Windows입니다.
 2. 패키지 해결과 컴파일이 끝날 때까지 기다립니다. 공식 **uGUI 2.0.0**을 사용합니다.
 3. [MergeBoard.unity](Assets/MergeBoard/Scenes/MergeBoard.unity)를 엽니다.
-4. Play를 누릅니다. 첫 실행은 씨앗 4개, 코인 0, 미완료 주문 3개로 시작합니다.
+4. Play를 누릅니다. 첫 실행은 씨앗 4개, 중앙 씨앗팩 1개, 에너지 100, 코인 0, 미완료 주문 3개로 시작합니다.
 
 Game View를 1080×1920 또는 같은 세로 비율로 두면 전체 배치를 편하게 볼 수 있습니다. 다른 창 크기에서는 Canvas가 전체 보드를 화면 안에 맞춥니다. 한국어는 실행 시 OS의 맑은 고딕을 사용하므로 별도 글꼴 파일을 배포하지 않습니다.
 
@@ -21,29 +21,35 @@ Windows 실행 파일은 `File > Build Profiles`에서 Windows를 선택하고 �
 
 | 조작 | 결과 |
 | --- | --- |
-| `씨앗 만들기` 클릭 | 무작위 빈 칸에 씨앗 하나 생성, 2초 충전 시작 |
+| 보드 위 `씨앗팩` 클릭 | 대각선을 포함한 최근접 빈 칸에 씨앗 하나 생성, 에너지 -1. 생성 쿨타임 없음 |
+| 씨앗팩을 빈 칸으로 드래그 | 생성기 위치 이동. 에너지 소모·합성 없음 |
+| 보드가 꽉 찼을 때 씨앗팩 클릭 | `보드 가득 참` 토스트, 생성·에너지 소모 없음 |
 | 아이템을 빈 칸으로 드래그 | 아이템 이동 |
 | 씨앗 두 개를 겹치기 | 새싹 하나로 합성 |
 | 새싹 두 개를 겹치기 | 꽃 하나로 합성 |
 | 다른 단계·꽃끼리·보드 밖에 드롭 | 상태를 바꾸지 않고 원위치로 복귀, 안내 표시 |
 | 활성화된 주문 `Get` 클릭 | 필요한 수량을 보드에서 함께 소비하고 보상 지급 |
 
+에너지는 초기·최대 100이며 100 미만일 때 2분마다 1씩 회복합니다. 추가 생성이나 재시작으로 회복 타이머가 초기화되지 않으며, 종료 중 경과 시간과 남은 초도 반영합니다. 최대 100에 도달한 뒤의 시간은 적립하지 않습니다. 에너지 0에서는 생성할 수 없습니다.
+
 주문은 새싹 1개 → 20코인, 꽃 1개 → 60코인, 꽃 2개 → 150코인입니다. 세 주문을 모두 완료하면 총 230코인입니다. 주문은 교체되지 않으며 완료한 주문의 버튼은 비활성화됩니다. 필요한 수량이 부족할 때도 `Get`은 비활성화됩니다.
 
 클릭·합성·주문 제출·보상 피드백은 **Animator**로 재생합니다. 주문 제출 시 소비한 아이템의 표시가 보드에서 해당 슬롯으로 날아갑니다. 상태 변경과 저장은 애니메이션 시작 전에 끝나므로 빠른 재클릭이나 실행 종료로 보상이 중복되지 않습니다.
+
+합성 성공 토스트는 표시하지 않고 아이템 확대와 이름 변경만 보여줍니다. 주문 버튼이 `완료`라면 저장된 완료 주문이므로 재제출할 수 없습니다. 앱 재시작은 새 게임 시작이 아니라 기존 진행 복원입니다. 신규 상태는 씨앗 4개와 씨앗팩 1개이며, GIF 마지막의 가득 찬 보드는 실패 토스트 검증을 위해 채운 별도 테스트 상태입니다.
 
 ## 구현 구조와 UI 편집
 
 | 파일·영역 | 책임 |
 | --- | --- |
-| [BoardModel / GameState / OrderModel / SaveData](Assets/MergeBoard/Scripts/Model) | 보드, 아이템 단계, 고정 주문, 코인, 저장 포맷 |
-| [MergeGameController](Assets/MergeBoard/Scripts/MergeGameController.cs) | 이동·합성·생성·Get 제출·보상·상태 변경 직후 저장 요청 |
+| [BoardModel / GameState / OrderModel / SaveData](Assets/MergeBoard/Scripts/Model) | 보드, 아이템 단계, 고정 주문, 코인, 에너지·회복 기준 시각, 저장 포맷 |
+| [MergeGameController](Assets/MergeBoard/Scripts/MergeGameController.cs) | 이동·합성·씨앗팩 생성·에너지 소모/회복·Get 제출·보상·저장 요청 |
 | [BoardView / CellView / OrderView / HUDView](Assets/MergeBoard/Scripts/View) | uGUI 표시와 입력 전달 |
 | [LocalSaveService](Assets/MergeBoard/Scripts/LocalSaveService.cs) | JSON 검증·읽기·임시 파일 기록 후 교체 |
 | [AnimatorFeedback](Assets/MergeBoard/Scripts/View/AnimatorFeedback.cs) | Animator 진행도를 동적 비행 목적지에 적용하고 임시 표시 정리 |
 | [MergeGameBootstrap](Assets/MergeBoard/Scripts/MergeGameBootstrap.cs) | 시작 시 복원, 장면 UI와 Controller 연결 |
 
-장면의 `머지 게임 > Canvas > 작은 정원` 아래에서 RectTransform과 Button을 편집할 수 있습니다. 상단 HUD, 보드 위 가로 주문 슬롯, 중앙·하단 보드 배치는 사용자가 제작한 `pkmerge-client`의 Game 씬을 참고했습니다. 해당 프로젝트의 코드·구조·아트는 가져오지 않았습니다.
+장면의 `머지 게임 > Canvas > 작은 정원` 아래에서 RectTransform과 Button을 편집할 수 있습니다. 상단 HUD, 보드 위 가로 주문 슬롯, 중앙·하단 보드 배치는 사용자가 제작한 `pkmerge-client`의 Game 씬을 참고했습니다. 추가 요청에 따라 씨앗팩의 체비쇼프 최근접 빈 칸 규칙만 확인했습니다. 해당 프로젝트의 코드·구조·아트는 가져오지 않았습니다.
 
 [AnimationClip 폴더](Assets/MergeBoard/Animations)에서 `Click`, `Merge`, `Flight`, `Reward`를, [AnimatorController](Assets/MergeBoard/Resources/MergeFeedback.controller)에서 상태 연결을 편집합니다. 비행·보상 클립은 `AnimatorFeedback.progress`를 0에서 1로 변경합니다.
 
@@ -51,9 +57,11 @@ Windows 실행 파일은 `File > Build Profiles`에서 Windows를 선택하고 �
 
 저장 파일은 `Application.persistentDataPath/merge-board-v1.json`입니다. Windows에서는 Unity Player Settings의 회사명·제품명에 따라 `%USERPROFILE%/AppData/LocalLow/<회사명>/<제품명>/` 아래에 생성됩니다.
 
-- 생성·이동·합성·주문 완료 성공 직후 저장하고 시작할 때 한 번 복원합니다.
-- 저장 대상은 63칸의 아이템 단계, 코인, 고정 주문 ID와 완료 여부입니다.
-- 드래그 표시, 애니메이션, 생성기 쿨다운은 저장하지 않습니다.
+- 생성·이동·합성·주문 완료·에너지 회복/시각 보정 직후 저장하고 시작할 때 복원합니다.
+- 내부 포맷은 버전 2입니다. 63칸의 아이템(씨앗팩 포함), 코인, 주문 ID·완료 여부, 에너지, UTC 회복 기준 시각을 저장합니다.
+- 파일 이름은 기존 저장을 찾기 위해 유지합니다. 빈 칸이 있는 버전 1은 진행을 보존하고 씨앗팩·에너지 100을 추가합니다. 꽉 찬 구버전 보드의 별도 변환·지급 보류는 사용자 요청으로 제외했습니다.
+- 드래그 표시·애니메이션·토스트는 저장하지 않습니다. 생성기 쿨다운은 제거했습니다.
+- 로컬 UTC 시계를 사용합니다. 과거 시각에는 회복 없이 기준을 보정하며 시스템 시계 조작 방지는 범위 밖입니다.
 - 파일 누락·손상·미지원 버전·잘못된 데이터는 기본 상태로 시작합니다.
 - 쓰기 실패는 화면에 안내하며 현재 플레이 상태와 기존 저장 파일을 유지합니다.
 
@@ -65,14 +73,18 @@ Windows 실행 파일은 `File > Build Profiles`에서 Windows를 선택하고 �
 | --- | --- |
 | unity-verify: Editor 연결·컴파일·Console | 성공, Error 0건·관련 Warning 0건 |
 | 규칙 검증 | 63칸·초기 배치·좌표 경계·이동·2단계 합성·최종 단계 거절 PASS |
-| 생성기·주문 검증 | 2초 경계·빈/가득 찬 보드·수량 부족·정확한 소비·중복 보상 방지 PASS |
-| Play Mode 전체 루프 | 실제 uGUI 이벤트와 시간 경과로 세 주문 완료·230코인 PASS |
+| 씨앗팩·주문 검증 | 체비쇼프 대각선·동률·가장자리·유일 빈 칸, 연속 생성, 수량·보상·중복 방지 PASS |
+| 에너지 규칙 | 성공당 -1, 0 거절, 119/120/240초, 최대 100, 남은 초·추가 소모 타이머 보존, 시각 역행·장기 미접속 PASS |
+| Play Mode 전체 루프 | 씨앗팩 이동·드래그 후 클릭 억제·연속 생성·세 주문·230코인·가득 참 토스트와 자동 숨김 PASS |
 | Animator 검증 | 클릭·합성 상태 재생, 비행·보상 진행도, 효과 정리 PASS |
 | 저장 실패 경로 | 변경 직후 파일 일치, 손상·버전·칸·단계·주문·코인 검증, 쓰기 실패 시 기존 파일 보존 PASS |
-| Play Mode 종료·재진입 | 보드·코인·주문 상태 일치 PASS |
+| Play Mode 종료·재진입 | 씨앗팩 위치·보드·코인·주문·에너지·회복 기준 일치 PASS |
+| 오프라인 회복 | 주입 시각 119/120/250초 및 반복 복원 PASS. 실제 Play Mode 시작에서도 250초 전 50 → 52/100 확인 |
 | Windows Development Build | 빌드 성공, Error 0건·Warning 0건 |
-| Windows 실행 파일 두 번 실행 | 격리 파일의 씨앗 위치·230코인·주문 3개 완료 상태 일치 PASS |
+| Windows 실행 파일 두 번 실행 | 격리 파일의 씨앗팩·보드·230코인·주문·오프라인 에너지·회복 기준 일치 PASS |
 | mvp-review | 최종 Critical 없음·Warning 없음 |
+
+회복 경계는 시스템 시계를 변경하지 않고 Controller에 UTC 초를 주입해 검증했습니다. 오프라인 시작 검증은 과거 기준 시각을 가진 격리 저장으로 재실행했습니다. 실제 2분을 기다리는 장시간 수동 관찰은 별도로 수행하지 않았습니다.
 
 Windows 실행 파일의 재시작 검증은 `-batchmode -nographics`로 수행했습니다. 실제 UI와 애니메이션의 시각 확인 및 GIF 캡처는 Editor Play Mode에서 수행했습니다. 모바일·다른 OS는 검증 범위에서 제외했습니다.
 
@@ -107,7 +119,17 @@ unity-cli editor stop
 unity-cli exec 'MergeBoard.Editor.SaveVerification.EndIsolatedPlay(); return true;'
 ```
 
-개발 빌드의 독립 프로세스 검증은 [verify-standalone.ps1](docs/tools/verify-standalone.ps1)에 실행 파일과 격리 저장 파일을 전달합니다. 일반 빌드에는 검증 경로 재정의와 복원 상태 로그가 포함되지 않습니다.
+실제 오프라인 회복 재현은 Play Mode 밖에서 아래 첫 줄로 250초 전 에너지 50의 격리 저장을 준비합니다.
+
+```powershell
+unity-cli exec 'MergeBoard.Editor.SaveVerification.PrepareOfflinePlay(); return true;'
+unity-cli editor play --wait
+unity-cli exec 'MergeBoard.Editor.SaveVerification.VerifyPlayReload(); return true;'
+unity-cli editor stop
+unity-cli exec 'MergeBoard.Editor.SaveVerification.EndIsolatedPlay(); return true;'
+```
+
+개발 빌드의 독립 프로세스 검증은 [verify-standalone.ps1](docs/tools/verify-standalone.ps1)에 실행 파일과 버전 2의 격리 저장 파일을 전달합니다. 일반 빌드에는 검증 경로 재정의와 복원 상태 로그가 포함되지 않습니다.
 
 ```powershell
 .\docs\tools\verify-standalone.ps1 -PlayerPath .\Builds\MergeBoard\MergeBoard.exe -SavePath <격리된-progress.json-경로>
@@ -118,7 +140,7 @@ unity-cli exec 'MergeBoard.Editor.SaveVerification.EndIsolatedPlay(); return tru
 
 기획 기준은 [MVP_SPEC.md](MVP_SPEC.md), 구현 설계는 [설계 문서](docs/design/merge-board-mvp-design.md)입니다. 변수·함수 이름은 영어, 설명과 필요한 XML summary는 한국어로 작성했습니다.
 
-서버·로그인·결제·광고·상점·인벤토리·튜토리얼·이벤트·추가 아이템·주문 무한 갱신·밸런싱·고품질 아트·사운드는 의도적으로 제외했습니다.
+서버·로그인·결제·광고·상점·인벤토리·튜토리얼·이벤트·추가 합성 체인·주문 무한 갱신·밸런싱·고품질 아트·사운드·에너지 구매·시계 조작 방지는 제외했습니다.
 
 | 커밋 | 내용 |
 | --- | --- |
@@ -129,5 +151,9 @@ unity-cli exec 'MergeBoard.Editor.SaveVerification.EndIsolatedPlay(); return tru
 | `1e4fb86` | uGUI 전환, 생성기·주문·보상 |
 | `0c3181c` | 로컬 저장·복원과 실패 검증 |
 | `899c158` | Animator 피드백과 전체 플레이·빌드 검증 |
+| `a7841ac` | 씨앗팩·에너지 설계 문서 단독 갱신 |
+| `634fa89` | 확정 기획 동기화, 구버전 지급 보류 제외 |
+| `dc98de1` | 씨앗팩·에너지 소모·오프라인 회복·저장 |
+| `c8af44c` | 씨앗팩 입력·에너지 HUD·토스트·실제 플레이 검증 |
 
 모든 Unity 에셋은 대응하는 `.meta`와 함께 관리합니다. `Library/`, `Logs/`, `Temp/`, `Obj/`, `UserSettings/`, `Builds/`는 커밋하지 않습니다.
