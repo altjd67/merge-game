@@ -27,6 +27,8 @@ namespace MergeBoard
         private float nextGuidePulseAt;
         private long lastHudRenderUtcSecond = long.MinValue;
         private const float GuidePulseInterval = 1.5f;
+        private const float InitialGuideDelay = 0.5f;
+        private const float GeneratedItemFlightSpeed = 2f;
 
         /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
         private async UniTaskVoid Start()
@@ -53,7 +55,7 @@ namespace MergeBoard
             boardView.Clicked += HandleGenerate;
             orderView.GetClicked += HandleOrder;
             RefreshViews();
-            nextGuidePulseAt = Time.unscaledTime + 0.5f;
+            nextGuidePulseAt = Time.unscaledTime + InitialGuideDelay;
             if (loadMessage.Length > 0) hud.ShowMessage(loadMessage);
             else if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
 #if DEVELOPMENT_BUILD
@@ -86,7 +88,7 @@ namespace MergeBoard
             if (result.Success && destination >= 0)
             {
                 boardView.Cells[destination].SetItemVisible(false);
-                AnimatorFeedback.Fly(screenRoot, generatorWorld, ItemWorldCenter(destination), ItemStage.Seed, 2f);
+                AnimatorFeedback.Fly(screenRoot, generatorWorld, ItemWorldCenter(destination), ItemStage.Seed, GeneratedItemFlightSpeed);
                 ShowGeneratedItem(destination);
             }
             ShowResult(result.Success ? "" : GameText.Get(result.Message));
@@ -224,9 +226,9 @@ namespace MergeBoard
             boardView.Configure(cells, screenRoot);
             var ordersRoot = UIFactory.CreateRect(screenRoot, "주문 목록", new Vector2(16, 72), new Vector2(448, 122));
             orderView = ordersRoot.gameObject.AddComponent<OrderView>();
-            var cards = new RectTransform[3]; var buttons = new Button[3]; var labels = new TextMeshProUGUI[3];
+            var cards = new RectTransform[GameState.OrderTemplateCount]; var buttons = new Button[GameState.OrderTemplateCount]; var labels = new TextMeshProUGUI[GameState.OrderTemplateCount];
             var initial = new GameState();
-            for (int index = 0; index < 3; index++)
+            for (int index = 0; index < GameState.OrderTemplateCount; index++)
             {
                 var order = initial.Orders[index];
                 cards[index] = UIFactory.CreateRect(ordersRoot, order.Id, new Vector2(index * 152, 0), new Vector2(144, 122));
