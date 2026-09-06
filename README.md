@@ -21,7 +21,11 @@ Windows 실행 파일은 `File > Build Profiles`에서 Windows를 선택하고 �
 
 ## WebGL 공개 배포
 
-`main` 브랜치에 변경을 push하면 GitHub Actions가 WebGL 빌드를 생성하고 GitHub Pages에 배포합니다. 최초 한 번 GitHub 저장소의 **Settings > Pages > Build and deployment > Source**를 **GitHub Actions**로 선택하고, Actions secrets에 `UNITY_LICENSE`를 등록해야 합니다. Unity Personal 라이선스 활성화 파일 또는 Unity 라이선스 문자열을 이 시크릿에 넣습니다.
+`main` 브랜치에 변경을 push하면 GitHub Actions가 WebGL 빌드를 생성하고 GitHub Pages에 배포합니다. 최초 한 번 GitHub 저장소의 **Settings > Pages > Build and deployment > Source**를 **GitHub Actions**로 선택하고, Actions secrets에 아래 값을 등록해야 합니다.
+
+- `UNITY_LICENSE`: Unity Personal 라이선스 활성화 파일(`.ulf`) 전체 내용
+- `UNITY_EMAIL`: Unity 계정 이메일
+- `UNITY_PASSWORD`: Unity 계정 비밀번호
 
 배포 주소는 `https://altjd67.github.io/merge-game/`입니다. 배포 후 각 플레이어의 진행 상태는 서버가 아닌 자신의 브라우저 IndexedDB에 저장됩니다. 브라우저 사이트 데이터 삭제, 다른 브라우저 사용, 시크릿 모드에서는 진행 상태가 유지되지 않을 수 있습니다.
 
