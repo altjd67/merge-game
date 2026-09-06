@@ -24,6 +24,7 @@ namespace MergeBoard
         public int GeneratorGuidePulseCount { get; private set; }
         [SerializeField] private TMP_FontAsset textFont;
         private float nextGuidePulseAt;
+        private long lastHudRenderUtcSecond = long.MinValue;
         private const float GuidePulseInterval = 1.5f;
 
         /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
@@ -112,7 +113,7 @@ namespace MergeBoard
                 var order = Controller.State.Orders[index];
                 orderView.Render(index, order, Board.FindCells(order.RequiredStage).Count, !boardView.IsDragging && Controller.CanSubmit(index));
             }
-            RenderHUD();
+            RenderHUD(true);
             hud.RenderGeneratorGuide(!Controller.State.GeneratorGuideCompleted);
         }
 
@@ -128,8 +129,13 @@ namespace MergeBoard
             PlayGeneratorGuide();
         }
 
-        private void RenderHUD() => hud.Render(Controller.State.Coins, Controller.State.Energy, GameState.MaxEnergy,
-            Controller.RecoveryRemaining(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
+        private void RenderHUD(bool force = false)
+        {
+            long now = System.DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if (!force && now == lastHudRenderUtcSecond) return;
+            hud.Render(Controller.State.Coins, Controller.State.Energy, GameState.MaxEnergy, Controller.RecoveryRemaining(now));
+            lastHudRenderUtcSecond = now;
+        }
 
         /// <summary>첫 씨앗 생성 전까지 씨앗팩을 Animator로 주기적으로 강조한다.</summary>
         private void PlayGeneratorGuide()

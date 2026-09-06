@@ -32,7 +32,7 @@ namespace MergeBoard
         /// <summary>첫 생성 성공 전 씨앗팩 사용 안내의 표시 여부를 갱신한다.</summary>
         public void RenderGeneratorGuide(bool visible)
         {
-            if (generatorGuideRoot != null) generatorGuideRoot.SetActive(visible);
+            if (generatorGuideRoot != null && generatorGuideRoot.activeSelf != visible) generatorGuideRoot.SetActive(visible);
         }
 
         /// <summary>규칙 계층에서 전달받은 코인·에너지·다음 회복 초를 표시한다.</summary>
