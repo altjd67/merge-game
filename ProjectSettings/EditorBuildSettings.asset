@@ -4,6 +4,9 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/MergeBoard/Scenes/MergeBoard.unity
+    guid: 3a2888956f5abc445b1460ac21248579
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
