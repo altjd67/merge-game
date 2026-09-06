@@ -199,5 +199,28 @@ namespace MergeBoard.Editor
             EditorSceneManager.SaveScene(game.gameObject.scene);
             FeedbackAssetBuilder.PrepareFeedback();
         }
+
+        /// <summary>기존 장면 배치를 유지하며 첫 씨앗팩 터치 안내만 추가한다.</summary>
+        [MenuItem("머지 MVP/씨앗팩 가이드 준비")]
+        public static void PrepareGeneratorGuide()
+        {
+            var game = UnityEngine.Object.FindFirstObjectByType<MergeGameBootstrap>();
+            Assert(!Application.isPlaying && game != null && !game.gameObject.scene.isDirty, "저장된 MVP 장면에서 가이드 변경");
+            var root = game.ScreenRoot;
+            Assert(root.Find("씨앗팩 가이드") == null, "씨앗팩 가이드 중복 생성 방지");
+            var guide = UIFactory.CreateRect(root, "씨앗팩 가이드", new Vector2(94, 196), new Vector2(292, 30));
+            var background = guide.gameObject.AddComponent<UnityEngine.UI.Image>();
+            background.color = new Color32(82, 139, 77, 235); background.raycastTarget = false;
+            var text = UIFactory.CreateText(guide, "문구", new Vector2(6, 0), new Vector2(280, 30), "씨앗팩을 터치해 씨앗을 만들어보세요", 13, TextAnchor.MiddleCenter);
+            text.color = Color.white;
+            var hud = game.HUD;
+            var serialized = new SerializedObject(hud);
+            serialized.FindProperty("generatorGuideRoot").objectReferenceValue = guide.gameObject;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(hud);
+            EditorSceneManager.MarkSceneDirty(game.gameObject.scene);
+            EditorSceneManager.SaveScene(game.gameObject.scene);
+            AssetDatabase.SaveAssets();
+        }
     }
 }

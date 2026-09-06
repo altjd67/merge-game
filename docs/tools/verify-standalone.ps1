@@ -9,7 +9,7 @@ $savePath = (Resolve-Path -LiteralPath $SavePath).Path
 $logRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot ('../../Logs/StandaloneVerification/' + [Guid]::NewGuid().ToString('N'))))
 New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 $expected = Get-Content -Raw -LiteralPath $savePath | ConvertFrom-Json
-if ($expected.version -ne 2) { throw '에너지 검증에는 버전 2의 격리 저장 파일이 필요합니다.' }
+if ($expected.version -ne 3) { throw '반복 주문·에너지 검증에는 버전 3의 격리 저장 파일이 필요합니다.' }
 $previousPath = $env:MERGE_BOARD_VERIFY_SAVE
 try {
     $env:MERGE_BOARD_VERIFY_SAVE = $savePath
@@ -30,7 +30,7 @@ try {
             }
             if (-not $restoredLine) { throw "시작 상태 기록 누락: $run" }
             $actual = $restoredLine.Substring('MVP_RESTORED '.Length) | ConvertFrom-Json
-            if ($actual.version -ne 2 -or $actual.coins -ne $expected.coins -or ($actual.cells -join ',') -ne ($expected.cells -join ',') -or ($actual.completedOrders -join ',') -ne ($expected.completedOrders -join ',') -or ($actual.orderIds -join ',') -ne ($expected.orderIds -join ',')) {
+            if ($actual.version -ne 3 -or $actual.coins -ne $expected.coins -or ($actual.cells -join ',') -ne ($expected.cells -join ',') -or ($actual.completedOrders -join ',') -ne ($expected.completedOrders -join ',') -or ($actual.orderIds -join ',') -ne ($expected.orderIds -join ',')) {
                 throw "실행 파일 복원 상태 불일치: $run"
             }
             $observedAt = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds()

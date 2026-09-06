@@ -18,6 +18,10 @@ namespace MergeBoard
         public RectTransform ScreenRoot => screenRoot;
         public MergeGameController Controller { get; private set; }
         private Font runtimeFont;
+        /// <summary>검증에서 씨앗팩 강조 재생 여부를 확인하기 위한 누적 횟수다.</summary>
+        public int GeneratorGuidePulseCount { get; private set; }
+        private float nextGuidePulseAt;
+        private const float GuidePulseInterval = 1.5f;
 
         /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
         private void Start()
@@ -45,6 +49,7 @@ namespace MergeBoard
             boardView.Clicked += HandleGenerate;
             orderView.GetClicked += HandleOrder;
             RefreshViews();
+            nextGuidePulseAt = Time.unscaledTime + 0.5f;
             if (loadMessage.Length > 0) hud.ShowMessage(loadMessage);
             else if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
 #if DEVELOPMENT_BUILD
@@ -105,18 +110,38 @@ namespace MergeBoard
                 orderView.Render(index, order, Board.FindCells(order.RequiredStage).Count, !boardView.IsDragging && Controller.CanSubmit(index));
             }
             RenderHUD();
+            hud.RenderGeneratorGuide(!Controller.State.GeneratorGuideCompleted);
         }
 
         private void Update()
         {
             if (Controller == null) return;
-            if (Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()) && Controller.SaveMessage.Length > 0)
-                hud.ShowMessage(Controller.SaveMessage);
+            if (Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()))
+            {
+                RefreshViews();
+                if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
+            }
             RenderHUD();
+            PlayGeneratorGuide();
         }
 
         private void RenderHUD() => hud.Render(Controller.State.Coins, Controller.State.Energy, GameState.MaxEnergy,
             Controller.RecoveryRemaining(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
+
+        /// <summary>첫 씨앗 생성 전까지 씨앗팩을 Animator로 주기적으로 강조한다.</summary>
+        private void PlayGeneratorGuide()
+        {
+            bool visible = !Controller.State.GeneratorGuideCompleted;
+            hud.RenderGeneratorGuide(visible);
+            if (!visible || boardView.IsDragging || Time.unscaledTime < nextGuidePulseAt) return;
+            var generators = Board.FindCells(ItemStage.SeedPack);
+            if (generators.Count > 0)
+            {
+                AnimatorFeedback.PlayScale(boardView.Cells[generators[0]].Icon.transform, "Click");
+                GeneratorGuidePulseCount++;
+            }
+            nextGuidePulseAt = Time.unscaledTime + GuidePulseInterval;
+        }
 
         private void OnApplicationFocus(bool hasFocus) { if (!hasFocus) boardView?.CancelDrag(); }
 
@@ -173,8 +198,13 @@ namespace MergeBoard
             background.color = new Color32(36, 49, 39, 235); background.raycastTarget = false;
             var message = UIFactory.CreateText(toast, "안내", new Vector2(8, 0), new Vector2(284, 52), "", 16, TextAnchor.MiddleCenter);
             message.color = Color.white;
+            var guide = UIFactory.CreateRect(screenRoot, "씨앗팩 가이드", new Vector2(94, 196), new Vector2(292, 30));
+            var guideBackground = guide.gameObject.AddComponent<Image>();
+            guideBackground.color = new Color32(82, 139, 77, 235); guideBackground.raycastTarget = false;
+            var guideText = UIFactory.CreateText(guide, "문구", new Vector2(6, 0), new Vector2(280, 30), "씨앗팩을 터치해 씨앗을 만들어보세요", 13, TextAnchor.MiddleCenter);
+            guideText.color = Color.white;
             hud = screenRoot.gameObject.AddComponent<HUDView>();
-            hud.Configure(coins, energy, recovery, message, toast.gameObject);
+            hud.Configure(coins, energy, recovery, message, toast.gameObject, guide.gameObject);
             if (FindFirstObjectByType<EventSystem>() == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule)).transform.SetParent(transform, false);
             boardView.Render(initial.Board);

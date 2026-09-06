@@ -62,6 +62,9 @@ namespace MergeBoard.Editor
         {
             yield return 0.6;
             MergeBoardVerification.Assert(game.HUD.EnergyText == "에너지 100/100", "초기 에너지 HUD");
+            MergeBoardVerification.Assert(game.HUD.IsGeneratorGuideVisible && !game.Controller.State.GeneratorGuideCompleted, "신규 저장 씨앗팩 가이드");
+            var guideAnimator = game.BoardView.Cells[31].Icon.GetComponent<Animator>();
+            MergeBoardVerification.Assert(game.GeneratorGuidePulseCount > 0 && guideAnimator.runtimeAnimatorController != null, "씨앗팩 가이드 Animator 강조");
             MergeBoardVerification.Drag(game, 31, 32);
             MergeBoardVerification.Assert(game.Board[32] == ItemStage.SeedPack && game.Controller.State.Energy == 100, "씨앗팩 드래그 이동 무소모");
             MergeBoardVerification.Drag(game, 32, 32);
@@ -69,6 +72,7 @@ namespace MergeBoard.Editor
             MergeBoardVerification.Assert(game.Controller.State.Energy == 100, "드래그 후 중복 클릭 억제");
             ClickCell(game, 0);
             MergeBoardVerification.Assert(game.Controller.State.Energy == 100, "일반 아이템 클릭 무소모");
+            MergeBoardVerification.Assert(game.HUD.IsGeneratorGuideVisible, "일반 아이템 클릭은 가이드 유지");
             MergeBoardVerification.Drag(game, 0, 7);
             yield return 0.4;
             MergeBoardVerification.Drag(game, 7, -1);
@@ -96,6 +100,7 @@ namespace MergeBoard.Editor
                     int before = game.Board.FindCells(ItemStage.Seed).Count;
                     int energyBefore = game.Controller.State.Energy;
                     ClickCell(game, 32);
+                    MergeBoardVerification.Assert(game.Controller.State.GeneratorGuideCompleted && !game.HUD.IsGeneratorGuideVisible, "첫 생성 성공으로 가이드 종료");
                     ClickCell(game, 32);
                     MergeBoardVerification.Assert(game.Board.FindCells(ItemStage.Seed).Count == before + 2 && game.Controller.State.Energy == energyBefore - 2, "씨앗팩 연속 클릭과 에너지 차감");
                     MergeBoardVerification.Assert(game.BoardView.Cells[32].Icon.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Click"), "생성기 클릭 Animator");
