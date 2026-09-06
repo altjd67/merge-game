@@ -26,6 +26,7 @@ namespace MergeBoard.Editor
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(path, true) };
             AssetDatabase.SaveAssets();
             PrepareUGUI();
+            FeedbackAssetBuilder.PrepareFeedback();
         }
 
         /// <summary>보드·이동·합성의 성공 경로와 경계·실패 경로를 검사한다.</summary>
@@ -108,12 +109,9 @@ namespace MergeBoard.Editor
             ExecuteEvents.Execute(cell.gameObject, evt, ExecuteEvents.endDragHandler);
         }
 
-        /// <summary>최초 uGUI 전환 시 글꼴과 편집 가능한 UI 계층을 현재 MVP 장면에 저장한다.</summary>
+        /// <summary>최초 uGUI 전환 시 편집 가능한 UI 계층을 현재 MVP 장면에 저장한다.</summary>
         public static void PrepareUGUI()
         {
-            const string fontPath = "Assets/MergeBoard/Resources/KoreanFont.fontsettings";
-            if (AssetDatabase.LoadAssetAtPath<Font>(fontPath) == null)
-                AssetDatabase.CreateAsset(Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Arial" }, 32), fontPath);
             var game = UnityEngine.Object.FindFirstObjectByType<MergeGameBootstrap>();
             Assert(!Application.isPlaying && game != null, "MVP 장면 준비");
             game.BuildUI();

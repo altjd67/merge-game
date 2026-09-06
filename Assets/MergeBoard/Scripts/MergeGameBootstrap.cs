@@ -19,8 +19,11 @@ namespace MergeBoard
         public MergeGameController Controller { get; private set; }
         private Font runtimeFont;
 
+        /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
         private void Start()
         {
+            // PC에서 창 포커스를 잃어도 생성기 시간과 제출 피드백은 계속 진행한다.
+            Application.runInBackground = true;
             // OS 동적 글꼴의 런타임 Material은 직렬화되지 않으므로 실행 시 다시 생성한다.
             runtimeFont = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Arial" }, 32);
             foreach (var text in GetComponentsInChildren<Text>(true)) text.font = runtimeFont;
@@ -28,6 +31,10 @@ namespace MergeBoard
 #if UNITY_EDITOR
             // 검증은 사용자 저장과 분리하며, SessionState는 Play Mode 재진입에도 유지된다.
             savePath = UnityEditor.SessionState.GetString("MergeBoard.VerificationSavePath", savePath);
+#elif DEVELOPMENT_BUILD
+            // 개발 빌드 재실행 검증만 별도 파일을 사용하며 일반 빌드에는 포함되지 않는다.
+            string verificationPath = System.Environment.GetEnvironmentVariable("MERGE_BOARD_VERIFY_SAVE");
+            if (!string.IsNullOrEmpty(verificationPath)) savePath = verificationPath;
 #endif
             var saveService = new LocalSaveService(savePath);
             Controller = new MergeGameController(saveService.Load(), saveService);
@@ -37,27 +44,47 @@ namespace MergeBoard
             orderView.GetClicked += HandleOrder;
             RefreshViews();
             if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
+#if DEVELOPMENT_BUILD
+            Debug.Log("MVP_RESTORED " + JsonUtility.ToJson(SaveData.FromState(Controller.State)));
+#endif
         }
 
+        /// <summary>드롭 규칙을 처리하고 저장 결과 및 합성 표시를 갱신한다.</summary>
         private void HandleDrop(int source, int destination)
         {
             var result = Controller.Move(source, destination);
             RefreshViews();
             ShowResult(result.Merged ? BoardView.StageName(Board[destination]) + " 합성!" : result.Message);
+            if (result.Merged) AnimatorFeedback.PlayScale(boardView.Cells[destination].Icon.transform, "Merge");
         }
 
+        /// <summary>생성 명령과 저장을 완료한 뒤 클릭 피드백을 재생한다.</summary>
         private void HandleGenerate()
         {
             if (boardView.IsDragging) return;
             var result = Controller.Generate(Time.unscaledTimeAsDouble);
+            if (result.Success) AnimatorFeedback.PlayScale(hud.GenerateButton.transform, "Click");
             RefreshViews();
             ShowResult(result.Message);
         }
 
+        /// <summary>주문 상태를 먼저 확정·저장하고 소비된 아이템의 표시만 슬롯으로 비행시킨다.</summary>
         private void HandleOrder(int orderIndex)
         {
             if (boardView.IsDragging) return;
             var result = Controller.SubmitOrder(orderIndex);
+            if (result.Success)
+            {
+                AnimatorFeedback.PlayScale(orderView.GetButtons[orderIndex].transform, "Click");
+                var card = orderView.Cards[orderIndex];
+                Vector3 destination = card.TransformPoint(new Vector3(72, -26, 0));
+                foreach (int index in result.ConsumedCells)
+                {
+                    var icon = boardView.Cells[index].Icon.rectTransform;
+                    AnimatorFeedback.Fly(screenRoot, icon.TransformPoint(icon.rect.center), destination, Controller.State.Orders[orderIndex].RequiredStage);
+                }
+                AnimatorFeedback.ShowReward(screenRoot, card.TransformPoint(new Vector3(72, -78, 0)), result.Reward, runtimeFont);
+            }
             RefreshViews();
             ShowResult(result.Success ? "+" + result.Reward + " 코인!" : "주문에 필요한 아이템이 부족합니다.");
         }
@@ -108,8 +135,8 @@ namespace MergeBoard
             var cells = new CellView[BoardModel.CellCount];
             for (int index = 0; index < cells.Length; index++)
             {
-                var cell = UIFactory.CreateRect(boardRoot, "칸 " + index, new Vector2(index % 7 * 64, index / 7 * 64), new Vector2(60, 60));
-                cell.gameObject.AddComponent<Image>().color = (index % 7 + index / 7) % 2 == 0 ? new Color32(222, 231, 210, 255) : new Color32(210, 222, 198, 255);
+                var cell = UIFactory.CreateRect(boardRoot, "칸 " + index, new Vector2(index % BoardModel.Columns * BoardView.CellPitch, index / BoardModel.Columns * BoardView.CellPitch), new Vector2(BoardView.CellSize, BoardView.CellSize));
+                cell.gameObject.AddComponent<Image>().color = (index % BoardModel.Columns + index / BoardModel.Columns) % 2 == 0 ? new Color32(222, 231, 210, 255) : new Color32(210, 222, 198, 255);
                 var icon = UIFactory.CreateItem(cell, "아이템", Vector2.zero, ItemStage.Empty);
                 var label = UIFactory.CreateText(cell, "이름", new Vector2(0, 44), new Vector2(60, 16), "", 10, TextAnchor.MiddleCenter);
                 cells[index] = cell.gameObject.AddComponent<CellView>();

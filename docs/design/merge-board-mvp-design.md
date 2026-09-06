@@ -75,7 +75,6 @@ Controller는 시간 값을 받아 생성 가능 여부를 판정한다. View의
 | Assets/MergeBoard/Scripts/View/CellView.cs | 한 칸의 아이템·이름과 uGUI 드래그 이벤트 전달. |
 | Assets/MergeBoard/Scripts/View/ItemGraphic.cs | 외부 아트 없이 씨앗·새싹·꽃을 그리는 uGUI Graphic. |
 | Assets/MergeBoard/Scripts/View/UIFactory.cs | 장면 생성에 반복되는 uGUI 요소 구성. |
-| Assets/MergeBoard/Resources/KoreanFont.fontsettings | PC 한국어 동적 글꼴 설정. |
 | Packages/manifest.json, Packages/packages-lock.json | 사용자가 승인한 공식 uGUI 패키지 선언·해결 결과. |
 | Assets/MergeBoard/Animations/ | 클릭·합성·비행·보상 AnimationClip과 AnimatorController. 모두 .meta를 포함한다. |
 | Assets/MergeBoard/Scripts/MergeGameBootstrap.cs | 장면 UI 구성과 서비스 초기화, 최초 복원, 입력 연결. |
@@ -116,7 +115,7 @@ C# 변경 후에는 unity-verify의 status → editor refresh --compile → cons
 
 - Order03은 보드에 꽃 2개가 있으면 Get을 활성화하고 클릭 시 함께 소비·비행하는 방식으로 사용자 확정됐다. 동일한 제출 방식을 세 주문에 적용한다.
 - 초기 아이템은 첫 행의 씨앗 4개, 코인은 0, 생성기 대기시간은 실행마다 초기화하는 안이다. 기획에 명시되지 않은 초기값임을 구현 전에 알린다.
-- UI는 사용자 요청에 따라 uGUI로 확정했고 공식 패키지 추가도 승인됐다. JSON 로컬 파일을 사용하고, Editor 생성 도구로 만든 UI를 장면에 저장한다. 실제 Editor에서 한국어 글꼴 표시와 포인터 동작을 확인하며, 필요한 외부 에셋·패키지가 생기면 별도 승인을 받는다.
+- UI는 사용자 요청에 따라 uGUI로 확정했고 공식 패키지 추가도 승인됐다. JSON 로컬 파일을 사용하고, Editor 생성 도구로 만든 UI를 장면에 저장한다. 한국어 글꼴은 실행 시 OS 글꼴로 생성하고 장면에는 Unity 기본 글꼴을 참조한다. 포트폴리오 실행 기준은 Windows의 맑은 고딕이며 글꼴 파일을 배포하지 않는다.
 - 기획의 `빈 보드 처리`는 빈 보드의 생성 성공과 생성기 절의 가득 찬 보드 거절을 모두 검증한다.
 - 저장 포맷 버전 1 이전 데이터는 없으며 알 수 없는 버전은 기본 상태로 시작한다. 향후 마이그레이션 기능은 이번 범위에서 제외한다.
 - 최초 설계 시 Unity 연결이 없었으나 사용자 요구사항 확정 후 D:/merge-game의 Unity 6000.3.21f1 연결이 ready임을 확인했다. 구현 및 unity-verify를 진행한다.

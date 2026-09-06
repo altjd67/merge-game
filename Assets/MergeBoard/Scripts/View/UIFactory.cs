@@ -21,7 +21,7 @@ namespace MergeBoard
         public static Text CreateText(Transform parent, string name, Vector2 position, Vector2 size, string content, int fontSize, TextAnchor alignment = TextAnchor.MiddleLeft)
         {
             var text = CreateRect(parent, name, position, size).gameObject.AddComponent<Text>();
-            text.font = Resources.Load<Font>("KoreanFont");
+            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             text.fontSize = fontSize;
             text.text = content;
             text.color = new Color32(47, 65, 51, 255);
