@@ -14,10 +14,17 @@
 
 - 보드: 7열 × 9행, 총 63칸
 - 핵심 루프: 생성 → 드래그 → 합성 → 주문 제출 → 보상
-- 저장 대상: 보드, 코인, 주문 완료 상태
+- 저장 대상: 씨앗팩을 포함한 보드, 코인, 슬롯별 현재 주문, 에너지·회복 기준 시각, 씨앗팩 안내 완료 상태
 - MVP 제외 범위: 서버, 로그인, 결제, 광고, 상점, 튜토리얼, 과도한 아이템·주문 확장
 
 명시적으로 요청되지 않은 기능은 추가하지 않는다.
+
+## 현재 프로젝트 기준
+
+- Unity Editor 기준 버전은 `6000.3.21f1`이며, 실행 장면은 `Assets/MergeBoard/Scenes/MergeBoard.unity`다.
+- UI는 uGUI와 TextMeshPro를 사용한다. 이미 설치된 패키지의 업그레이드·삭제·추가는 사용자 승인 없이 하지 않는다.
+- 런타임 코드는 `Assets/MergeBoard/Scripts/`에 두고 `MergeBoard` 네임스페이스를 사용한다. Editor 전용 자동화·검증 코드는 `Assets/MergeBoard/Editor/`에 둔다.
+- 화면 문구는 런타임 하드코딩 대신 `GameText`와 `Assets/MergeBoard/Localization/`의 한국어·영어 테이블을 사용한다. 새 문구를 추가하면 두 언어 테이블을 함께 갱신한다.
 
 ## 작업 전 확인
 
@@ -42,6 +49,7 @@ SaveService: 로컬 저장과 복원
 - Model은 Unity `MonoBehaviour` 없이 게임 상태를 표현한다.
 - 필요한 최소 단위로만 클래스를 분리하며, 사용처가 하나뿐인 추상화는 만들지 않는다.
 - 매직 넘버는 의도를 설명하는 상수 또는 데이터로 관리한다.
+- Animator 기반 화면 효과와 임시 UI는 View 계층에 두며, 효과 진행 중에도 게임 상태 변경·저장은 Controller에서 먼저 끝낸다.
 
 ## Unity 규칙
 
@@ -55,8 +63,16 @@ SaveService: 로컬 저장과 복원
 ## 저장 규칙
 
 - 상태 변경 직후 저장한다: 생성, 이동/합성, 주문 완료.
+- 현재 저장 구현은 `PlayerPrefs` 안의 JSON이며 `SaveData.CurrentVersion`으로 포맷 버전을 관리한다. 저장 필드나 의미를 변경할 때는 이전 버전의 마이그레이션과 손상 데이터의 기본 상태 복원을 함께 검토한다.
 - 저장 데이터가 없거나 읽기 실패 시 기본 보드 상태로 안전하게 시작한다.
 - 저장 포맷 변경이 필요하면 기존 저장 데이터 처리 방식을 먼저 결정한다.
+
+## 검증 기준
+
+- C# 또는 Unity 에셋 변경 뒤에는 Unity Editor 컴파일과 Console 오류를 확인한다.
+- 규칙·저장 변경은 각각 `MergeBoard.Editor.MergeBoardVerification.VerifyRules()`와 `MergeBoard.Editor.SaveVerification.VerifySave()`로 회귀를 확인한다.
+- 입력·애니메이션·저장 복원이 걸린 변경은 격리 PlayerPrefs 키를 사용하는 `PlayLoopVerification` 흐름으로 Play Mode 핵심 루프를 확인한다.
+- 검증 보조 코드는 `Assets/MergeBoard/Editor/`에만 두고, 개인 진행 저장이나 장면 에셋을 의도치 않게 변경하지 않도록 격리 키와 기존 검증 유틸리티를 재사용한다.
 
 ## Git 규칙
 
