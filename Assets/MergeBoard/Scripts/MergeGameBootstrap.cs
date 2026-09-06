@@ -32,12 +32,6 @@ namespace MergeBoard
         private const float GeneratedItemFlightSpeed = 2f;
 
         /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
-        private void Awake()
-        {
-            // WebGL 저장소가 준비되기 전 기본 보드가 잠깐 노출되지 않도록 한다.
-            if (screenRoot != null) screenRoot.gameObject.SetActive(false);
-        }
-
         private async UniTaskVoid Start()
         {
             // PC에서 창 포커스를 잃어도 생성기 시간과 제출 피드백은 계속 진행한다.
@@ -49,7 +43,6 @@ namespace MergeBoard
             await UniTask.DelayFrame(2);
             ReloadSavedState();
             RefreshViews(true);
-            screenRoot.gameObject.SetActive(true);
             await UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation.ToUniTask();
             await UniTask.Yield();
             ApplyStaticText();
