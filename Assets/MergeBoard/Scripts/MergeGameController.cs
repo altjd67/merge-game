@@ -2,6 +2,17 @@ using System;
 
 namespace MergeBoard
 {
+    /// <summary>게임 상태 변경 뒤 진행 데이터를 기록하고, 저장 실패 안내를 제공하는 최소 계약입니다.</summary>
+    public interface IGameStateSaver
+    {
+        /// <summary>현재 게임 상태를 영속 저장소에 기록합니다.</summary>
+        /// <returns>저장 성공 여부입니다.</returns>
+        bool Save(GameState state);
+
+        /// <summary>가장 최근 저장 시도의 사용자 안내 메시지입니다.</summary>
+        string LastError { get; }
+    }
+
     /// <summary>보드 명령의 성공 여부와 표시할 합성·실패 정보를 전달한다.</summary>
     public readonly struct MoveResult
     {
@@ -33,14 +44,14 @@ namespace MergeBoard
         public const long MaximumUtcSeconds = 253402300799;
         public GameState State { get; }
         public BoardModel Board => State.Board;
-        private readonly LocalSaveService saveService;
+        private readonly IGameStateSaver saveService;
         private readonly Random random;
         public string SaveMessage => saveService?.LastError ?? "";
 
         public MergeGameController(BoardModel board = null) : this(new GameState(board), null, null) { }
 
         /// <summary>복원한 상태와 저장 서비스를 연결한다. 검증에서는 저장 서비스를 생략할 수 있다.</summary>
-        public MergeGameController(GameState state, LocalSaveService saveService, Random random = null)
+        public MergeGameController(GameState state, IGameStateSaver saveService, Random random = null)
         {
             State = state ?? throw new ArgumentNullException(nameof(state));
             this.saveService = saveService;

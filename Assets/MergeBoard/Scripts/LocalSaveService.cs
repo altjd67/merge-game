@@ -4,7 +4,7 @@ using UnityEngine;
 namespace MergeBoard
 {
     /// <summary>PlayerPrefs에 JSON 진행 데이터를 저장하고, 읽기 실패 시 기본 게임 상태를 복원한다.</summary>
-    public sealed class LocalSaveService
+    public sealed class LocalSaveService : IGameStateSaver
     {
         public const string DefaultSaveKey = "MergeBoard.Progress";
 
