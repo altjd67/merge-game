@@ -72,6 +72,10 @@ unity-cli exec 'MergeBoard.Editor.MergeBoardVerification.VerifyRules(); return t
 unity-cli exec 'MergeBoard.Editor.SaveVerification.VerifySave(); return true;'
 ```
 
+## 개발 보조 도구
+
+구현 및 문서 정리에 OpenAI Codex를 활용했습니다. 기능 범위 결정, 코드 반영, Unity Editor 실행 및 최종 검증 결과 확인은 개발자가 수행했습니다.
+
 ## 범위
 
 기획과 완료 조건은 [MVP_SPEC.md](MVP_SPEC.md), 설계 상세는 [설계 문서](docs/design/merge-board-mvp-design.md)를 기준으로 합니다. 서버·로그인·결제·광고·상점·튜토리얼·추가 아이템/주문 확장은 의도적으로 제외했습니다.
