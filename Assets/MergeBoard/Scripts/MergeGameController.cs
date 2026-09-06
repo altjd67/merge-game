@@ -18,8 +18,15 @@ namespace MergeBoard
     {
         public bool Success { get; }
         public bool Merged { get; }
+        public bool Swapped { get; }
         public string Message { get; }
-        public MoveResult(bool success, bool merged, string message) { Success = success; Merged = merged; Message = message; }
+        public MoveResult(bool success, bool merged, bool swapped, string message)
+        {
+            Success = success;
+            Merged = merged;
+            Swapped = swapped;
+            Message = message;
+        }
     }
 
     /// <summary>주문 완료 시 소비한 칸 목록과 보상을 View에 전달한다.</summary>
@@ -84,19 +91,19 @@ namespace MergeBoard
         /// <summary>씨앗팩 근처 빈 칸에 씨앗을 만들고 성공당 에너지 1을 차감한다. 생성 쿨타임은 없다.</summary>
         public MoveResult Generate(int generatorIndex, long now)
         {
-            if (!IsValidTime(now)) return new MoveResult(false, false, "message.invalid_time");
+            if (!IsValidTime(now)) return new MoveResult(false, false, false, "message.invalid_time");
             if (!BoardModel.IsValidIndex(generatorIndex) || Board[generatorIndex] != ItemStage.SeedPack)
-                return new MoveResult(false, false, "message.tap_generator");
+                return new MoveResult(false, false, false, "message.tap_generator");
             RefreshEnergy(now);
             int destination = Board.FindNearestEmptyCell(generatorIndex);
-            if (destination < 0) return new MoveResult(false, false, "message.board_full");
-            if (State.Energy == 0) return new MoveResult(false, false, "message.not_enough_energy");
+            if (destination < 0) return new MoveResult(false, false, false, "message.board_full");
+            if (State.Energy == 0) return new MoveResult(false, false, false, "message.not_enough_energy");
             Board.SetCell(destination, ItemStage.Seed);
             if (State.Energy == GameState.MaxEnergy) State.EnergyRecoveryAnchorUtcSeconds = now;
             State.Energy--;
             State.GeneratorGuideCompleted = true;
             Persist();
-            return new MoveResult(true, false, "message.generated");
+            return new MoveResult(true, false, false, "message.generated");
         }
 
         private static bool IsValidTime(long now) => now > 0 && now <= MaximumUtcSeconds;
@@ -132,25 +139,28 @@ namespace MergeBoard
             return GameState.GetOrderId((current + offset) % GameState.OrderTemplateCount);
         }
 
-        /// <summary>빈 칸으로 이동하거나 동일 단계 두 개를 합성한다. 거절 시 상태를 유지한다.</summary>
+        /// <summary>빈 칸으로 이동하거나 동일 단계 두 개를 합성하며, 합성할 수 없는 아이템끼리는 위치를 교환한다.</summary>
         /// <param name="source">드래그를 시작한 칸의 인덱스.</param>
         /// <param name="destination">드롭한 칸의 인덱스. 보드 밖은 음수로 전달할 수 있다.</param>
         /// <returns>이동·합성 여부와 사용자 안내.</returns>
         public MoveResult Move(int source, int destination)
         {
-            if (!BoardModel.IsValidIndex(source) || !BoardModel.IsValidIndex(destination)) return new MoveResult(false, false, "message.drop_on_board");
+            if (!BoardModel.IsValidIndex(source) || !BoardModel.IsValidIndex(destination)) return new MoveResult(false, false, false, "message.drop_on_board");
             var stage = Board[source];
-            if (stage == ItemStage.Empty) return new MoveResult(false, false, "message.empty_cannot_move");
-            if (source == destination) return new MoveResult(false, false, "");
-            if (stage == ItemStage.Flower && Board[destination] == ItemStage.Flower)
-                return new MoveResult(false, false, "message.flower_maximum");
+            if (stage == ItemStage.Empty) return new MoveResult(false, false, false, "message.empty_cannot_move");
+            if (source == destination) return new MoveResult(false, false, false, "");
             bool merged = Board[destination] == stage && stage < ItemStage.Flower;
             if (Board[destination] != ItemStage.Empty && !merged)
-                return new MoveResult(false, false, "message.merge_same_stage");
+            {
+                Board.SetCell(source, Board[destination]);
+                Board.SetCell(destination, stage);
+                Persist();
+                return new MoveResult(true, false, true, "");
+            }
             Board.SetCell(destination, merged ? GetNextMergeStage(stage) : stage);
             Board.SetCell(source, ItemStage.Empty);
             Persist();
-            return new MoveResult(true, merged, "");
+            return new MoveResult(true, merged, false, "");
         }
 
         private void Persist() => saveService?.Save(State);
