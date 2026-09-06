@@ -52,12 +52,13 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/WebGLRelease.loader.js";
+      var buildVersion = "b98cb6b";
+      var loaderUrl = buildUrl + "/WebGLRelease.loader.js?v=" + buildVersion;
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/WebGLRelease.data.unityweb",
-        frameworkUrl: buildUrl + "/WebGLRelease.framework.js.unityweb",
-        codeUrl: buildUrl + "/WebGLRelease.wasm.unityweb",
+        dataUrl: buildUrl + "/WebGLRelease.data.unityweb?v=" + buildVersion,
+        frameworkUrl: buildUrl + "/WebGLRelease.framework.js.unityweb?v=" + buildVersion,
+        codeUrl: buildUrl + "/WebGLRelease.wasm.unityweb?v=" + buildVersion,
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "merge-game",
