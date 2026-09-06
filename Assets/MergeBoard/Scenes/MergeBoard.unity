@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 16150836}
   - component: {fileID: 16150837}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 20771899}
   - component: {fileID: 20771900}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -358,7 +358,7 @@ GameObject:
   - component: {fileID: 39013491}
   - component: {fileID: 39013492}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -447,7 +447,7 @@ GameObject:
   - component: {fileID: 58439641}
   - component: {fileID: 58439642}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -536,7 +536,7 @@ GameObject:
   - component: {fileID: 65362124}
   - component: {fileID: 65362125}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -624,7 +624,7 @@ GameObject:
   - component: {fileID: 86238782}
   - component: {fileID: 86238783}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -761,7 +761,7 @@ GameObject:
   - component: {fileID: 99514481}
   - component: {fileID: 99514482}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -898,7 +898,7 @@ GameObject:
   - component: {fileID: 101359591}
   - component: {fileID: 101359592}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1035,7 +1035,7 @@ GameObject:
   - component: {fileID: 103380388}
   - component: {fileID: 103380389}
   m_Layer: 0
-  m_Name: "\uBB38\uAD6C"
+  m_Name: "Text"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1173,7 +1173,7 @@ GameObject:
   - component: {fileID: 107420477}
   - component: {fileID: 107420476}
   m_Layer: 0
-  m_Name: "\uCE78 29"
+  m_Name: "Cell 29"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1265,7 +1265,7 @@ GameObject:
   - component: {fileID: 111098613}
   - component: {fileID: 111098614}
   m_Layer: 0
-  m_Name: "\uC8FC\uBB38 \uBAA9\uB85D"
+  m_Name: "OrderList"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1329,7 +1329,7 @@ GameObject:
   - component: {fileID: 115684265}
   - component: {fileID: 115684266}
   m_Layer: 0
-  m_Name: "\uC694\uCCAD \uC544\uC774\uD15C"
+  m_Name: "RequiredItem"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1395,7 +1395,7 @@ GameObject:
   - component: {fileID: 118051994}
   - component: {fileID: 118051995}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1533,7 +1533,7 @@ GameObject:
   - component: {fileID: 120213405}
   - component: {fileID: 120213406}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1621,7 +1621,7 @@ GameObject:
   - component: {fileID: 127139109}
   - component: {fileID: 127139110}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1759,7 +1759,7 @@ GameObject:
   - component: {fileID: 128160856}
   - component: {fileID: 128160857}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1848,7 +1848,7 @@ GameObject:
   - component: {fileID: 130876775}
   - component: {fileID: 130876776}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1937,7 +1937,7 @@ GameObject:
   - component: {fileID: 164075078}
   - component: {fileID: 164075077}
   m_Layer: 0
-  m_Name: "\uCE78 13"
+  m_Name: "Cell 13"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2031,7 +2031,7 @@ GameObject:
   - component: {fileID: 167594299}
   - component: {fileID: 167594298}
   m_Layer: 0
-  m_Name: "\uCE78 37"
+  m_Name: "Cell 37"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2124,7 +2124,7 @@ GameObject:
   - component: {fileID: 174143552}
   - component: {fileID: 174143553}
   m_Layer: 0
-  m_Name: "\uBCF4\uC0C1"
+  m_Name: "Reward"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2261,7 +2261,7 @@ GameObject:
   - component: {fileID: 187818645}
   - component: {fileID: 187818646}
   m_Layer: 0
-  m_Name: "\uCF54\uC778"
+  m_Name: "Coin"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2399,7 +2399,7 @@ GameObject:
   - component: {fileID: 198356854}
   - component: {fileID: 198356853}
   m_Layer: 0
-  m_Name: "\uCE78 18"
+  m_Name: "Cell 18"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2493,7 +2493,7 @@ GameObject:
   - component: {fileID: 208333676}
   - component: {fileID: 208333675}
   m_Layer: 0
-  m_Name: "\uCE78 59"
+  m_Name: "Cell 59"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2587,7 +2587,7 @@ GameObject:
   - component: {fileID: 233624276}
   - component: {fileID: 233624275}
   m_Layer: 0
-  m_Name: "\uCE78 61"
+  m_Name: "Cell 61"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2681,7 +2681,7 @@ GameObject:
   - component: {fileID: 257634969}
   - component: {fileID: 257634970}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2769,7 +2769,7 @@ GameObject:
   - component: {fileID: 258305935}
   - component: {fileID: 258305936}
   m_Layer: 0
-  m_Name: "\uC548\uB0B4"
+  m_Name: "Guide"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2906,7 +2906,7 @@ GameObject:
   - component: {fileID: 264649511}
   - component: {fileID: 264649512}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3043,7 +3043,7 @@ GameObject:
   - component: {fileID: 267774763}
   - component: {fileID: 267774764}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3181,7 +3181,7 @@ GameObject:
   - component: {fileID: 270569560}
   - component: {fileID: 270569561}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3270,7 +3270,7 @@ GameObject:
   - component: {fileID: 289568583}
   - component: {fileID: 289568582}
   m_Layer: 0
-  m_Name: "\uCE78 17"
+  m_Name: "Cell 17"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3363,7 +3363,7 @@ GameObject:
   - component: {fileID: 309976478}
   - component: {fileID: 309976479}
   m_Layer: 0
-  m_Name: "\uC694\uCCAD \uC544\uC774\uD15C"
+  m_Name: "RequiredItem"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3430,7 +3430,7 @@ GameObject:
   - component: {fileID: 311520742}
   - component: {fileID: 311520743}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3519,7 +3519,7 @@ GameObject:
   - component: {fileID: 314665535}
   - component: {fileID: 314665534}
   m_Layer: 0
-  m_Name: "\uCE78 25"
+  m_Name: "Cell 25"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3613,7 +3613,7 @@ GameObject:
   - component: {fileID: 314707572}
   - component: {fileID: 314707571}
   m_Layer: 0
-  m_Name: "\uCE78 57"
+  m_Name: "Cell 57"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3706,7 +3706,7 @@ GameObject:
   - component: {fileID: 316461368}
   - component: {fileID: 316461369}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3843,7 +3843,7 @@ GameObject:
   - component: {fileID: 317707757}
   - component: {fileID: 317707758}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3981,7 +3981,7 @@ GameObject:
   - component: {fileID: 320475499}
   - component: {fileID: 320475498}
   m_Layer: 0
-  m_Name: "\uCE78 32"
+  m_Name: "Cell 32"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4074,7 +4074,7 @@ GameObject:
   - component: {fileID: 336572429}
   - component: {fileID: 336572430}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4212,7 +4212,7 @@ GameObject:
   - component: {fileID: 341044928}
   - component: {fileID: 341044927}
   m_Layer: 0
-  m_Name: "\uCE78 50"
+  m_Name: "Cell 50"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4305,7 +4305,7 @@ GameObject:
   - component: {fileID: 344035912}
   - component: {fileID: 344035913}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4442,7 +4442,7 @@ GameObject:
   - component: {fileID: 347580336}
   - component: {fileID: 347580337}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4724,7 +4724,7 @@ GameObject:
   - component: {fileID: 404653052}
   - component: {fileID: 404653051}
   m_Layer: 0
-  m_Name: "\uCE78 39"
+  m_Name: "Cell 39"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4818,7 +4818,7 @@ GameObject:
   - component: {fileID: 412174183}
   - component: {fileID: 412174182}
   m_Layer: 0
-  m_Name: "\uCE78 38"
+  m_Name: "Cell 38"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4991,7 +4991,7 @@ GameObject:
   - component: {fileID: 432472111}
   - component: {fileID: 432472110}
   m_Layer: 0
-  m_Name: "\uCE78 48"
+  m_Name: "Cell 48"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5084,7 +5084,7 @@ GameObject:
   - component: {fileID: 442648539}
   - component: {fileID: 442648540}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5222,7 +5222,7 @@ GameObject:
   - component: {fileID: 456484841}
   - component: {fileID: 456484840}
   m_Layer: 0
-  m_Name: "\uCE78 52"
+  m_Name: "Cell 52"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5315,7 +5315,7 @@ GameObject:
   - component: {fileID: 457540871}
   - component: {fileID: 457540872}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5453,7 +5453,7 @@ GameObject:
   - component: {fileID: 458445508}
   - component: {fileID: 458445509}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5542,7 +5542,7 @@ GameObject:
   - component: {fileID: 464096106}
   - component: {fileID: 464096105}
   m_Layer: 0
-  m_Name: "\uCE78 1"
+  m_Name: "Cell 1"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5635,7 +5635,7 @@ GameObject:
   - component: {fileID: 470770938}
   - component: {fileID: 470770939}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5773,7 +5773,7 @@ GameObject:
   - component: {fileID: 488045391}
   - component: {fileID: 488045392}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5862,7 +5862,7 @@ GameObject:
   - component: {fileID: 491491064}
   - component: {fileID: 491491065}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5951,7 +5951,7 @@ GameObject:
   - component: {fileID: 500354073}
   - component: {fileID: 500354072}
   m_Layer: 0
-  m_Name: "\uCE78 34"
+  m_Name: "Cell 34"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6045,7 +6045,7 @@ GameObject:
   - component: {fileID: 518009938}
   - component: {fileID: 518009937}
   m_Layer: 0
-  m_Name: "\uCE78 19"
+  m_Name: "Cell 19"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6139,7 +6139,7 @@ GameObject:
   - component: {fileID: 520702478}
   - component: {fileID: 520702477}
   m_Layer: 0
-  m_Name: "\uCE78 21"
+  m_Name: "Cell 21"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6232,7 +6232,7 @@ GameObject:
   - component: {fileID: 522669264}
   - component: {fileID: 522669265}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6369,7 +6369,7 @@ GameObject:
   - component: {fileID: 522774152}
   - component: {fileID: 522774153}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6507,7 +6507,7 @@ GameObject:
   - component: {fileID: 535008981}
   - component: {fileID: 535008980}
   m_Layer: 0
-  m_Name: "\uCE78 45"
+  m_Name: "Cell 45"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6744,7 +6744,7 @@ GameObject:
   - component: {fileID: 566121864}
   - component: {fileID: 566121865}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6882,7 +6882,7 @@ GameObject:
   - component: {fileID: 573957197}
   - component: {fileID: 573957198}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6970,7 +6970,7 @@ GameObject:
   - component: {fileID: 574024019}
   - component: {fileID: 574024020}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7108,7 +7108,7 @@ GameObject:
   - component: {fileID: 587949431}
   - component: {fileID: 587949432}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7276,7 +7276,7 @@ GameObject:
   - component: {fileID: 611807599}
   - component: {fileID: 611807600}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7364,7 +7364,7 @@ GameObject:
   - component: {fileID: 619358981}
   - component: {fileID: 619358982}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7502,7 +7502,7 @@ GameObject:
   - component: {fileID: 624668078}
   - component: {fileID: 624668077}
   m_Layer: 0
-  m_Name: "\uCE78 16"
+  m_Name: "Cell 16"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7594,7 +7594,7 @@ GameObject:
   - component: {fileID: 635305049}
   - component: {fileID: 635305048}
   m_Layer: 0
-  m_Name: "\uCE74\uBA54\uB77C"
+  m_Name: "MainCamera"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7678,7 +7678,7 @@ GameObject:
   - component: {fileID: 646003187}
   - component: {fileID: 646003188}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7816,7 +7816,7 @@ GameObject:
   - component: {fileID: 646956524}
   - component: {fileID: 646956523}
   m_Layer: 0
-  m_Name: "\uCE78 55"
+  m_Name: "Cell 55"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7910,7 +7910,7 @@ GameObject:
   - component: {fileID: 653545395}
   - component: {fileID: 653545394}
   m_Layer: 0
-  m_Name: "\uCE78 47"
+  m_Name: "Cell 47"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8003,7 +8003,7 @@ GameObject:
   - component: {fileID: 666965538}
   - component: {fileID: 666965539}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8141,7 +8141,7 @@ GameObject:
   - component: {fileID: 672102061}
   - component: {fileID: 672102062}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8230,7 +8230,7 @@ GameObject:
   - component: {fileID: 678575556}
   - component: {fileID: 678575557}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8319,7 +8319,7 @@ GameObject:
   - component: {fileID: 681138209}
   - component: {fileID: 681138210}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8408,7 +8408,7 @@ GameObject:
   - component: {fileID: 691387585}
   - component: {fileID: 691387586}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8497,7 +8497,7 @@ GameObject:
   - component: {fileID: 704149735}
   - component: {fileID: 704149736}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8586,7 +8586,7 @@ GameObject:
   - component: {fileID: 712082531}
   - component: {fileID: 712082530}
   m_Layer: 0
-  m_Name: "\uCE78 6"
+  m_Name: "Cell 6"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8679,7 +8679,7 @@ GameObject:
   - component: {fileID: 720853741}
   - component: {fileID: 720853740}
   m_Layer: 0
-  m_Name: "\uC528\uC557\uD329 \uAC00\uC774\uB4DC"
+  m_Name: "SeedPackGuide"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8756,7 +8756,7 @@ GameObject:
   - component: {fileID: 721250673}
   - component: {fileID: 721250674}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8845,7 +8845,7 @@ GameObject:
   - component: {fileID: 724878040}
   - component: {fileID: 724878041}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8933,7 +8933,7 @@ GameObject:
   - component: {fileID: 732292811}
   - component: {fileID: 732292812}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9070,7 +9070,7 @@ GameObject:
   - component: {fileID: 739919135}
   - component: {fileID: 739919136}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9207,7 +9207,7 @@ GameObject:
   - component: {fileID: 756524899}
   - component: {fileID: 756524900}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9345,7 +9345,7 @@ GameObject:
   - component: {fileID: 759533480}
   - component: {fileID: 759533481}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9433,7 +9433,7 @@ GameObject:
   - component: {fileID: 780525517}
   - component: {fileID: 780525518}
   m_Layer: 0
-  m_Name: "\uD68C\uBCF5 \uC2DC\uAC04"
+  m_Name: "RecoveryTime"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9570,7 +9570,7 @@ GameObject:
   - component: {fileID: 788305385}
   - component: {fileID: 788305386}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9706,7 +9706,7 @@ GameObject:
   - component: {fileID: 826572188}
   - component: {fileID: 826572189}
   m_Layer: 0
-  m_Name: "\uBCF4\uB4DC"
+  m_Name: "Board"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9884,7 +9884,7 @@ GameObject:
   - component: {fileID: 835705484}
   - component: {fileID: 835705485}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9973,7 +9973,7 @@ GameObject:
   - component: {fileID: 842715918}
   - component: {fileID: 842715917}
   m_Layer: 0
-  m_Name: "\uCE78 9"
+  m_Name: "Cell 9"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10067,7 +10067,7 @@ GameObject:
   - component: {fileID: 852080902}
   - component: {fileID: 852080901}
   m_Layer: 0
-  m_Name: "\uCE78 12"
+  m_Name: "Cell 12"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10161,7 +10161,7 @@ GameObject:
   - component: {fileID: 862247091}
   - component: {fileID: 862247090}
   m_Layer: 0
-  m_Name: "\uCE78 3"
+  m_Name: "Cell 3"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10334,7 +10334,7 @@ GameObject:
   - component: {fileID: 873938930}
   - component: {fileID: 873938931}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10490,7 +10490,7 @@ GameObject:
   - component: {fileID: 896555067}
   - component: {fileID: 896555068}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10579,7 +10579,7 @@ GameObject:
   - component: {fileID: 917828924}
   - component: {fileID: 917828925}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10668,7 +10668,7 @@ GameObject:
   - component: {fileID: 927220200}
   - component: {fileID: 927220201}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10756,7 +10756,7 @@ GameObject:
   - component: {fileID: 948326873}
   - component: {fileID: 948326874}
   m_Layer: 0
-  m_Name: "\uBB38\uAD6C"
+  m_Name: "Text"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10893,7 +10893,7 @@ GameObject:
   - component: {fileID: 951232461}
   - component: {fileID: 951232462}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11030,7 +11030,7 @@ GameObject:
   - component: {fileID: 960084274}
   - component: {fileID: 960084275}
   m_Layer: 0
-  m_Name: "\uBCF4\uC0C1"
+  m_Name: "Reward"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11168,7 +11168,7 @@ GameObject:
   - component: {fileID: 967663811}
   - component: {fileID: 967663812}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11257,7 +11257,7 @@ GameObject:
   - component: {fileID: 976069660}
   - component: {fileID: 976069661}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11346,7 +11346,7 @@ GameObject:
   - component: {fileID: 1000578476}
   - component: {fileID: 1000578475}
   m_Layer: 0
-  m_Name: "\uCE78 40"
+  m_Name: "Cell 40"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11440,7 +11440,7 @@ GameObject:
   - component: {fileID: 1038368424}
   - component: {fileID: 1038368425}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11630,7 +11630,7 @@ GameObject:
   - component: {fileID: 1070135924}
   - component: {fileID: 1070135925}
   m_Layer: 0
-  m_Name: "\uC218\uB7C9"
+  m_Name: "Quantity"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11767,7 +11767,7 @@ GameObject:
   - component: {fileID: 1073159049}
   - component: {fileID: 1073159050}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11904,7 +11904,7 @@ GameObject:
   - component: {fileID: 1074584372}
   - component: {fileID: 1074584373}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12041,7 +12041,7 @@ GameObject:
   - component: {fileID: 1095307384}
   - component: {fileID: 1095307385}
   m_Layer: 0
-  m_Name: "\uBB38\uAD6C"
+  m_Name: "Text"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12178,7 +12178,7 @@ GameObject:
   - component: {fileID: 1115548731}
   - component: {fileID: 1115548732}
   m_Layer: 0
-  m_Name: "\uBCF4\uC0C1"
+  m_Name: "Reward"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12316,7 +12316,7 @@ GameObject:
   - component: {fileID: 1120340011}
   - component: {fileID: 1120340010}
   m_Layer: 0
-  m_Name: "\uCE78 8"
+  m_Name: "Cell 8"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12410,7 +12410,7 @@ GameObject:
   - component: {fileID: 1154518860}
   - component: {fileID: 1154518859}
   m_Layer: 0
-  m_Name: "\uCE78 51"
+  m_Name: "Cell 51"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12504,7 +12504,7 @@ GameObject:
   - component: {fileID: 1165274995}
   - component: {fileID: 1165274994}
   m_Layer: 0
-  m_Name: "\uCE78 14"
+  m_Name: "Cell 14"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12597,7 +12597,7 @@ GameObject:
   - component: {fileID: 1171226949}
   - component: {fileID: 1171226950}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12735,7 +12735,7 @@ GameObject:
   - component: {fileID: 1173640331}
   - component: {fileID: 1173640332}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12824,7 +12824,7 @@ GameObject:
   - component: {fileID: 1178378387}
   - component: {fileID: 1178378386}
   m_Layer: 0
-  m_Name: "\uCE78 31"
+  m_Name: "Cell 31"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12918,7 +12918,7 @@ GameObject:
   - component: {fileID: 1181131783}
   - component: {fileID: 1181131782}
   m_Layer: 0
-  m_Name: "\uCE78 33"
+  m_Name: "Cell 33"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13011,7 +13011,7 @@ GameObject:
   - component: {fileID: 1203831345}
   - component: {fileID: 1203831346}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13148,7 +13148,7 @@ GameObject:
   - component: {fileID: 1215855506}
   - component: {fileID: 1215855507}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13286,7 +13286,7 @@ GameObject:
   - component: {fileID: 1219506213}
   - component: {fileID: 1219506214}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13374,7 +13374,7 @@ GameObject:
   - component: {fileID: 1227139774}
   - component: {fileID: 1227139775}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13512,7 +13512,7 @@ GameObject:
   - component: {fileID: 1238648151}
   - component: {fileID: 1238648150}
   m_Layer: 0
-  m_Name: "\uCE78 43"
+  m_Name: "Cell 43"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13606,7 +13606,7 @@ GameObject:
   - component: {fileID: 1251988288}
   - component: {fileID: 1251988287}
   m_Layer: 0
-  m_Name: "\uCE78 27"
+  m_Name: "Cell 27"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13700,7 +13700,7 @@ GameObject:
   - component: {fileID: 1272324151}
   - component: {fileID: 1272324152}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13789,7 +13789,7 @@ GameObject:
   - component: {fileID: 1282021274}
   - component: {fileID: 1282021275}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13878,7 +13878,7 @@ GameObject:
   - component: {fileID: 1291429569}
   - component: {fileID: 1291429568}
   m_Layer: 0
-  m_Name: "\uCE78 54"
+  m_Name: "Cell 54"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13972,7 +13972,7 @@ GameObject:
   - component: {fileID: 1293567188}
   - component: {fileID: 1293567189}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14060,7 +14060,7 @@ GameObject:
   - component: {fileID: 1306489509}
   - component: {fileID: 1306489510}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14197,7 +14197,7 @@ GameObject:
   - component: {fileID: 1309341903}
   - component: {fileID: 1309341904}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14334,7 +14334,7 @@ GameObject:
   - component: {fileID: 1312585474}
   - component: {fileID: 1312585475}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14471,7 +14471,7 @@ GameObject:
   - component: {fileID: 1314650834}
   - component: {fileID: 1314650835}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14608,7 +14608,7 @@ GameObject:
   - component: {fileID: 1336392178}
   - component: {fileID: 1336392179}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14746,7 +14746,7 @@ GameObject:
   - component: {fileID: 1366660595}
   - component: {fileID: 1366660594}
   m_Layer: 0
-  m_Name: "\uCE78 46"
+  m_Name: "Cell 46"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14839,7 +14839,7 @@ GameObject:
   - component: {fileID: 1370481236}
   - component: {fileID: 1370481237}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14976,7 +14976,7 @@ GameObject:
   - component: {fileID: 1379403363}
   - component: {fileID: 1379403364}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15182,7 +15182,7 @@ GameObject:
   - component: {fileID: 1382264291}
   - component: {fileID: 1382264290}
   m_Layer: 0
-  m_Name: "\uCE78 30"
+  m_Name: "Cell 30"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15276,7 +15276,7 @@ GameObject:
   - component: {fileID: 1417182261}
   - component: {fileID: 1417182260}
   m_Layer: 0
-  m_Name: "\uCE78 4"
+  m_Name: "Cell 4"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15369,7 +15369,7 @@ GameObject:
   - component: {fileID: 1421443516}
   - component: {fileID: 1421443517}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15507,7 +15507,7 @@ GameObject:
   - component: {fileID: 1423148729}
   - component: {fileID: 1423148730}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15596,7 +15596,7 @@ GameObject:
   - component: {fileID: 1438132337}
   - component: {fileID: 1438132336}
   m_Layer: 0
-  m_Name: "\uCE78 2"
+  m_Name: "Cell 2"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15689,7 +15689,7 @@ GameObject:
   - component: {fileID: 1442372004}
   - component: {fileID: 1442372005}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15827,7 +15827,7 @@ GameObject:
   - component: {fileID: 1449562547}
   - component: {fileID: 1449562546}
   m_Layer: 0
-  m_Name: "\uCE78 7"
+  m_Name: "Cell 7"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15921,7 +15921,7 @@ GameObject:
   - component: {fileID: 1456727393}
   - component: {fileID: 1456727394}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16008,7 +16008,7 @@ GameObject:
   - component: {fileID: 1465968668}
   - component: {fileID: 1465968667}
   m_Layer: 0
-  m_Name: "\uBA38\uC9C0 \uAC8C\uC784"
+  m_Name: "MergeGame"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16060,7 +16060,7 @@ GameObject:
   - component: {fileID: 1485453114}
   - component: {fileID: 1485453115}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16244,7 +16244,7 @@ GameObject:
   - component: {fileID: 1501909580}
   - component: {fileID: 1501909581}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16332,7 +16332,7 @@ GameObject:
   - component: {fileID: 1504507280}
   - component: {fileID: 1504507281}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16470,7 +16470,7 @@ GameObject:
   - component: {fileID: 1534614597}
   - component: {fileID: 1534614596}
   m_Layer: 0
-  m_Name: "\uCE78 22"
+  m_Name: "Cell 22"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16564,7 +16564,7 @@ GameObject:
   - component: {fileID: 1573409358}
   - component: {fileID: 1573409357}
   m_Layer: 0
-  m_Name: "\uCE78 11"
+  m_Name: "Cell 11"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16658,7 +16658,7 @@ GameObject:
   - component: {fileID: 1612592763}
   - component: {fileID: 1612592762}
   m_Layer: 0
-  m_Name: "\uCE78 24"
+  m_Name: "Cell 24"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16752,7 +16752,7 @@ GameObject:
   - component: {fileID: 1615227459}
   - component: {fileID: 1615227460}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16841,7 +16841,7 @@ GameObject:
   - component: {fileID: 1618552296}
   - component: {fileID: 1618552295}
   m_Layer: 0
-  m_Name: "\uCE78 41"
+  m_Name: "Cell 41"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16934,7 +16934,7 @@ GameObject:
   - component: {fileID: 1622131086}
   - component: {fileID: 1622131087}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17072,7 +17072,7 @@ GameObject:
   - component: {fileID: 1627263015}
   - component: {fileID: 1627263016}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17161,7 +17161,7 @@ GameObject:
   - component: {fileID: 1652156715}
   - component: {fileID: 1652156714}
   m_Layer: 0
-  m_Name: "\uCE78 10"
+  m_Name: "Cell 10"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17254,7 +17254,7 @@ GameObject:
   - component: {fileID: 1657031374}
   - component: {fileID: 1657031375}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17392,7 +17392,7 @@ GameObject:
   - component: {fileID: 1664658177}
   - component: {fileID: 1664658176}
   m_Layer: 0
-  m_Name: "\uCE78 62"
+  m_Name: "Cell 62"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17485,7 +17485,7 @@ GameObject:
   - component: {fileID: 1667334862}
   - component: {fileID: 1667334863}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17622,7 +17622,7 @@ GameObject:
   - component: {fileID: 1684590746}
   - component: {fileID: 1684590747}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17760,7 +17760,7 @@ GameObject:
   - component: {fileID: 1688061975}
   - component: {fileID: 1688061974}
   m_Layer: 0
-  m_Name: "\uCE78 23"
+  m_Name: "Cell 23"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17853,7 +17853,7 @@ GameObject:
   - component: {fileID: 1689988706}
   - component: {fileID: 1689988707}
   m_Layer: 0
-  m_Name: "\uC81C\uBAA9"
+  m_Name: "Title"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17991,7 +17991,7 @@ GameObject:
   - component: {fileID: 1712555327}
   - component: {fileID: 1712555328}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18080,7 +18080,7 @@ GameObject:
   - component: {fileID: 1717645446}
   - component: {fileID: 1717645445}
   m_Layer: 0
-  m_Name: "\uCE78 0"
+  m_Name: "Cell 0"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18174,7 +18174,7 @@ GameObject:
   - component: {fileID: 1720344090}
   - component: {fileID: 1720344089}
   m_Layer: 0
-  m_Name: "\uCE78 28"
+  m_Name: "Cell 28"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18268,7 +18268,7 @@ GameObject:
   - component: {fileID: 1735578583}
   - component: {fileID: 1735578584}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18357,7 +18357,7 @@ GameObject:
   - component: {fileID: 1750450091}
   - component: {fileID: 1750450092}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18445,7 +18445,7 @@ GameObject:
   - component: {fileID: 1754961225}
   - component: {fileID: 1754961226}
   m_Layer: 0
-  m_Name: "\uC5D0\uB108\uC9C0"
+  m_Name: "Energy"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18583,7 +18583,7 @@ GameObject:
   - component: {fileID: 1756311873}
   - component: {fileID: 1756311872}
   m_Layer: 0
-  m_Name: "\uCE78 5"
+  m_Name: "Cell 5"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18676,7 +18676,7 @@ GameObject:
   - component: {fileID: 1764271911}
   - component: {fileID: 1764271912}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18814,7 +18814,7 @@ GameObject:
   - component: {fileID: 1817107390}
   - component: {fileID: 1817107389}
   m_Layer: 0
-  m_Name: "\uCE78 53"
+  m_Name: "Cell 53"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18907,7 +18907,7 @@ GameObject:
   - component: {fileID: 1823420740}
   - component: {fileID: 1823420739}
   m_Layer: 0
-  m_Name: "\uD1A0\uC2A4\uD2B8"
+  m_Name: "Toast"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19127,7 +19127,7 @@ GameObject:
   - component: {fileID: 1837325533}
   - component: {fileID: 1837325534}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19264,7 +19264,7 @@ GameObject:
   - component: {fileID: 1838613201}
   - component: {fileID: 1838613202}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19402,7 +19402,7 @@ GameObject:
   - component: {fileID: 1849773269}
   - component: {fileID: 1849773268}
   m_Layer: 0
-  m_Name: "\uCE78 44"
+  m_Name: "Cell 44"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19496,7 +19496,7 @@ GameObject:
   - component: {fileID: 1856103409}
   - component: {fileID: 1856103410}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19585,7 +19585,7 @@ GameObject:
   - component: {fileID: 1860329399}
   - component: {fileID: 1860329400}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19674,7 +19674,7 @@ GameObject:
   - component: {fileID: 1875242455}
   - component: {fileID: 1875242454}
   m_Layer: 0
-  m_Name: "\uCE78 49"
+  m_Name: "Cell 49"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19768,7 +19768,7 @@ GameObject:
   - component: {fileID: 1876339824}
   - component: {fileID: 1876339825}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19857,7 +19857,7 @@ GameObject:
   - component: {fileID: 1883488771}
   - component: {fileID: 1883488772}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19945,7 +19945,7 @@ GameObject:
   - component: {fileID: 1889163674}
   - component: {fileID: 1889163675}
   m_Layer: 0
-  m_Name: "\uBB38\uAD6C"
+  m_Name: "Text"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20083,7 +20083,7 @@ GameObject:
   - component: {fileID: 1900274867}
   - component: {fileID: 1900274868}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20172,7 +20172,7 @@ GameObject:
   - component: {fileID: 1902289638}
   - component: {fileID: 1902289639}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20260,7 +20260,7 @@ GameObject:
   - component: {fileID: 1903738655}
   - component: {fileID: 1903738656}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20397,7 +20397,7 @@ GameObject:
   - component: {fileID: 1927355416}
   - component: {fileID: 1927355417}
   m_Layer: 0
-  m_Name: "\uC218\uB7C9"
+  m_Name: "Quantity"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20535,7 +20535,7 @@ GameObject:
   - component: {fileID: 1934627049}
   - component: {fileID: 1934627050}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20623,7 +20623,7 @@ GameObject:
   - component: {fileID: 1953155685}
   - component: {fileID: 1953155686}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20760,7 +20760,7 @@ GameObject:
   - component: {fileID: 1954291399}
   - component: {fileID: 1954291400}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20897,7 +20897,7 @@ GameObject:
   - component: {fileID: 1965133580}
   - component: {fileID: 1965133581}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21035,7 +21035,7 @@ GameObject:
   - component: {fileID: 1971906712}
   - component: {fileID: 1971906713}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21124,7 +21124,7 @@ GameObject:
   - component: {fileID: 1988177912}
   - component: {fileID: 1988177914}
   m_Layer: 0
-  m_Name: "\uC791\uC740 \uC815\uC6D0"
+  m_Name: "SmallGarden"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21226,7 +21226,7 @@ GameObject:
   - component: {fileID: 1990355097}
   - component: {fileID: 1990355098}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21315,7 +21315,7 @@ GameObject:
   - component: {fileID: 1991118156}
   - component: {fileID: 1991118157}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21404,7 +21404,7 @@ GameObject:
   - component: {fileID: 2003559920}
   - component: {fileID: 2003559921}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21493,7 +21493,7 @@ GameObject:
   - component: {fileID: 2017677697}
   - component: {fileID: 2017677698}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21581,7 +21581,7 @@ GameObject:
   - component: {fileID: 2031562960}
   - component: {fileID: 2031562961}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21719,7 +21719,7 @@ GameObject:
   - component: {fileID: 2038092151}
   - component: {fileID: 2038092150}
   m_Layer: 0
-  m_Name: "\uCE78 42"
+  m_Name: "Cell 42"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21813,7 +21813,7 @@ GameObject:
   - component: {fileID: 2052376584}
   - component: {fileID: 2052376583}
   m_Layer: 0
-  m_Name: "\uCE78 58"
+  m_Name: "Cell 58"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21907,7 +21907,7 @@ GameObject:
   - component: {fileID: 2056148139}
   - component: {fileID: 2056148138}
   m_Layer: 0
-  m_Name: "\uCE78 26"
+  m_Name: "Cell 26"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22001,7 +22001,7 @@ GameObject:
   - component: {fileID: 2065112989}
   - component: {fileID: 2065112990}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22090,7 +22090,7 @@ GameObject:
   - component: {fileID: 2066851690}
   - component: {fileID: 2066851691}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22179,7 +22179,7 @@ GameObject:
   - component: {fileID: 2070051402}
   - component: {fileID: 2070051403}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22268,7 +22268,7 @@ GameObject:
   - component: {fileID: 2079379844}
   - component: {fileID: 2079379843}
   m_Layer: 0
-  m_Name: "\uCE78 20"
+  m_Name: "Cell 20"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22362,7 +22362,7 @@ GameObject:
   - component: {fileID: 2084839917}
   - component: {fileID: 2084839918}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22451,7 +22451,7 @@ GameObject:
   - component: {fileID: 2088752318}
   - component: {fileID: 2088752317}
   m_Layer: 0
-  m_Name: "\uCE78 36"
+  m_Name: "Cell 36"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22545,7 +22545,7 @@ GameObject:
   - component: {fileID: 2090119204}
   - component: {fileID: 2090119203}
   m_Layer: 0
-  m_Name: "\uCE78 56"
+  m_Name: "Cell 56"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22638,7 +22638,7 @@ GameObject:
   - component: {fileID: 2092149940}
   - component: {fileID: 2092149941}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22776,7 +22776,7 @@ GameObject:
   - component: {fileID: 2094783077}
   - component: {fileID: 2094783078}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22864,7 +22864,7 @@ GameObject:
   - component: {fileID: 2097585557}
   - component: {fileID: 2097585558}
   m_Layer: 0
-  m_Name: "\uC218\uB7C9"
+  m_Name: "Quantity"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23002,7 +23002,7 @@ GameObject:
   - component: {fileID: 2098027207}
   - component: {fileID: 2098027206}
   m_Layer: 0
-  m_Name: "\uCE78 15"
+  m_Name: "Cell 15"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23096,7 +23096,7 @@ GameObject:
   - component: {fileID: 2098228447}
   - component: {fileID: 2098228448}
   m_Layer: 0
-  m_Name: "\uC544\uC774\uD15C"
+  m_Name: "Item"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23184,7 +23184,7 @@ GameObject:
   - component: {fileID: 2109515049}
   - component: {fileID: 2109515050}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23321,7 +23321,7 @@ GameObject:
   - component: {fileID: 2116524103}
   - component: {fileID: 2116524104}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23458,7 +23458,7 @@ GameObject:
   - component: {fileID: 2119255714}
   - component: {fileID: 2119255715}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23595,7 +23595,7 @@ GameObject:
   - component: {fileID: 2122072871}
   - component: {fileID: 2122072872}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23732,7 +23732,7 @@ GameObject:
   - component: {fileID: 2124800737}
   - component: {fileID: 2124800738}
   m_Layer: 0
-  m_Name: "\uC694\uCCAD \uC544\uC774\uD15C"
+  m_Name: "RequiredItem"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23799,7 +23799,7 @@ GameObject:
   - component: {fileID: 2129356254}
   - component: {fileID: 2129356253}
   m_Layer: 0
-  m_Name: "\uCE78 35"
+  m_Name: "Cell 35"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23893,7 +23893,7 @@ GameObject:
   - component: {fileID: 2141620437}
   - component: {fileID: 2141620436}
   m_Layer: 0
-  m_Name: "\uCE78 60"
+  m_Name: "Cell 60"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23986,7 +23986,7 @@ GameObject:
   - component: {fileID: 2143517860}
   - component: {fileID: 2143517861}
   m_Layer: 0
-  m_Name: "\uC774\uB984"
+  m_Name: "Name"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

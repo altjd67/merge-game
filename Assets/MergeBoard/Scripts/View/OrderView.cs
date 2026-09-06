@@ -33,9 +33,9 @@ namespace MergeBoard
         /// <summary>현재 주문의 아이템·수량·보상과 Controller가 판정한 버튼 활성 여부를 갱신한다.</summary>
         public void Render(int index, OrderModel order, int availableCount, bool canSubmit)
         {
-            cards[index].Find("요청 아이템").GetComponent<ItemGraphic>().Stage = order.RequiredStage;
+            cards[index].Find("RequiredItem").GetComponent<ItemGraphic>().Stage = order.RequiredStage;
             statusLabels[index].text = $"{BoardView.StageName(order.RequiredStage)} {availableCount}/{order.RequiredCount}";
-            cards[index].Find("보상").GetComponent<TextMeshProUGUI>().text = "+" + order.Reward + " 코인";
+            cards[index].Find("Reward").GetComponent<TextMeshProUGUI>().text = "+" + order.Reward + " 코인";
             getButtons[index].GetComponentInChildren<TextMeshProUGUI>().text = "Get";
             getButtons[index].interactable = canSubmit;
         }
