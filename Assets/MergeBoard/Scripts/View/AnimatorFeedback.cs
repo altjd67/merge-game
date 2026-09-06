@@ -8,6 +8,8 @@ namespace MergeBoard
     [RequireComponent(typeof(Animator))]
     public sealed class AnimatorFeedback : MonoBehaviour
     {
+        public const float FlightDuration = 0.65f;
+        public const float FastFlightDuration = FlightDuration * 0.5f;
         [SerializeField] private float progress;
         public float Progress => progress;
         private Vector2 start;
@@ -29,13 +31,13 @@ namespace MergeBoard
         }
 
         /// <summary>소비된 아이템의 표시를 복제해 보드 위치에서 주문 슬롯까지 비행시킨다.</summary>
-        public static AnimatorFeedback Fly(RectTransform overlay, Vector3 sourceWorld, Vector3 targetWorld, ItemStage stage)
+        public static AnimatorFeedback Fly(RectTransform overlay, Vector3 sourceWorld, Vector3 targetWorld, ItemStage stage, float speed = 1f)
         {
             var pool = UIFeedbackPool.GetOrCreate(overlay);
             var icon = pool.AcquireItem();
             icon.Stage = stage;
             return StartMotion(icon.GetComponent<AnimatorFeedback>(), pool, icon.rectTransform,
-                overlay.InverseTransformPoint(sourceWorld), overlay.InverseTransformPoint(targetWorld), "Flight", false);
+                overlay.InverseTransformPoint(sourceWorld), overlay.InverseTransformPoint(targetWorld), "Flight", false, speed);
         }
 
         /// <summary>보상 텍스트를 위로 이동시키며 서서히 사라지게 한다.</summary>
@@ -51,7 +53,7 @@ namespace MergeBoard
                 position, position + Vector2.up * 54, "Reward", true);
         }
 
-        private static AnimatorFeedback StartMotion(AnimatorFeedback feedback, UIFeedbackPool pool, RectTransform target, Vector2 from, Vector2 to, string state, bool fade)
+        private static AnimatorFeedback StartMotion(AnimatorFeedback feedback, UIFeedbackPool pool, RectTransform target, Vector2 from, Vector2 to, string state, bool fade, float speed = 1f)
         {
             target.anchorMin = target.anchorMax = target.pivot = new Vector2(0.5f, 0.5f);
             target.anchoredPosition = from;
@@ -70,6 +72,7 @@ namespace MergeBoard
             animator.runtimeAnimatorController = feedbackController;
             animator.updateMode = AnimatorUpdateMode.UnscaledTime;
             animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            animator.speed = speed;
             animator.Play(state, 0, 0);
             animator.Update(0);
             return feedback;

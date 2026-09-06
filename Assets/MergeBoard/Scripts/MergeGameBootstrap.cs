@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -70,10 +71,34 @@ namespace MergeBoard
         private void HandleGenerate(int index)
         {
             if (boardView.IsDragging || Board[index] != ItemStage.SeedPack) return;
+            int destination = Board.FindNearestEmptyCell(index);
+            Vector3 generatorWorld = ItemWorldCenter(index);
             var result = Controller.Generate(index, System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             if (result.Success) AnimatorFeedback.PlayScale(boardView.Cells[index].Icon.transform, "Click");
             RefreshViews();
+            if (result.Success && destination >= 0)
+            {
+                boardView.Cells[destination].SetItemVisible(false);
+                AnimatorFeedback.Fly(screenRoot, generatorWorld, ItemWorldCenter(destination), ItemStage.Seed, 2f);
+                StartCoroutine(ShowGeneratedItem(destination));
+            }
             ShowResult(result.Success ? "" : result.Message);
+        }
+
+        /// <summary>생성 비행이 끝난 뒤 도착 칸의 씨앗을 표시하고 짧게 확대한다.</summary>
+        private IEnumerator ShowGeneratedItem(int destination)
+        {
+            yield return new WaitForSecondsRealtime(AnimatorFeedback.FastFlightDuration);
+            if (Board[destination] != ItemStage.Seed) yield break;
+            boardView.Cells[destination].SetItemVisible(true);
+            AnimatorFeedback.PlayScale(boardView.Cells[destination].Icon.transform, "Merge");
+        }
+
+        /// <summary>칸 아이콘의 중앙 월드 좌표를 반환한다.</summary>
+        private Vector3 ItemWorldCenter(int index)
+        {
+            var icon = boardView.Cells[index].Icon.rectTransform;
+            return icon.TransformPoint(icon.rect.center);
         }
 
         /// <summary>주문 상태를 먼저 확정·저장하고 소비된 아이템의 표시만 슬롯으로 비행시킨다.</summary>
