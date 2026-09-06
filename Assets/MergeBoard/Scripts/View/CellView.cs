@@ -27,9 +27,10 @@ namespace MergeBoard
         }
 
         /// <summary>아이템 단계와 표시 이름을 갱신하고 드래그 중인 원본은 숨긴다.</summary>
-        public void Render(ItemStage stage, bool dragging)
+        /// <param name="force">true면 이전 아이템 단계와 같아도 아이콘과 이름을 다시 표시한다.</param>
+        public void Render(ItemStage stage, bool dragging, bool force = false)
         {
-            if (!hasRenderedStage || renderedStage != stage)
+            if (force || !hasRenderedStage || renderedStage != stage)
             {
                 icon.Stage = stage;
                 label.text = BoardView.StageName(stage);

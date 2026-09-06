@@ -30,13 +30,14 @@ namespace MergeBoard
         }
 
         /// <summary>현재 모델의 단계와 이름을 모든 칸에 표시한다.</summary>
-        public void Render(BoardModel board)
+        /// <param name="force">true면 이전 렌더링 결과와 같아도 모든 셀의 표시를 다시 적용한다.</param>
+        public void Render(BoardModel board, bool force = false)
         {
             for (int index = 0; index < cells.Length; index++)
             {
                 ItemStage stage = board[index];
-                if (hasRenderedBoard && renderedStages[index] == stage) continue;
-                cells[index].Render(stage, index == source);
+                if (!force && hasRenderedBoard && renderedStages[index] == stage) continue;
+                cells[index].Render(stage, index == source, force);
                 renderedStages[index] = stage;
             }
             hasRenderedBoard = true;

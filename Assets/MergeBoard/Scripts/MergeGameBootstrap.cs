@@ -39,10 +39,12 @@ namespace MergeBoard
             if (textFont == null) throw new System.InvalidOperationException("TMP 한글 폰트가 연결되지 않았습니다.");
             foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true)) text.font = textFont;
             InitializeGame();
+            await UniTask.NextFrame();
+            RefreshViews(true);
             await UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation.ToUniTask();
             await UniTask.Yield();
             ApplyStaticText();
-            RefreshViews();
+            RefreshViews(true);
         }
 
         /// <summary>로컬라이제이션 완료 여부와 무관하게 저장 상태와 입력 이벤트를 즉시 연결한다.</summary>
@@ -149,10 +151,11 @@ namespace MergeBoard
         private void ShowResult(string message) => hud.ShowMessage(Controller.SaveMessage.Length > 0 ? Controller.SaveMessage : message);
 
         /// <summary>최신 모델과 규칙 판정을 보드·주문·HUD에 전달한다.</summary>
-        public void RefreshViews()
+        /// <param name="forceBoardRender">true면 WebGL 초기 프레임에서도 모든 보드 셀을 강제로 다시 표시한다.</param>
+        public void RefreshViews(bool forceBoardRender = false)
         {
             if (Controller == null) return;
-            boardView.Render(Board);
+            boardView.Render(Board, forceBoardRender);
             for (int index = 0; index < Controller.State.Orders.Count; index++)
             {
                 var order = Controller.State.Orders[index];
