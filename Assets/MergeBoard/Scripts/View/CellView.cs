@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MergeBoard
 {
@@ -10,14 +11,14 @@ namespace MergeBoard
         [SerializeField] private BoardView boardView;
         [SerializeField] private int index;
         [SerializeField] private ItemGraphic icon;
-        [SerializeField] private Text label;
+        [SerializeField] private TextMeshProUGUI label;
         public RectTransform Rect => (RectTransform)transform;
         public ItemStage Stage => icon.Stage;
         public ItemGraphic Icon => icon;
         private bool dragged;
 
         /// <summary>장면 생성 시 소속 보드·칸 인덱스·표시 요소를 연결한다.</summary>
-        public void Configure(BoardView board, int cellIndex, ItemGraphic item, Text nameLabel)
+        public void Configure(BoardView board, int cellIndex, ItemGraphic item, TextMeshProUGUI nameLabel)
         {
             boardView = board; index = cellIndex; icon = item; label = nameLabel;
         }

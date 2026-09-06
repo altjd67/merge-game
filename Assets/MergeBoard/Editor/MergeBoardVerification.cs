@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -177,21 +178,21 @@ namespace MergeBoard.Editor
             var oldButton = root.Find("생성기");
             Assert(oldButton != null, "교체할 기존 생성 버튼");
             UnityEngine.Object.DestroyImmediate(oldButton.gameObject);
-            var title = root.Find("제목").GetComponent<UnityEngine.UI.Text>();
+            var title = root.Find("제목").GetComponent<TextMeshProUGUI>();
             title.rectTransform.anchoredPosition = new Vector2(24, -4);
             title.rectTransform.sizeDelta = new Vector2(210, 32); title.fontSize = 24;
-            var coins = root.Find("코인").GetComponent<UnityEngine.UI.Text>();
+            var coins = root.Find("코인").GetComponent<TextMeshProUGUI>();
             var energy = UIFactory.CreateText(root, "에너지", new Vector2(24, 38), new Vector2(174, 26), "에너지 100/100", 15);
             var recovery = UIFactory.CreateText(root, "회복 시간", new Vector2(204, 38), new Vector2(72, 26), "최대", 14);
             var toast = UIFactory.CreateRect(root, "토스트", new Vector2(90, 410), new Vector2(300, 52));
             var background = toast.gameObject.AddComponent<UnityEngine.UI.Image>();
             background.color = new Color32(36, 49, 39, 235); background.raycastTarget = false;
-            var message = root.Find("안내").GetComponent<UnityEngine.UI.Text>();
+            var message = root.Find("안내").GetComponent<TextMeshProUGUI>();
             message.transform.SetParent(toast, false);
             message.rectTransform.anchorMin = message.rectTransform.anchorMax = message.rectTransform.pivot = new Vector2(0, 1);
             message.rectTransform.anchoredPosition = new Vector2(8, 0);
             message.rectTransform.sizeDelta = new Vector2(284, 52);
-            message.alignment = TextAnchor.MiddleCenter; message.fontSize = 16; message.color = Color.white; message.text = "";
+            message.alignment = TextAlignmentOptions.Center; message.fontSize = 16; message.color = Color.white; message.text = "";
             game.HUD.Configure(coins, energy, recovery, message, toast.gameObject);
             game.BoardView.Render(new BoardModel());
             EditorUtility.SetDirty(game.HUD);

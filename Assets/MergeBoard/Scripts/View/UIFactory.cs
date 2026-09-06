@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MergeBoard
 {
@@ -18,16 +19,34 @@ namespace MergeBoard
         }
 
         /// <summary>한국어 동적 글꼴을 사용하는 표시 전용 Text를 만든다.</summary>
-        public static Text CreateText(Transform parent, string name, Vector2 position, Vector2 size, string content, int fontSize, TextAnchor alignment = TextAnchor.MiddleLeft)
+        public static TextMeshProUGUI CreateText(Transform parent, string name, Vector2 position, Vector2 size, string content, int fontSize, TextAnchor alignment = TextAnchor.MiddleLeft)
         {
-            var text = CreateRect(parent, name, position, size).gameObject.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            var text = CreateRect(parent, name, position, size).gameObject.AddComponent<TextMeshProUGUI>();
+            var game = Object.FindFirstObjectByType<MergeGameBootstrap>();
+            if (game != null) text.font = game.TextFont;
             text.fontSize = fontSize;
             text.text = content;
             text.color = new Color32(47, 65, 51, 255);
-            text.alignment = alignment;
+            text.alignment = ToTextAlignment(alignment);
             text.raycastTarget = false;
             return text;
+        }
+
+        private static TextAlignmentOptions ToTextAlignment(TextAnchor alignment)
+        {
+            return alignment switch
+            {
+                TextAnchor.UpperLeft => TextAlignmentOptions.TopLeft,
+                TextAnchor.UpperCenter => TextAlignmentOptions.Top,
+                TextAnchor.UpperRight => TextAlignmentOptions.TopRight,
+                TextAnchor.MiddleLeft => TextAlignmentOptions.Left,
+                TextAnchor.MiddleCenter => TextAlignmentOptions.Center,
+                TextAnchor.MiddleRight => TextAlignmentOptions.Right,
+                TextAnchor.LowerLeft => TextAlignmentOptions.BottomLeft,
+                TextAnchor.LowerCenter => TextAlignmentOptions.Bottom,
+                TextAnchor.LowerRight => TextAlignmentOptions.BottomRight,
+                _ => TextAlignmentOptions.Left,
+            };
         }
 
         /// <summary>Image와 Text를 가진 uGUI Button을 만든다.</summary>

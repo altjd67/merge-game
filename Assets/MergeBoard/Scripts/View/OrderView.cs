@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MergeBoard
 {
@@ -9,13 +10,13 @@ namespace MergeBoard
     {
         [SerializeField] private RectTransform[] cards;
         [SerializeField] private Button[] getButtons;
-        [SerializeField] private Text[] statusLabels;
+        [SerializeField] private TextMeshProUGUI[] statusLabels;
         public RectTransform[] Cards => cards;
         public Button[] GetButtons => getButtons;
         public event Action<int> GetClicked;
 
         /// <summary>장면에 생성된 주문 슬롯·버튼·상태 문구 참조를 연결한다.</summary>
-        public void Configure(RectTransform[] cardViews, Button[] buttons, Text[] labels)
+        public void Configure(RectTransform[] cardViews, Button[] buttons, TextMeshProUGUI[] labels)
         {
             cards = cardViews; getButtons = buttons; statusLabels = labels;
         }
@@ -34,8 +35,8 @@ namespace MergeBoard
         {
             cards[index].Find("요청 아이템").GetComponent<ItemGraphic>().Stage = order.RequiredStage;
             statusLabels[index].text = $"{BoardView.StageName(order.RequiredStage)} {availableCount}/{order.RequiredCount}";
-            cards[index].Find("보상").GetComponent<Text>().text = "+" + order.Reward + " 코인";
-            getButtons[index].GetComponentInChildren<Text>().text = "Get";
+            cards[index].Find("보상").GetComponent<TextMeshProUGUI>().text = "+" + order.Reward + " 코인";
+            getButtons[index].GetComponentInChildren<TextMeshProUGUI>().text = "Get";
             getButtons[index].interactable = canSubmit;
         }
     }

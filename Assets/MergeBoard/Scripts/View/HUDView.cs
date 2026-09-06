@@ -1,15 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MergeBoard
 {
     /// <summary>코인·에너지·회복 시간과 입력을 막지 않는 짧은 토스트를 표시한다.</summary>
     public sealed class HUDView : MonoBehaviour
     {
-        [SerializeField] private Text coinsLabel;
-        [SerializeField] private Text energyLabel;
-        [SerializeField] private Text recoveryLabel;
-        [SerializeField] private Text messageLabel;
+        [SerializeField] private TextMeshProUGUI coinsLabel;
+        [SerializeField] private TextMeshProUGUI energyLabel;
+        [SerializeField] private TextMeshProUGUI recoveryLabel;
+        [SerializeField] private TextMeshProUGUI messageLabel;
         [SerializeField] private GameObject toastRoot;
         [SerializeField] private GameObject generatorGuideRoot;
         private const float ToastDuration = 2;
@@ -20,7 +21,7 @@ namespace MergeBoard
         public bool IsGeneratorGuideVisible => generatorGuideRoot != null && generatorGuideRoot.activeSelf;
 
         /// <summary>장면에 생성된 HUD 요소를 연결한다.</summary>
-        public void Configure(Text coins, Text energy, Text recovery, Text message, GameObject toast, GameObject generatorGuide = null)
+        public void Configure(TextMeshProUGUI coins, TextMeshProUGUI energy, TextMeshProUGUI recovery, TextMeshProUGUI message, GameObject toast, GameObject generatorGuide = null)
         {
             coinsLabel = coins; energyLabel = energy; recoveryLabel = recovery;
             messageLabel = message; toastRoot = toast;

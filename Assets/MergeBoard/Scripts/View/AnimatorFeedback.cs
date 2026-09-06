@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MergeBoard
 {
@@ -33,7 +34,7 @@ namespace MergeBoard
         }
 
         /// <summary>보상 텍스트를 위로 이동시키며 서서히 사라지게 한다.</summary>
-        public static AnimatorFeedback ShowReward(RectTransform overlay, Vector3 targetWorld, int reward, Font font)
+        public static AnimatorFeedback ShowReward(RectTransform overlay, Vector3 targetWorld, int reward, TMP_FontAsset font)
         {
             var text = UIFactory.CreateText(overlay, "코인 보상", Vector2.zero, new Vector2(144, 36), "+" + reward + " 코인", 22, TextAnchor.MiddleCenter);
             text.font = font;

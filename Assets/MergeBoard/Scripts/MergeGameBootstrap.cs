@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 namespace MergeBoard
 {
@@ -16,10 +17,12 @@ namespace MergeBoard
         public OrderView OrderView => orderView;
         public HUDView HUD => hud;
         public RectTransform ScreenRoot => screenRoot;
+        /// <summary>장면의 모든 TMP uGUI 문구에 적용하는 한글 글꼴이다.</summary>
+        public TMP_FontAsset TextFont => textFont;
         public MergeGameController Controller { get; private set; }
-        private Font runtimeFont;
         /// <summary>검증에서 씨앗팩 강조 재생 여부를 확인하기 위한 누적 횟수다.</summary>
         public int GeneratorGuidePulseCount { get; private set; }
+        [SerializeField] private TMP_FontAsset textFont;
         private float nextGuidePulseAt;
         private const float GuidePulseInterval = 1.5f;
 
@@ -29,8 +32,8 @@ namespace MergeBoard
             // PC에서 창 포커스를 잃어도 생성기 시간과 제출 피드백은 계속 진행한다.
             Application.runInBackground = true;
             // OS 동적 글꼴의 런타임 Material은 직렬화되지 않으므로 실행 시 다시 생성한다.
-            runtimeFont = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Arial" }, 32);
-            foreach (var text in GetComponentsInChildren<Text>(true)) text.font = runtimeFont;
+            if (textFont == null) throw new System.InvalidOperationException("TMP 한글 폰트가 연결되지 않았습니다.");
+            foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true)) text.font = textFont;
             string savePath = System.IO.Path.Combine(Application.persistentDataPath, "merge-board-v1.json");
 #if UNITY_EDITOR
             // 검증은 사용자 저장과 분리하며, SessionState는 Play Mode 재진입에도 유지된다.
@@ -91,7 +94,7 @@ namespace MergeBoard
                     var icon = boardView.Cells[index].Icon.rectTransform;
                     AnimatorFeedback.Fly(screenRoot, icon.TransformPoint(icon.rect.center), destination, result.ConsumedStage);
                 }
-                AnimatorFeedback.ShowReward(screenRoot, card.TransformPoint(new Vector3(72, -78, 0)), result.Reward, runtimeFont);
+                AnimatorFeedback.ShowReward(screenRoot, card.TransformPoint(new Vector3(72, -78, 0)), result.Reward, textFont);
             }
             RefreshViews();
             ShowResult(result.Success ? "+" + result.Reward + " 코인!" : "주문에 필요한 아이템이 부족합니다.");
@@ -145,8 +148,6 @@ namespace MergeBoard
 
         private void OnApplicationFocus(bool hasFocus) { if (!hasFocus) boardView?.CancelDrag(); }
 
-        private void OnDestroy() { if (runtimeFont != null) Destroy(runtimeFont); }
-
         /// <summary>Editor 장면 준비 시 한 번 호출해 편집 가능한 uGUI 계층을 생성한다.</summary>
         public void BuildUI()
         {
@@ -180,7 +181,7 @@ namespace MergeBoard
             boardView.Configure(cells, screenRoot);
             var ordersRoot = UIFactory.CreateRect(screenRoot, "주문 목록", new Vector2(16, 72), new Vector2(448, 122));
             orderView = ordersRoot.gameObject.AddComponent<OrderView>();
-            var cards = new RectTransform[3]; var buttons = new Button[3]; var labels = new Text[3];
+            var cards = new RectTransform[3]; var buttons = new Button[3]; var labels = new TextMeshProUGUI[3];
             var initial = new GameState();
             for (int index = 0; index < 3; index++)
             {
