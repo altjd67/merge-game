@@ -1,5 +1,7 @@
 # 작은 정원 · Merge Board MVP
 
+## [🎮 브라우저에서 플레이하기](https://altjd67.github.io/merge-game/)
+
 Unity uGUI로 만든 7열 × 9행 머지 보드입니다. 씨앗을 생성하고 합성해 주문을 완료하면 코인을 받습니다. 보드·코인·주문·에너지는 로컬 JSON으로 저장되며 종료 중에도 에너지가 회복됩니다.
 
 ![실제 플레이: 첫 씨앗팩 가이드, 합성, Get 제출, 무작위 후속 주문](docs/media/merge-board-mvp.gif)
