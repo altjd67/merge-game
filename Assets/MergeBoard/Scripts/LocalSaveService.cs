@@ -1,7 +1,4 @@
 using System;
-#if !UNITY_WEBGL
-using System.IO;
-#endif
 using UnityEngine;
 
 namespace MergeBoard
@@ -28,15 +25,11 @@ namespace MergeBoard
             try
             {
                 string json = PlayerPrefs.GetString(SaveKey, "");
-                bool migratedFromLegacyFile = false;
-#if !UNITY_WEBGL
-                if (string.IsNullOrEmpty(json)) migratedFromLegacyFile = TryLoadLegacyJson(out json);
-#endif
                 if (string.IsNullOrEmpty(json)) return new GameState();
                 var data = JsonUtility.FromJson<SaveData>(json);
                 if (data == null) throw new ArgumentException("비어 있는 저장 데이터입니다.");
                 var state = data.ToState();
-                if (data.version < 3 || migratedFromLegacyFile) Save(state);
+                if (data.version < 3) Save(state);
                 return state;
             }
             catch (Exception)
@@ -66,16 +59,5 @@ namespace MergeBoard
             }
         }
 
-#if !UNITY_WEBGL
-        /// <summary>PlayerPrefs 전환 전의 JSON 저장 파일을 읽어 최초 실행 시 진행 상태를 이전한다.</summary>
-        private static bool TryLoadLegacyJson(out string json)
-        {
-            json = "";
-            string legacyPath = Path.Combine(Application.persistentDataPath, "merge-board-v1.json");
-            if (!File.Exists(legacyPath)) return false;
-            json = File.ReadAllText(legacyPath);
-            return !string.IsNullOrEmpty(json);
-        }
-#endif
     }
 }
