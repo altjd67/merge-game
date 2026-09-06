@@ -42,7 +42,7 @@ namespace MergeBoard
             Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             boardView.Dropped += HandleDrop;
             boardView.DragStateChanged += _ => RefreshViews();
-            hud.GenerateClicked += HandleGenerate;
+            boardView.Clicked += HandleGenerate;
             orderView.GetClicked += HandleOrder;
             RefreshViews();
             if (loadMessage.Length > 0) hud.ShowMessage(loadMessage);
@@ -62,13 +62,13 @@ namespace MergeBoard
         }
 
         /// <summary>생성 명령과 저장을 완료한 뒤 클릭 피드백을 재생한다.</summary>
-        private void HandleGenerate()
+        private void HandleGenerate(int index)
         {
-            if (boardView.IsDragging) return;
-            var result = Controller.Generate(Board.FindCells(ItemStage.SeedPack)[0], System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-            if (result.Success) AnimatorFeedback.PlayScale(hud.GenerateButton.transform, "Click");
+            if (boardView.IsDragging || Board[index] != ItemStage.SeedPack) return;
+            var result = Controller.Generate(index, System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            if (result.Success) AnimatorFeedback.PlayScale(boardView.Cells[index].Icon.transform, "Click");
             RefreshViews();
-            ShowResult(result.Message);
+            ShowResult(result.Success ? "" : result.Message);
         }
 
         /// <summary>주문 상태를 먼저 확정·저장하고 소비된 아이템의 표시만 슬롯으로 비행시킨다.</summary>
@@ -104,15 +104,19 @@ namespace MergeBoard
                 var order = Controller.State.Orders[index];
                 orderView.Render(index, order, Board.FindCells(order.RequiredStage).Count, !boardView.IsDragging && Controller.CanSubmit(index));
             }
-            hud.Render(Controller.State.Coins, 0, !boardView.IsDragging && Controller.State.Energy > 0);
+            RenderHUD();
         }
 
         private void Update()
         {
             if (Controller == null) return;
-            Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-            hud.Render(Controller.State.Coins, 0, !boardView.IsDragging && Controller.State.Energy > 0);
+            if (Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()) && Controller.SaveMessage.Length > 0)
+                hud.ShowMessage(Controller.SaveMessage);
+            RenderHUD();
         }
+
+        private void RenderHUD() => hud.Render(Controller.State.Coins, Controller.State.Energy, GameState.MaxEnergy,
+            Controller.RecoveryRemaining(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds()));
 
         private void OnApplicationFocus(bool hasFocus) { if (!hasFocus) boardView?.CancelDrag(); }
 
@@ -132,9 +136,10 @@ namespace MergeBoard
             screenRoot = UIFactory.CreateRect(canvasRoot.transform, "작은 정원", Vector2.zero, new Vector2(480, 854));
             screenRoot.anchorMin = screenRoot.anchorMax = screenRoot.pivot = new Vector2(0.5f, 0.5f);
             screenRoot.gameObject.AddComponent<Image>().color = new Color32(244, 242, 225, 255);
-            UIFactory.CreateText(screenRoot, "제목", new Vector2(24, 16), new Vector2(250, 42), "작은 정원", 26);
+            UIFactory.CreateText(screenRoot, "제목", new Vector2(24, 4), new Vector2(210, 32), "작은 정원", 24);
             var coins = UIFactory.CreateText(screenRoot, "코인", new Vector2(314, 20), new Vector2(142, 32), "0 코인", 20, TextAnchor.MiddleRight);
-            var message = UIFactory.CreateText(screenRoot, "안내", new Vector2(20, 196), new Vector2(440, 28), "씨앗을 합쳐 주문을 완성해보세요.", 12);
+            var energy = UIFactory.CreateText(screenRoot, "에너지", new Vector2(24, 38), new Vector2(174, 26), "에너지 100/100", 15);
+            var recovery = UIFactory.CreateText(screenRoot, "회복 시간", new Vector2(204, 38), new Vector2(72, 26), "최대", 14);
             var boardRoot = UIFactory.CreateRect(screenRoot, "보드", new Vector2(16, 226), new Vector2(448, 576));
             boardView = boardRoot.gameObject.AddComponent<BoardView>();
             var cells = new CellView[BoardModel.CellCount];
@@ -163,9 +168,13 @@ namespace MergeBoard
                 UIFactory.CreateText(cards[index], "보상", new Vector2(0, 98), new Vector2(144, 20), "+" + order.Reward + " 코인", 10, TextAnchor.MiddleCenter);
             }
             orderView.Configure(cards, buttons, labels);
-            var generate = UIFactory.CreateButton(screenRoot, "생성기", new Vector2(140, 809), new Vector2(200, 34), "씨앗 만들기");
+            var toast = UIFactory.CreateRect(screenRoot, "토스트", new Vector2(90, 410), new Vector2(300, 52));
+            var background = toast.gameObject.AddComponent<Image>();
+            background.color = new Color32(36, 49, 39, 235); background.raycastTarget = false;
+            var message = UIFactory.CreateText(toast, "안내", new Vector2(8, 0), new Vector2(284, 52), "", 16, TextAnchor.MiddleCenter);
+            message.color = Color.white;
             hud = screenRoot.gameObject.AddComponent<HUDView>();
-            hud.Configure(generate, coins, message);
+            hud.Configure(coins, energy, recovery, message, toast.gameObject);
             if (FindFirstObjectByType<EventSystem>() == null)
                 new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule)).transform.SetParent(transform, false);
             boardView.Render(initial.Board);

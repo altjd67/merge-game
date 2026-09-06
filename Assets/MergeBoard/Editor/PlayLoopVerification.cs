@@ -61,6 +61,14 @@ namespace MergeBoard.Editor
         private static IEnumerable<double> Run(MergeGameBootstrap game)
         {
             yield return 0.6;
+            MergeBoardVerification.Assert(game.HUD.EnergyText == "에너지 100/100", "초기 에너지 HUD");
+            MergeBoardVerification.Drag(game, 31, 32);
+            MergeBoardVerification.Assert(game.Board[32] == ItemStage.SeedPack && game.Controller.State.Energy == 100, "씨앗팩 드래그 이동 무소모");
+            MergeBoardVerification.Drag(game, 32, 32);
+            ExecuteEvents.Execute(game.BoardView.Cells[32].gameObject, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left }, ExecuteEvents.pointerClickHandler);
+            MergeBoardVerification.Assert(game.Controller.State.Energy == 100, "드래그 후 중복 클릭 억제");
+            ClickCell(game, 0);
+            MergeBoardVerification.Assert(game.Controller.State.Energy == 100, "일반 아이템 클릭 무소모");
             MergeBoardVerification.Drag(game, 0, 7);
             yield return 0.4;
             MergeBoardVerification.Drag(game, 7, -1);
@@ -84,13 +92,12 @@ namespace MergeBoard.Editor
                         break;
                     }
                     if (merged) continue;
-                    while (!game.HUD.GenerateButton.interactable) yield return 0.1;
                     int before = game.Board.FindCells(ItemStage.Seed).Count;
-                    Click(game.HUD.GenerateButton);
-                    MergeBoardVerification.Assert(game.Board.FindCells(ItemStage.Seed).Count == before + 1 && !game.HUD.GenerateButton.interactable, "생성 클릭과 쿨다운 비활성화");
-                    Click(game.HUD.GenerateButton);
-                    MergeBoardVerification.Assert(game.Board.FindCells(ItemStage.Seed).Count == before + 1, "쿨다운 중 재클릭 거절");
-                    MergeBoardVerification.Assert(game.HUD.GenerateButton.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Click"), "생성기 클릭 Animator");
+                    int energyBefore = game.Controller.State.Energy;
+                    ClickCell(game, 32);
+                    ClickCell(game, 32);
+                    MergeBoardVerification.Assert(game.Board.FindCells(ItemStage.Seed).Count == before + 2 && game.Controller.State.Energy == energyBefore - 2, "씨앗팩 연속 클릭과 에너지 차감");
+                    MergeBoardVerification.Assert(game.BoardView.Cells[32].Icon.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Click"), "생성기 클릭 Animator");
                     yield return 0.3;
                 }
                 MergeBoardVerification.Assert(game.OrderView.GetButtons[orderIndex].interactable, "수량 충족 Get 활성화");
@@ -112,6 +119,19 @@ namespace MergeBoard.Editor
                 MergeBoardVerification.Assert(UnityEngine.Object.FindObjectsByType<AnimatorFeedback>(FindObjectsSortMode.None).Length == 0, "효과 종료 후 임시 오브젝트 정리");
             }
             MergeBoardVerification.Assert(game.Controller.State.Coins == 230, "세 주문 총 230코인");
+            // 실제 생성 입력으로 보드를 채운 후 실패 토스트와 소모 불변을 검사한다.
+            int emptyCount = game.Board.FindCells(ItemStage.Empty).Count;
+            for (int index = 0; index < emptyCount; index++)
+            {
+                ClickCell(game, 32);
+                MergeBoardVerification.Assert(game.Board.FindCells(ItemStage.Empty).Count == emptyCount - index - 1, "보드 채우기 생성 성공");
+            }
+            int remainingEnergy = game.Controller.State.Energy;
+            ClickCell(game, 32);
+            MergeBoardVerification.Assert(game.HUD.MessageText == "보드 가득 참" && game.HUD.IsToastVisible && game.Controller.State.Energy == remainingEnergy, "가득 찬 보드 토스트와 에너지 불변");
+            yield return 1;
+            yield return 1.2;
+            MergeBoardVerification.Assert(!game.HUD.IsToastVisible, "토스트 자동 숨김");
             SaveVerification.RememberPlayState();
             yield return 1.5;
         }
@@ -120,6 +140,15 @@ namespace MergeBoard.Editor
         public static void Click(Button button)
         {
             ExecuteEvents.Execute(button.gameObject, new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left }, ExecuteEvents.pointerClickHandler);
+        }
+
+        /// <summary>셀의 실제 포인터 누름·클릭 경로로 입력한다.</summary>
+        public static void ClickCell(MergeGameBootstrap game, int index)
+        {
+            var target = game.BoardView.Cells[index].gameObject;
+            var evt = new PointerEventData(EventSystem.current) { button = PointerEventData.InputButton.Left, pointerId = -1 };
+            ExecuteEvents.Execute(target, evt, ExecuteEvents.pointerDownHandler);
+            ExecuteEvents.Execute(target, evt, ExecuteEvents.pointerClickHandler);
         }
     }
 }

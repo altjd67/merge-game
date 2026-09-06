@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MergeBoard
 {
-    /// <summary>빈 칸과 하나의 아이템 계열에 속한 세 단계를 구분한다.</summary>
+    /// <summary>빈 칸, 합성 아이템 세 단계와 합성되지 않는 씨앗팩을 구분한다.</summary>
     public enum ItemStage { Empty, Seed, Sprout, Flower, SeedPack }
 
     /// <summary>좌측 상단 기준 7열 × 9행의 칸 상태를 보관한다.</summary>
@@ -16,7 +16,7 @@ namespace MergeBoard
         private readonly ItemStage[] cells;
         public ItemStage this[int index] => cells[index];
 
-        /// <summary>첫 행의 앞 4칸에 씨앗을 배치한 초기 보드를 만든다.</summary>
+        /// <summary>첫 행 씨앗 4개와 중앙 씨앗팩 하나를 배치한 초기 보드를 만든다.</summary>
         public BoardModel() : this(new ItemStage[CellCount])
         {
             for (int index = 0; index < 4; index++) cells[index] = ItemStage.Seed;

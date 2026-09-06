@@ -32,7 +32,6 @@ namespace MergeBoard.Editor
             }
             foreach (var cell in game.BoardView.Cells) Attach(cell.Icon.gameObject, controller);
             foreach (var button in game.OrderView.GetButtons) Attach(button.gameObject, controller);
-            Attach(game.HUD.GenerateButton.gameObject, controller);
             EditorSceneManager.MarkSceneDirty(game.gameObject.scene);
             EditorSceneManager.SaveScene(game.gameObject.scene);
             AssetDatabase.SaveAssets();

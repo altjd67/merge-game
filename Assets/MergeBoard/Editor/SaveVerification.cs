@@ -112,8 +112,24 @@ namespace MergeBoard.Editor
         public static void VerifyPlayReload()
         {
             var game = UnityEngine.Object.FindFirstObjectByType<MergeGameBootstrap>();
-            Check(SessionState.GetString("MergeBoard.ExpectedSave", "") == JsonUtility.ToJson(SaveData.FromState(game.Controller.State)), "재진입 보드·코인·주문 복원");
-            Debug.Log("MVP 재실행 복원 PASS: 보드 63칸·코인·주문 완료 상태 일치");
+            var expected = new MergeGameController(JsonUtility.FromJson<SaveData>(SessionState.GetString("MergeBoard.ExpectedSave", "")).ToState(), null);
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            expected.RefreshEnergy(now);
+            game.Controller.RefreshEnergy(now);
+            CheckEqual(expected.State, game.Controller.State, "재진입 보드·코인·주문·에너지·회복 기준 복원");
+            Debug.Log("MVP 재실행 복원 PASS: 보드·코인·주문·에너지·오프라인 회복 일치");
+        }
+
+        /// <summary>개인 저장과 분리된 파일에 250초 전 에너지 50 상태를 준비해 실제 재진입 회복을 검증한다.</summary>
+        public static void PrepareOfflinePlay()
+        {
+            PrepareIsolatedPlay();
+            var data = SaveData.FromState(new GameState());
+            data.energy = 50;
+            data.energyRecoveryAnchorUtcSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - 250;
+            var service = new LocalSaveService(SessionState.GetString("MergeBoard.VerificationSavePath", ""));
+            Check(service.Save(data.ToState()), "오프라인 검증 파일 저장");
+            SessionState.SetString("MergeBoard.ExpectedSave", JsonUtility.ToJson(data));
         }
 
         /// <summary>검증 이후 정상 저장 경로로 돌린다. 검증 파일은 Logs에 남긴다.</summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MergeBoard
 {
-    /// <summary>보드, 고정 주문 세 개, 코인을 하나의 진행 상태로 묶는다.</summary>
+    /// <summary>보드·고정 주문·코인·에너지와 회복 기준 시각을 하나의 진행 상태로 묶는다.</summary>
     public sealed class GameState
     {
         public BoardModel Board { get; }

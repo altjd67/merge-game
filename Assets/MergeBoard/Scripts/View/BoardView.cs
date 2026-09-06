@@ -14,6 +14,7 @@ namespace MergeBoard
         public bool IsDragging => source >= 0;
         public event Action<int, int> Dropped;
         public event Action<bool> DragStateChanged;
+        public event Action<int> Clicked;
         private int source = -1;
         private ItemGraphic ghost;
         private int activePointerId;
@@ -30,6 +31,12 @@ namespace MergeBoard
         {
             for (int index = 0; index < cells.Length; index++)
                 cells[index].Render(board[index], index == source);
+        }
+
+        /// <summary>드래그 중이 아니면 클릭한 칸을 전달한다. 아이템 규칙은 Controller가 검사한다.</summary>
+        public void Click(int index)
+        {
+            if (!IsDragging && BoardModel.IsValidIndex(index)) Clicked?.Invoke(index);
         }
 
         /// <summary>아이템 표시만 복제하여 드래그를 시작한다. 원본 모델은 드롭 전까지 유지한다.</summary>
@@ -83,7 +90,7 @@ namespace MergeBoard
         /// <summary>아이템 단계의 한국어 표시 이름을 반환한다.</summary>
         public static string StageName(ItemStage stage) => stage switch
         {
-            ItemStage.Seed => "씨앗", ItemStage.Sprout => "새싹", ItemStage.Flower => "꽃", _ => ""
+            ItemStage.Seed => "씨앗", ItemStage.Sprout => "새싹", ItemStage.Flower => "꽃", ItemStage.SeedPack => "씨앗팩", _ => ""
         };
     }
 }

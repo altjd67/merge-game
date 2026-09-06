@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace MergeBoard
 {
     /// <summary>한 칸의 아이템과 이름을 표시하고 uGUI 드래그 이벤트를 BoardView에 전달한다.</summary>
-    public sealed class CellView : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public sealed class CellView : MonoBehaviour, IPointerDownHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField] private BoardView boardView;
         [SerializeField] private int index;
@@ -14,6 +14,7 @@ namespace MergeBoard
         public RectTransform Rect => (RectTransform)transform;
         public ItemStage Stage => icon.Stage;
         public ItemGraphic Icon => icon;
+        private bool dragged;
 
         /// <summary>장면 생성 시 소속 보드·칸 인덱스·표시 요소를 연결한다.</summary>
         public void Configure(BoardView board, int cellIndex, ItemGraphic item, Text nameLabel)
@@ -31,7 +32,22 @@ namespace MergeBoard
 
         /// <summary>아이템과 이름의 표시만 변경한다.</summary>
         public void SetItemVisible(bool visible) { icon.enabled = visible; label.enabled = visible; }
-        public void OnBeginDrag(PointerEventData eventData) => boardView.BeginDrag(index, eventData);
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left) dragged = false;
+        }
+        /// <summary>드래그를 수행하지 않은 왼쪽 클릭만 보드에 전달한다.</summary>
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (!dragged && eventData.button == PointerEventData.InputButton.Left) boardView.Click(index);
+        }
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left) return;
+            dragged = true;
+            eventData.eligibleForClick = false;
+            boardView.BeginDrag(index, eventData);
+        }
         public void OnDrag(PointerEventData eventData) => boardView.MoveDrag(eventData);
         public void OnEndDrag(PointerEventData eventData) => boardView.EndDrag(eventData);
     }
