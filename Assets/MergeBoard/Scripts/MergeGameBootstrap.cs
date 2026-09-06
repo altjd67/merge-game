@@ -1,4 +1,4 @@
-using System.Collections;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -29,14 +29,15 @@ namespace MergeBoard
         private const float GuidePulseInterval = 1.5f;
 
         /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
-        private IEnumerator Start()
+        private async UniTaskVoid Start()
         {
             // PC에서 창 포커스를 잃어도 생성기 시간과 제출 피드백은 계속 진행한다.
             Application.runInBackground = true;
             // OS 동적 글꼴의 런타임 Material은 직렬화되지 않으므로 실행 시 다시 생성한다.
             if (textFont == null) throw new System.InvalidOperationException("TMP 한글 폰트가 연결되지 않았습니다.");
             foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true)) text.font = textFont;
-            yield return UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation;
+            await UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation.ToUniTask();
+            await UniTask.Yield();
             ApplyStaticText();
             string saveKey = LocalSaveService.DefaultSaveKey;
 #if UNITY_EDITOR
@@ -86,16 +87,16 @@ namespace MergeBoard
             {
                 boardView.Cells[destination].SetItemVisible(false);
                 AnimatorFeedback.Fly(screenRoot, generatorWorld, ItemWorldCenter(destination), ItemStage.Seed, 2f);
-                StartCoroutine(ShowGeneratedItem(destination));
+                ShowGeneratedItem(destination);
             }
             ShowResult(result.Success ? "" : GameText.Get(result.Message));
         }
 
         /// <summary>생성 비행이 끝난 뒤 도착 칸의 씨앗을 표시하고 짧게 확대한다.</summary>
-        private IEnumerator ShowGeneratedItem(int destination)
+        private async UniTaskVoid ShowGeneratedItem(int destination)
         {
-            yield return new WaitForSecondsRealtime(AnimatorFeedback.FastFlightDuration);
-            if (Board[destination] != ItemStage.Seed) yield break;
+            await UniTask.Delay(System.TimeSpan.FromSeconds(AnimatorFeedback.FastFlightDuration), DelayType.UnscaledDeltaTime);
+            if (Board[destination] != ItemStage.Seed) return;
             boardView.Cells[destination].SetItemVisible(true);
             AnimatorFeedback.PlayScale(boardView.Cells[destination].Icon.transform, "Merge");
         }
