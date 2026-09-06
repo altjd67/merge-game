@@ -68,15 +68,24 @@ namespace MergeBoard.Editor
             var orderCells = new ItemStage[63];
             orderCells[0] = ItemStage.Sprout;
             orderCells[1] = orderCells[2] = orderCells[3] = ItemStage.Flower;
-            var orders = new MergeGameController(new BoardModel(orderCells));
+            var orders = new MergeGameController(new GameState(new BoardModel(orderCells)), null, new System.Random(0));
+            var originalIds = new[] { orders.State.Orders[0].Id, orders.State.Orders[1].Id, orders.State.Orders[2].Id };
             Assert(orders.CanSubmit(0) && orders.CanSubmit(1) && orders.CanSubmit(2), "주문 세 개 활성 조건");
             Assert(orders.SubmitOrder(0).Reward == 20 && orders.SubmitOrder(1).Reward == 60 && orders.SubmitOrder(2).Reward == 150, "정확한 주문 보상");
             Assert(orders.State.Coins == 230 && orders.Board.FindCells(ItemStage.Empty).Count == 63, "총 보상과 수량 소비");
-            Assert(!orders.SubmitOrder(2).Success && orders.State.Coins == 230, "중복 보상 방지");
+            Assert(orders.State.Orders[0].Id != originalIds[0] && orders.State.Orders[1].Id != originalIds[1] &&
+                orders.State.Orders[2].Id != originalIds[2], "완료 슬롯의 직전과 다른 무작위 주문 교체");
+            Assert(!orders.SubmitOrder(2).Success && orders.State.Coins == 230, "교체 주문 수량 부족 시 중복 보상 방지");
             var insufficientCells = new ItemStage[63]; insufficientCells[0] = ItemStage.Flower;
             var insufficient = new MergeGameController(new BoardModel(insufficientCells));
             Assert(!insufficient.CanSubmit(2) && !insufficient.SubmitOrder(2).Success && insufficient.Board[0] == ItemStage.Flower, "수량 부족 시 소비 없음");
-            Debug.Log("MVP 규칙 검증 PASS: 씨앗팩·체비쇼프·연속 생성·에너지 경계·가득 찬 보드·이동·합성·주문·230코인");
+            var repeatedCells = new ItemStage[63];
+            for (int index = 0; index < 4; index++) repeatedCells[index] = ItemStage.Flower;
+            var repeated = new MergeGameController(new GameState(new BoardModel(repeatedCells)), null, new System.Random(0));
+            string beforeId = repeated.State.Orders[1].Id;
+            var first = repeated.SubmitOrder(1);
+            Assert(first.Success && first.ConsumedStage == ItemStage.Flower && first.ReplacementOrderId != beforeId, "교체 전 비행 단계와 새 주문 ID");
+            Debug.Log("MVP 규칙 검증 PASS: 씨앗팩·에너지·이동·합성·반복 무작위 주문·수량 부족·230코인");
         }
 
         /// <summary>실제 대기 없이 UTC 경계값을 주입하여 소모·회복·최대치와 시각 역행을 검사한다.</summary>

@@ -17,7 +17,13 @@ namespace MergeBoard
         public bool Success { get; }
         public int[] ConsumedCells { get; }
         public int Reward { get; }
-        public OrderResult(int[] cells, int reward) { Success = true; ConsumedCells = cells; Reward = reward; }
+        public ItemStage ConsumedStage { get; }
+        public string ReplacementOrderId { get; }
+        public OrderResult(int[] cells, int reward, ItemStage stage, string replacementOrderId)
+        {
+            Success = true; ConsumedCells = cells; Reward = reward;
+            ConsumedStage = stage; ReplacementOrderId = replacementOrderId;
+        }
     }
 
     /// <summary>UI에 의존하지 않고 이동과 합성의 게임 규칙 및 상태 변경을 처리한다.</summary>
@@ -28,15 +34,17 @@ namespace MergeBoard
         public GameState State { get; }
         public BoardModel Board => State.Board;
         private readonly LocalSaveService saveService;
+        private readonly Random random;
         public string SaveMessage => saveService?.LastError ?? "";
 
-        public MergeGameController(BoardModel board = null) : this(new GameState(board), null) { }
+        public MergeGameController(BoardModel board = null) : this(new GameState(board), null, null) { }
 
         /// <summary>복원한 상태와 저장 서비스를 연결한다. 검증에서는 저장 서비스를 생략할 수 있다.</summary>
-        public MergeGameController(GameState state, LocalSaveService saveService)
+        public MergeGameController(GameState state, LocalSaveService saveService, Random random = null)
         {
             State = state ?? throw new ArgumentNullException(nameof(state));
             this.saveService = saveService;
+            this.random = random ?? new Random();
         }
 
         /// <summary>UTC 경과 시간으로 실행·종료 중 에너지를 회복하고 남은 초를 보존한다. 실제 변경 시에만 저장한다.</summary>
@@ -75,6 +83,7 @@ namespace MergeBoard
             Board.SetCell(destination, ItemStage.Seed);
             if (State.Energy == GameState.MaxEnergy) State.EnergyRecoveryAnchorUtcSeconds = now;
             State.Energy--;
+            State.GeneratorGuideCompleted = true;
             Persist();
             return new MoveResult(true, false, "씨앗이 자랄 준비를 마쳤어요.");
         }
@@ -86,7 +95,7 @@ namespace MergeBoard
         {
             if (orderIndex < 0 || orderIndex >= State.Orders.Count) return false;
             var order = State.Orders[orderIndex];
-            return !order.Completed && Board.FindCells(order.RequiredStage).Count >= order.RequiredCount;
+            return Board.FindCells(order.RequiredStage).Count >= order.RequiredCount;
         }
 
         /// <summary>Get 클릭 시 수량을 재검사하고 아이템 소비·주문 완료·코인 보상을 한 번에 처리한다.</summary>
@@ -97,10 +106,18 @@ namespace MergeBoard
             var order = State.Orders[orderIndex];
             var consumed = Board.FindCells(order.RequiredStage).GetRange(0, order.RequiredCount).ToArray();
             foreach (int index in consumed) Board.SetCell(index, ItemStage.Empty);
-            order.Completed = true;
             State.Coins += order.Reward;
+            string replacementId = PickReplacementOrderId(order.Id);
+            State.ReplaceOrder(orderIndex, replacementId);
             Persist();
-            return new OrderResult(consumed, order.Reward);
+            return new OrderResult(consumed, order.Reward, order.RequiredStage, replacementId);
+        }
+
+        private string PickReplacementOrderId(string currentId)
+        {
+            int current = currentId == "Order01" ? 0 : currentId == "Order02" ? 1 : 2;
+            int offset = random.Next(GameState.OrderTemplateCount - 1) + 1;
+            return "Order0" + ((current + offset) % GameState.OrderTemplateCount + 1);
         }
 
         /// <summary>빈 칸으로 이동하거나 동일 단계 두 개를 합성한다. 거절 시 상태를 유지한다.</summary>

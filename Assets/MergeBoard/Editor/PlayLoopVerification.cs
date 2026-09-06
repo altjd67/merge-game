@@ -105,10 +105,10 @@ namespace MergeBoard.Editor
                 yield return 0.45;
                 int coinsBefore = game.Controller.State.Coins;
                 int countBefore = game.Board.FindCells(order.RequiredStage).Count;
+                string orderBefore = order.Id;
                 Click(game.OrderView.GetButtons[orderIndex]);
                 MergeBoardVerification.Assert(game.Controller.State.Coins == coinsBefore + order.Reward && game.Board.FindCells(order.RequiredStage).Count == countBefore - order.RequiredCount, "Get 소비·보상");
-                Click(game.OrderView.GetButtons[orderIndex]);
-                MergeBoardVerification.Assert(game.Controller.State.Coins == coinsBefore + order.Reward, "애니메이션 중 중복 보상 방지");
+                MergeBoardVerification.Assert(game.Controller.State.Orders[orderIndex].Id != orderBefore, "완료 주문 즉시 교체");
                 yield return 0.2;
                 var effects = UnityEngine.Object.FindObjectsByType<AnimatorFeedback>(FindObjectsSortMode.None);
                 MergeBoardVerification.Assert(effects.Length == order.RequiredCount + 1, "수량만큼 아이템 비행과 보상 텍스트");

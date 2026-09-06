@@ -62,7 +62,9 @@ namespace MergeBoard.Editor
             File.WriteAllText(service.FilePath, JsonUtility.ToJson(legacy));
             var restored = service.Load();
             Check(restored.Board[31] == ItemStage.Seed && restored.Board[10] == ItemStage.Flower &&
-                restored.Board[23] == ItemStage.SeedPack && restored.Coins == 20 && restored.Orders[0].Completed && restored.Energy == 100, "구버전 진행 보존과 최근접 씨앗팩");
+                restored.Board[23] == ItemStage.SeedPack && restored.Coins == 20 &&
+                restored.Orders[0].Id == "Order02" && restored.Energy == 100 && restored.GeneratorGuideCompleted,
+                "구버전 진행 보존과 완료 주문 교체·가이드 완료");
             var data = SaveData.FromState(restored);
             data.energy = 50; data.energyRecoveryAnchorUtcSeconds = 1000;
             foreach (long elapsed in new long[] { 119, 120, 250 })

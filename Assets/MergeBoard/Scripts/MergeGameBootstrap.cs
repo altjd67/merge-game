@@ -84,7 +84,7 @@ namespace MergeBoard
                 foreach (int index in result.ConsumedCells)
                 {
                     var icon = boardView.Cells[index].Icon.rectTransform;
-                    AnimatorFeedback.Fly(screenRoot, icon.TransformPoint(icon.rect.center), destination, Controller.State.Orders[orderIndex].RequiredStage);
+                    AnimatorFeedback.Fly(screenRoot, icon.TransformPoint(icon.rect.center), destination, result.ConsumedStage);
                 }
                 AnimatorFeedback.ShowReward(screenRoot, card.TransformPoint(new Vector3(72, -78, 0)), result.Reward, runtimeFont);
             }

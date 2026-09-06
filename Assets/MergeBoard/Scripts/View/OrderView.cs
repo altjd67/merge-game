@@ -32,8 +32,8 @@ namespace MergeBoard
         /// <summary>수량·완료 표시와 Controller가 판정한 버튼 활성 여부를 갱신한다.</summary>
         public void Render(int index, OrderModel order, int availableCount, bool canSubmit)
         {
-            statusLabels[index].text = order.Completed ? "완료" : $"{BoardView.StageName(order.RequiredStage)} {availableCount}/{order.RequiredCount}";
-            getButtons[index].GetComponentInChildren<Text>().text = order.Completed ? "완료" : "Get";
+            statusLabels[index].text = $"{BoardView.StageName(order.RequiredStage)} {availableCount}/{order.RequiredCount}";
+            getButtons[index].GetComponentInChildren<Text>().text = "Get";
             getButtons[index].interactable = canSubmit;
         }
     }

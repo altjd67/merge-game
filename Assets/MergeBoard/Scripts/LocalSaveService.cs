@@ -23,7 +23,7 @@ namespace MergeBoard
                 var data = JsonUtility.FromJson<SaveData>(File.ReadAllText(FilePath));
                 if (data == null) throw new ArgumentException("비어 있는 저장 데이터입니다.");
                 var state = data.ToState();
-                if (data.version == 1) Save(state);
+                if (data.version < 3) Save(state);
                 return state;
             }
             catch (Exception error) when (error is IOException || error is UnauthorizedAccessException || error is ArgumentException)
