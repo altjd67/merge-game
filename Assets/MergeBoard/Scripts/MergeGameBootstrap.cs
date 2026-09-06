@@ -24,6 +24,7 @@ namespace MergeBoard
         /// <summary>검증에서 씨앗팩 강조 재생 여부를 확인하기 위한 누적 횟수다.</summary>
         public int GeneratorGuidePulseCount { get; private set; }
         [SerializeField] private TMP_FontAsset textFont;
+        private LocalSaveService saveService;
         private float nextGuidePulseAt;
         private long lastHudRenderUtcSecond = long.MinValue;
         private const float GuidePulseInterval = 1.5f;
@@ -31,6 +32,12 @@ namespace MergeBoard
         private const float GeneratedItemFlightSpeed = 2f;
 
         /// <summary>로컬 진행 상태를 한 번 복원한 뒤 장면 UI의 입력을 연결한다.</summary>
+        private void Awake()
+        {
+            // WebGL 저장소가 준비되기 전 기본 보드가 잠깐 노출되지 않도록 한다.
+            if (screenRoot != null) screenRoot.gameObject.SetActive(false);
+        }
+
         private async UniTaskVoid Start()
         {
             // PC에서 창 포커스를 잃어도 생성기 시간과 제출 피드백은 계속 진행한다.
@@ -39,8 +46,10 @@ namespace MergeBoard
             if (textFont == null) throw new System.InvalidOperationException("TMP 한글 폰트가 연결되지 않았습니다.");
             foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true)) text.font = textFont;
             InitializeGame();
-            await UniTask.NextFrame();
+            await UniTask.DelayFrame(2);
+            ReloadSavedState();
             RefreshViews(true);
+            screenRoot.gameObject.SetActive(true);
             await UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation.ToUniTask();
             await UniTask.Yield();
             ApplyStaticText();
@@ -55,7 +64,7 @@ namespace MergeBoard
             // 검증은 사용자 저장과 분리하며, SessionState는 Play Mode 재진입에도 유지된다.
             saveKey = UnityEditor.SessionState.GetString("MergeBoard.VerificationSaveKey", saveKey);
 #endif
-            var saveService = new LocalSaveService(saveKey);
+            saveService = new LocalSaveService(saveKey);
             Controller = new MergeGameController(saveService.Load(), saveService);
             string loadMessage = Controller.SaveMessage;
             Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
@@ -70,6 +79,13 @@ namespace MergeBoard
 #if DEVELOPMENT_BUILD
             Debug.Log("MVP_RESTORED " + JsonUtility.ToJson(SaveData.FromState(Controller.State)));
 #endif
+        }
+
+        /// <summary>WebGL 영구 저장소 준비 뒤 같은 저장 서비스에서 진행 상태를 다시 복원한다.</summary>
+        private void ReloadSavedState()
+        {
+            Controller = new MergeGameController(saveService.Load(), saveService);
+            Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         }
 
         /// <summary>드롭 규칙을 처리하고 저장 결과 및 합성 표시를 갱신한다.</summary>
