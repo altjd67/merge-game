@@ -127,9 +127,9 @@ namespace MergeBoard
 
         private string PickReplacementOrderId(string currentId)
         {
-            int current = currentId == "Order01" ? 0 : currentId == "Order02" ? 1 : 2;
+            int current = GameState.GetOrderIndex(currentId);
             int offset = random.Next(GameState.OrderTemplateCount - 1) + 1;
-            return "Order0" + ((current + offset) % GameState.OrderTemplateCount + 1);
+            return GameState.GetOrderId((current + offset) % GameState.OrderTemplateCount);
         }
 
         /// <summary>빈 칸으로 이동하거나 동일 단계 두 개를 합성한다. 거절 시 상태를 유지한다.</summary>
@@ -147,12 +147,19 @@ namespace MergeBoard
             bool merged = Board[destination] == stage && stage < ItemStage.Flower;
             if (Board[destination] != ItemStage.Empty && !merged)
                 return new MoveResult(false, false, "message.merge_same_stage");
-            Board.SetCell(destination, merged ? stage + 1 : stage);
+            Board.SetCell(destination, merged ? GetNextMergeStage(stage) : stage);
             Board.SetCell(source, ItemStage.Empty);
             Persist();
             return new MoveResult(true, merged, "");
         }
 
         private void Persist() => saveService?.Save(State);
+
+        private static ItemStage GetNextMergeStage(ItemStage stage) => stage switch
+        {
+            ItemStage.Seed => ItemStage.Sprout,
+            ItemStage.Sprout => ItemStage.Flower,
+            _ => throw new ArgumentOutOfRangeException(nameof(stage), "합성할 수 없는 아이템 단계입니다.")
+        };
     }
 }

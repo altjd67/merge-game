@@ -7,7 +7,9 @@ namespace MergeBoard
     public sealed class GameState
     {
         public BoardModel Board { get; }
-        public const int OrderTemplateCount = 3;
+        private static readonly string[] OrderTemplateIds = { "Order01", "Order02", "Order03" };
+        /// <summary>현재 MVP에서 사용할 수 있는 주문 템플릿 수를 반환한다.</summary>
+        public static int OrderTemplateCount => OrderTemplateIds.Length;
         private readonly OrderModel[] orders;
         public IReadOnlyList<OrderModel> Orders { get; }
         public int Coins { get; internal set; }
@@ -35,6 +37,21 @@ namespace MergeBoard
             "Order03" => new OrderModel("Order03", ItemStage.Flower, 2, 150),
             _ => throw new ArgumentException("알 수 없는 주문 ID입니다.")
         };
+
+        /// <summary>템플릿 인덱스에 해당하는 주문 ID를 반환한다.</summary>
+        public static string GetOrderId(int index)
+        {
+            if (index < 0 || index >= OrderTemplateIds.Length) throw new ArgumentOutOfRangeException(nameof(index));
+            return OrderTemplateIds[index];
+        }
+
+        /// <summary>주문 ID에 해당하는 템플릿 인덱스를 반환한다.</summary>
+        public static int GetOrderIndex(string id)
+        {
+            for (int index = 0; index < OrderTemplateIds.Length; index++)
+                if (OrderTemplateIds[index] == id) return index;
+            throw new ArgumentException("알 수 없는 주문 ID입니다.", nameof(id));
+        }
 
         internal void ReplaceOrder(int index, string id) => orders[index] = CreateOrder(id);
     }
