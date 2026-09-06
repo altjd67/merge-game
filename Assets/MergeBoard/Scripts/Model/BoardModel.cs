@@ -54,6 +54,32 @@ namespace MergeBoard
             }
             return nearest;
         }
+        /// <summary>지정한 단계의 아이템 수를 새 컬렉션 할당 없이 반환한다.</summary>
+        public int CountCells(ItemStage stage)
+        {
+            int count = 0;
+            for (int index = 0; index < CellCount; index++) if (cells[index] == stage) count++;
+            return count;
+        }
+        /// <summary>지정한 단계의 첫 번째 칸 인덱스를 반환한다. 없으면 -1이다.</summary>
+        public int FindFirstCell(ItemStage stage)
+        {
+            for (int index = 0; index < CellCount; index++) if (cells[index] == stage) return index;
+            return -1;
+        }
+        /// <summary>지정한 단계의 앞선 칸을 요청 수량만큼 새 배열에 채운다. 부족하면 null을 반환한다.</summary>
+        public int[] FindFirstCells(ItemStage stage, int count)
+        {
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+            var result = new int[count];
+            int found = 0;
+            for (int index = 0; index < CellCount && found < count; index++)
+            {
+                if (cells[index] != stage) continue;
+                result[found++] = index;
+            }
+            return found == count ? result : null;
+        }
         /// <summary>요청 단계의 칸을 인덱스 오름차순으로 반환한다. Empty는 빈 칸 검색이다.</summary>
         public List<int> FindCells(ItemStage stage)
         {

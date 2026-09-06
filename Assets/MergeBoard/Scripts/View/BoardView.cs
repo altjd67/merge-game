@@ -18,19 +18,28 @@ namespace MergeBoard
         private int source = -1;
         private ItemGraphic ghost;
         private int activePointerId;
+        private readonly ItemStage[] renderedStages = new ItemStage[BoardModel.CellCount];
+        private bool hasRenderedBoard;
 
         /// <summary>장면 생성 시 칸 참조와 화면 최상단 드래그 계층을 연결한다.</summary>
         public void Configure(CellView[] cellViews, RectTransform overlay)
         {
             cells = cellViews;
             dragLayer = overlay;
+            hasRenderedBoard = false;
         }
 
         /// <summary>현재 모델의 단계와 이름을 모든 칸에 표시한다.</summary>
         public void Render(BoardModel board)
         {
             for (int index = 0; index < cells.Length; index++)
-                cells[index].Render(board[index], index == source);
+            {
+                ItemStage stage = board[index];
+                if (hasRenderedBoard && renderedStages[index] == stage) continue;
+                cells[index].Render(stage, index == source);
+                renderedStages[index] = stage;
+            }
+            hasRenderedBoard = true;
         }
 
         /// <summary>드래그 중이 아니면 클릭한 칸을 전달한다. 아이템 규칙은 Controller가 검사한다.</summary>
@@ -73,18 +82,18 @@ namespace MergeBoard
             int destination = -1;
             for (int index = 0; index < cells.Length; index++)
                 if (RectTransformUtility.RectangleContainsScreenPoint(cells[index].Rect, evt.position, evt.pressEventCamera)) { destination = index; break; }
-            CancelDrag();
+            CancelDrag(false);
             Dropped?.Invoke(start, destination);
         }
 
         /// <summary>포커스 상실·입력 취소 시 임시 표시를 정리하며 모델은 바꾸지 않는다.</summary>
-        public void CancelDrag()
+        public void CancelDrag(bool notify = true)
         {
             if (!IsDragging) return;
             cells[source].SetItemVisible(true);
             source = -1;
             if (ghost != null) ghost.gameObject.SetActive(false);
-            DragStateChanged?.Invoke(false);
+            if (notify) DragStateChanged?.Invoke(false);
         }
 
         private void OnDisable() => CancelDrag();

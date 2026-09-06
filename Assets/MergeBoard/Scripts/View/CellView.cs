@@ -16,6 +16,9 @@ namespace MergeBoard
         public ItemStage Stage => icon.Stage;
         public ItemGraphic Icon => icon;
         private bool dragged;
+        private bool hasRenderedStage;
+        private ItemStage renderedStage;
+        private bool itemVisible = true;
 
         /// <summary>장면 생성 시 소속 보드·칸 인덱스·표시 요소를 연결한다.</summary>
         public void Configure(BoardView board, int cellIndex, ItemGraphic item, TextMeshProUGUI nameLabel)
@@ -26,13 +29,24 @@ namespace MergeBoard
         /// <summary>아이템 단계와 표시 이름을 갱신하고 드래그 중인 원본은 숨긴다.</summary>
         public void Render(ItemStage stage, bool dragging)
         {
-            icon.Stage = stage;
-            label.text = BoardView.StageName(stage);
+            if (!hasRenderedStage || renderedStage != stage)
+            {
+                icon.Stage = stage;
+                label.text = BoardView.StageName(stage);
+                renderedStage = stage;
+                hasRenderedStage = true;
+            }
             SetItemVisible(!dragging);
         }
 
         /// <summary>아이템과 이름의 표시만 변경한다.</summary>
-        public void SetItemVisible(bool visible) { icon.enabled = visible; label.enabled = visible; }
+        public void SetItemVisible(bool visible)
+        {
+            if (itemVisible == visible) return;
+            icon.enabled = visible;
+            label.enabled = visible;
+            itemVisible = visible;
+        }
         public void OnPointerDown(PointerEventData eventData)
         {
             if (eventData.button == PointerEventData.InputButton.Left) dragged = false;

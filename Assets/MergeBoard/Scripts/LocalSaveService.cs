@@ -47,7 +47,6 @@ namespace MergeBoard
             try
             {
                 var data = SaveData.FromState(state);
-                data.ToState();
                 PlayerPrefs.SetString(SaveKey, JsonUtility.ToJson(data));
                 PlayerPrefs.Save();
                 return true;

@@ -106,7 +106,7 @@ namespace MergeBoard
         {
             if (orderIndex < 0 || orderIndex >= State.Orders.Count) return false;
             var order = State.Orders[orderIndex];
-            return Board.FindCells(order.RequiredStage).Count >= order.RequiredCount;
+            return Board.CountCells(order.RequiredStage) >= order.RequiredCount;
         }
 
         /// <summary>Get 클릭 시 수량을 재검사하고 아이템 소비·주문 완료·코인 보상을 한 번에 처리한다.</summary>
@@ -115,7 +115,8 @@ namespace MergeBoard
         {
             if (!CanSubmit(orderIndex)) return default;
             var order = State.Orders[orderIndex];
-            var consumed = Board.FindCells(order.RequiredStage).GetRange(0, order.RequiredCount).ToArray();
+            var consumed = Board.FindFirstCells(order.RequiredStage, order.RequiredCount);
+            if (consumed == null) return default;
             foreach (int index in consumed) Board.SetCell(index, ItemStage.Empty);
             State.Coins += order.Reward;
             string replacementId = PickReplacementOrderId(order.Id);

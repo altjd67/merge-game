@@ -132,7 +132,8 @@ namespace MergeBoard
             for (int index = 0; index < Controller.State.Orders.Count; index++)
             {
                 var order = Controller.State.Orders[index];
-                orderView.Render(index, order, Board.FindCells(order.RequiredStage).Count, !boardView.IsDragging && Controller.CanSubmit(index));
+                int availableCount = Board.CountCells(order.RequiredStage);
+                orderView.Render(index, order, availableCount, !boardView.IsDragging && availableCount >= order.RequiredCount);
             }
             RenderHUD(true);
             hud.RenderGeneratorGuide(!Controller.State.GeneratorGuideCompleted);
@@ -164,10 +165,10 @@ namespace MergeBoard
             bool visible = !Controller.State.GeneratorGuideCompleted;
             hud.RenderGeneratorGuide(visible);
             if (!visible || boardView.IsDragging || Time.unscaledTime < nextGuidePulseAt) return;
-            var generators = Board.FindCells(ItemStage.SeedPack);
-            if (generators.Count > 0)
+            int generator = Board.FindFirstCell(ItemStage.SeedPack);
+            if (generator >= 0)
             {
-                AnimatorFeedback.PlayScale(boardView.Cells[generators[0]].Icon.transform, "Click");
+                AnimatorFeedback.PlayScale(boardView.Cells[generator].Icon.transform, "Click");
                 GeneratorGuidePulseCount++;
             }
             nextGuidePulseAt = Time.unscaledTime + GuidePulseInterval;
