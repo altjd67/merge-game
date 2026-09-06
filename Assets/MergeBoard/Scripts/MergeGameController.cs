@@ -28,8 +28,17 @@ namespace MergeBoard
         public BoardModel Board => State.Board;
         private readonly Random random = new Random();
         private double nextGenerationTime;
+        private readonly LocalSaveService saveService;
+        public string SaveMessage => saveService?.LastError ?? "";
 
-        public MergeGameController(BoardModel board = null) => State = new GameState(board);
+        public MergeGameController(BoardModel board = null) : this(new GameState(board), null) { }
+
+        /// <summary>복원한 상태와 저장 서비스를 연결한다. 검증에서는 저장 서비스를 생략할 수 있다.</summary>
+        public MergeGameController(GameState state, LocalSaveService saveService)
+        {
+            State = state ?? throw new ArgumentNullException(nameof(state));
+            this.saveService = saveService;
+        }
 
         /// <summary>호출자가 전달한 단조 증가 시각으로 생성기 대기시간을 계산한다.</summary>
         public double CooldownRemaining(double now) => Math.Max(0, nextGenerationTime - now);
@@ -43,6 +52,7 @@ namespace MergeBoard
             if (emptyCells.Count == 0) return new MoveResult(false, false, "보드에 빈 칸이 없습니다.");
             Board.SetCell(emptyCells[random.Next(emptyCells.Count)], ItemStage.Seed);
             nextGenerationTime = now + GeneratorCooldown;
+            Persist();
             return new MoveResult(true, false, "씨앗이 자랄 준비를 마쳤어요.");
         }
 
@@ -64,6 +74,7 @@ namespace MergeBoard
             foreach (int index in consumed) Board.SetCell(index, ItemStage.Empty);
             order.Completed = true;
             State.Coins += order.Reward;
+            Persist();
             return new OrderResult(consumed, order.Reward);
         }
 
@@ -82,7 +93,10 @@ namespace MergeBoard
                 return new MoveResult(false, false, "같은 단계의 씨앗이나 새싹을 겹쳐주세요.");
             Board.SetCell(destination, merged ? stage + 1 : stage);
             Board.SetCell(source, ItemStage.Empty);
+            Persist();
             return new MoveResult(true, merged, "");
         }
+
+        private void Persist() => saveService?.Save(State);
     }
 }

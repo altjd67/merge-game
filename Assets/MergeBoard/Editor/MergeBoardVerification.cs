@@ -25,6 +25,7 @@ namespace MergeBoard.Editor
             EditorSceneManager.SaveScene(scene, path);
             EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(path, true) };
             AssetDatabase.SaveAssets();
+            PrepareUGUI();
         }
 
         /// <summary>보드·이동·합성의 성공 경로와 경계·실패 경로를 검사한다.</summary>

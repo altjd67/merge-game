@@ -24,19 +24,26 @@ namespace MergeBoard
             // OS 동적 글꼴의 런타임 Material은 직렬화되지 않으므로 실행 시 다시 생성한다.
             runtimeFont = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Arial" }, 32);
             foreach (var text in GetComponentsInChildren<Text>(true)) text.font = runtimeFont;
-            Controller = new MergeGameController();
+            string savePath = System.IO.Path.Combine(Application.persistentDataPath, "merge-board-v1.json");
+#if UNITY_EDITOR
+            // 검증은 사용자 저장과 분리하며, SessionState는 Play Mode 재진입에도 유지된다.
+            savePath = UnityEditor.SessionState.GetString("MergeBoard.VerificationSavePath", savePath);
+#endif
+            var saveService = new LocalSaveService(savePath);
+            Controller = new MergeGameController(saveService.Load(), saveService);
             boardView.Dropped += HandleDrop;
             boardView.DragStateChanged += _ => RefreshViews();
             hud.GenerateClicked += HandleGenerate;
             orderView.GetClicked += HandleOrder;
             RefreshViews();
+            if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
         }
 
         private void HandleDrop(int source, int destination)
         {
             var result = Controller.Move(source, destination);
             RefreshViews();
-            hud.ShowMessage(result.Merged ? BoardView.StageName(Board[destination]) + " 합성!" : result.Message);
+            ShowResult(result.Merged ? BoardView.StageName(Board[destination]) + " 합성!" : result.Message);
         }
 
         private void HandleGenerate()
@@ -44,7 +51,7 @@ namespace MergeBoard
             if (boardView.IsDragging) return;
             var result = Controller.Generate(Time.unscaledTimeAsDouble);
             RefreshViews();
-            hud.ShowMessage(result.Message);
+            ShowResult(result.Message);
         }
 
         private void HandleOrder(int orderIndex)
@@ -52,8 +59,10 @@ namespace MergeBoard
             if (boardView.IsDragging) return;
             var result = Controller.SubmitOrder(orderIndex);
             RefreshViews();
-            hud.ShowMessage(result.Success ? "+" + result.Reward + " 코인!" : "주문에 필요한 아이템이 부족합니다.");
+            ShowResult(result.Success ? "+" + result.Reward + " 코인!" : "주문에 필요한 아이템이 부족합니다.");
         }
+
+        private void ShowResult(string message) => hud.ShowMessage(Controller.SaveMessage.Length > 0 ? Controller.SaveMessage : message);
 
         /// <summary>최신 모델과 규칙 판정을 보드·주문·HUD에 전달한다.</summary>
         public void RefreshViews()
