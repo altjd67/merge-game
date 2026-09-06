@@ -45,7 +45,9 @@ namespace MergeBoard
             if (IsDragging || cells[index].Stage == ItemStage.Empty || evt.button != UnityEngine.EventSystems.PointerEventData.InputButton.Left) return;
             source = index;
             activePointerId = evt.pointerId;
-            ghost = UIFactory.CreateItem(dragLayer, "드래그 아이템", Vector2.zero, cells[index].Stage);
+            ghost ??= UIFactory.CreateItem(dragLayer, "드래그 아이템", Vector2.zero, ItemStage.Empty);
+            ghost.gameObject.SetActive(true);
+            ghost.Stage = cells[index].Stage;
             ghost.rectTransform.pivot = new Vector2(0.5f, 0.5f);
             cells[index].SetItemVisible(false);
             MoveDrag(evt);
@@ -81,7 +83,7 @@ namespace MergeBoard
             if (!IsDragging) return;
             cells[source].SetItemVisible(true);
             source = -1;
-            if (ghost != null) Destroy(ghost.gameObject);
+            if (ghost != null) ghost.gameObject.SetActive(false);
             DragStateChanged?.Invoke(false);
         }
 
