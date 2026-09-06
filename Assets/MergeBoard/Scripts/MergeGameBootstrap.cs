@@ -38,9 +38,16 @@ namespace MergeBoard
             // OS 동적 글꼴의 런타임 Material은 직렬화되지 않으므로 실행 시 다시 생성한다.
             if (textFont == null) throw new System.InvalidOperationException("TMP 한글 폰트가 연결되지 않았습니다.");
             foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true)) text.font = textFont;
+            InitializeGame();
             await UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation.ToUniTask();
             await UniTask.Yield();
             ApplyStaticText();
+            RefreshViews();
+        }
+
+        /// <summary>로컬라이제이션 완료 여부와 무관하게 저장 상태와 입력 이벤트를 즉시 연결한다.</summary>
+        private void InitializeGame()
+        {
             string saveKey = LocalSaveService.DefaultSaveKey;
 #if UNITY_EDITOR
             // 검증은 사용자 저장과 분리하며, SessionState는 Play Mode 재진입에도 유지된다.
