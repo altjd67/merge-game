@@ -35,16 +35,12 @@ namespace MergeBoard
             // OS 동적 글꼴의 런타임 Material은 직렬화되지 않으므로 실행 시 다시 생성한다.
             if (textFont == null) throw new System.InvalidOperationException("TMP 한글 폰트가 연결되지 않았습니다.");
             foreach (var text in GetComponentsInChildren<TextMeshProUGUI>(true)) text.font = textFont;
-            string savePath = System.IO.Path.Combine(Application.persistentDataPath, "merge-board-v1.json");
+            string saveKey = LocalSaveService.DefaultSaveKey;
 #if UNITY_EDITOR
             // 검증은 사용자 저장과 분리하며, SessionState는 Play Mode 재진입에도 유지된다.
-            savePath = UnityEditor.SessionState.GetString("MergeBoard.VerificationSavePath", savePath);
-#elif DEVELOPMENT_BUILD
-            // 개발 빌드 재실행 검증만 별도 파일을 사용하며 일반 빌드에는 포함되지 않는다.
-            string verificationPath = System.Environment.GetEnvironmentVariable("MERGE_BOARD_VERIFY_SAVE");
-            if (!string.IsNullOrEmpty(verificationPath)) savePath = verificationPath;
+            saveKey = UnityEditor.SessionState.GetString("MergeBoard.VerificationSaveKey", saveKey);
 #endif
-            var saveService = new LocalSaveService(savePath);
+            var saveService = new LocalSaveService(saveKey);
             Controller = new MergeGameController(saveService.Load(), saveService);
             string loadMessage = Controller.SaveMessage;
             Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());

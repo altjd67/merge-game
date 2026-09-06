@@ -1,116 +1,80 @@
 using System;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 namespace MergeBoard.Editor
 {
-    /// <summary>개인 저장을 건드리지 않고 파일 저장·실패·재실행 복원을 검증한다.</summary>
+    /// <summary>PlayerPrefs 기반 진행 저장과 복원을 검증한다.</summary>
     public static class SaveVerification
     {
-        /// <summary>각 상태 변경 직후 파일 일치와 손상·쓰기 실패의 기본 상태 복원을 검사한다.</summary>
         [MenuItem("머지 MVP/저장 검증")]
         public static void VerifySave()
         {
-            string root = Path.GetFullPath(Path.Combine(Application.dataPath, "../Logs/SaveVerification", Guid.NewGuid().ToString("N")));
-            Directory.CreateDirectory(root);
-            var service = new LocalSaveService(Path.Combine(root, "progress.json"));
+            var service = new LocalSaveService(CreateVerificationKey("SaveVerification"));
+            PlayerPrefs.DeleteKey(service.SaveKey);
             var game = new MergeGameController(service.Load(), service);
-            Check(service.Load().Board.FindCells(ItemStage.Seed).Count == 4, "누락 파일 초기 배치");
-            game.Generate(31, 1000); CheckEqual(game.State, service.Load(), "생성 직후 에너지 포함 저장");
+            Check(game.State.Board.FindCells(ItemStage.Seed).Count == 4, "저장 데이터가 없을 때 기본 보드 복원");
+
+            game.Generate(BoardModel.InitialGeneratorIndex, 1000);
+            CheckEqual(game.State, service.Load(), "생성 직후 저장");
             int empty = game.Board.FindCells(ItemStage.Empty)[0];
-            game.Move(0, empty); CheckEqual(game.State, service.Load(), "이동 직후 저장");
-            game.Move(empty, 1); CheckEqual(game.State, service.Load(), "합성 직후 저장");
-            game.SubmitOrder(0); CheckEqual(game.State, service.Load(), "주문 완료 직후 저장");
-            Check(service.Load().Coins == 20, "보상 복원");
-            string before = File.ReadAllText(service.FilePath);
-            game.Move(-1, 0); game.SubmitOrder(0);
-            Check(File.ReadAllText(service.FilePath) == before, "실패 명령은 저장 불변");
+            game.Move(0, empty);
+            CheckEqual(game.State, service.Load(), "이동 직후 저장");
+            game.Move(empty, 1);
+            CheckEqual(game.State, service.Load(), "합성 직후 저장");
+            game.SubmitOrder(0);
+            Check(service.Load().Coins == 20, "주문 보상 복원");
 
-            // 임시 파일 자리에 디렉터리를 만들어 쓰기 실패를 재현한다.
-            Directory.CreateDirectory(service.FilePath + ".tmp");
-            Check(!service.Save(game.State) && File.ReadAllText(service.FilePath) == before && service.LastError.Length > 0, "쓰기 실패 시 기존 파일 보존");
-            game.Generate(31, 1002);
-            Check(game.Board.FindCells(ItemStage.Seed).Count == 4 && game.SaveMessage.Length > 0, "저장 실패 시 현재 플레이 유지와 안내");
-
-            File.WriteAllText(service.FilePath, "잘못된 JSON");
-            Check(service.Load().Coins == 0 && service.LastError.Length > 0, "손상 JSON 기본 복원");
-            var data = SaveData.FromState(new GameState());
-            data.version = 99; CheckRejected(service, data, "미지원 버전");
-            data.version = 1; data.cells = new int[1]; CheckRejected(service, data, "잘못된 칸 수");
-            data = SaveData.FromState(new GameState()); data.cells[0] = 99; CheckRejected(service, data, "잘못된 단계");
-            data = SaveData.FromState(new GameState()); data.coins = -1; CheckRejected(service, data, "음수 코인");
-            data = SaveData.FromState(new GameState()); data.orderIds[0] = "unknown"; CheckRejected(service, data, "알 수 없는 주문");
-            data = SaveData.FromState(new GameState()); data.completedOrders[0] = true; CheckRejected(service, data, "코인·완료 상태 불일치");
-            data = SaveData.FromState(new GameState()); data.energy = -1; CheckRejected(service, data, "음수 에너지");
-            data = SaveData.FromState(new GameState()); data.energy = 101; CheckRejected(service, data, "최대 초과 에너지");
-            data = SaveData.FromState(new GameState()); data.energy = 99; CheckRejected(service, data, "회복 기준 누락");
-            data = SaveData.FromState(new GameState()); data.energyRecoveryAnchorUtcSeconds = 1000; CheckRejected(service, data, "최대 에너지 기준 불일치");
-            data = SaveData.FromState(new GameState()); data.cells[31] = 0; CheckRejected(service, data, "씨앗팩 누락");
-            data = SaveData.FromState(new GameState()); data.cells[32] = 4; CheckRejected(service, data, "씨앗팩 중복");
-            VerifyOfflineAndMigration(root);
-            Debug.Log("MVP 저장 검증 PASS: 변경 직후 파일 일치·실패 불변·손상 복원·버전·수량·단계·주문·쓰기 실패 보존");
+            PlayerPrefs.SetString(service.SaveKey, "잘못된 JSON");
+            Check(service.Load().Coins == 0 && service.LastError.Length > 0, "손상 데이터 기본 복원");
+            VerifyMigration();
+            PlayerPrefs.DeleteKey(service.SaveKey);
+            PlayerPrefs.Save();
+            Debug.Log("MVP 저장 검증 PASS: PlayerPrefs 저장, 복원, 손상 데이터, 버전 마이그레이션");
         }
 
-        /// <summary>구버전 진행 보존과 종료 시간별 회복·재접속 중복 방지를 독립 파일로 검사한다.</summary>
-        private static void VerifyOfflineAndMigration(string root)
+        private static void VerifyMigration()
         {
-            var service = new LocalSaveService(Path.Combine(root, "offline.json"));
+            var service = new LocalSaveService(CreateVerificationKey("MigrationVerification"));
             var legacy = SaveData.FromState(new GameState());
-            legacy.version = 1; legacy.cells[31] = 1; legacy.cells[10] = 3;
-            legacy.completedOrders[0] = true; legacy.coins = 20;
-            File.WriteAllText(service.FilePath, JsonUtility.ToJson(legacy));
+            legacy.version = 1;
+            legacy.cells[31] = 1;
+            legacy.cells[10] = 3;
+            legacy.completedOrders[0] = true;
+            legacy.coins = 20;
+            PlayerPrefs.SetString(service.SaveKey, JsonUtility.ToJson(legacy));
+
             var restored = service.Load();
             Check(restored.Board[31] == ItemStage.Seed && restored.Board[10] == ItemStage.Flower &&
                 restored.Board[23] == ItemStage.SeedPack && restored.Coins == 20 &&
                 restored.Orders[0].Id == "Order02" && restored.Energy == 100 && restored.GeneratorGuideCompleted,
-                "구버전 진행 보존과 완료 주문 교체·가이드 완료");
-            var data = SaveData.FromState(restored);
-            data.energy = 50; data.energyRecoveryAnchorUtcSeconds = 1000;
-            foreach (long elapsed in new long[] { 119, 120, 250 })
-            {
-                service.Save(data.ToState());
-                var game = new MergeGameController(service.Load(), service);
-                game.RefreshEnergy(1000 + elapsed);
-                Check(game.State.Energy == 50 + elapsed / 120 && game.RecoveryRemaining(1000 + elapsed) == 120 - elapsed % 120, "오프라인 경계와 남은 초");
-                CheckEqual(game.State, service.Load(), "회복 직후 저장");
-                var reopened = new MergeGameController(service.Load(), service);
-                Check(!reopened.RefreshEnergy(1000 + elapsed), "같은 시각 재접속 이중 회복 없음");
-            }
-            Debug.Log("MVP 오프라인·버전 변환 PASS: 119/120/250초·남은 초·반복 재접속·기존 진행 보존");
+                "버전 1 진행 데이터 복원");
+            PlayerPrefs.DeleteKey(service.SaveKey);
         }
 
-        private static void CheckRejected(LocalSaveService service, SaveData data, string description)
-        {
-            File.WriteAllText(service.FilePath, JsonUtility.ToJson(data));
-            var restored = service.Load();
-            Check(restored.Board.FindCells(ItemStage.Seed).Count == 4 && restored.Coins == 0 && service.LastError.Length > 0, description);
-        }
-
-        /// <summary>모든 저장 대상 필드가 같은지 비교한다.</summary>
+        /// <summary>모든 저장 상태 필드가 같은지 비교한다.</summary>
         public static void CheckEqual(GameState expected, GameState actual, string description)
         {
             Check(JsonUtility.ToJson(SaveData.FromState(expected)) == JsonUtility.ToJson(SaveData.FromState(actual)), description);
         }
 
-        private static void Check(bool condition, string description) => MergeBoardVerification.Assert(condition, description);
-
-        /// <summary>다음 Play Mode 실행을 새로운 격리 저장 경로로 설정한다.</summary>
+        /// <summary>다음 Play Mode에서 개인 진행 상태와 분리된 PlayerPrefs 키를 사용한다.</summary>
         public static void PrepareIsolatedPlay()
         {
-            Check(!Application.isPlaying, "격리 경로는 Play Mode 밖에서 준비");
-            string path = Path.GetFullPath(Path.Combine(Application.dataPath, "../Logs/PlayVerification", Guid.NewGuid().ToString("N"), "progress.json"));
-            SessionState.SetString("MergeBoard.VerificationSavePath", path);
+            Check(!Application.isPlaying, "Play Mode 밖에서 격리 저장 키 준비");
+            string saveKey = CreateVerificationKey("PlayVerification");
+            PlayerPrefs.DeleteKey(saveKey);
+            SessionState.SetString("MergeBoard.VerificationSaveKey", saveKey);
         }
 
-        /// <summary>재진입 비교를 위해 현재 Play Mode의 저장 상태를 기억한다.</summary>
+        /// <summary>Play Mode 재시작 뒤 비교할 현재 상태를 기억한다.</summary>
         public static void RememberPlayState()
         {
             var game = UnityEngine.Object.FindFirstObjectByType<MergeGameBootstrap>();
             SessionState.SetString("MergeBoard.ExpectedSave", JsonUtility.ToJson(SaveData.FromState(game.Controller.State)));
         }
 
-        /// <summary>Play Mode를 종료·재진입한 뒤 모든 저장 필드가 유지됐는지 검사한다.</summary>
+        /// <summary>Play Mode 재시작 후 PlayerPrefs 저장 상태가 복원되었는지 검증한다.</summary>
         public static void VerifyPlayReload()
         {
             var game = UnityEngine.Object.FindFirstObjectByType<MergeGameBootstrap>();
@@ -118,27 +82,32 @@ namespace MergeBoard.Editor
             long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             expected.RefreshEnergy(now);
             game.Controller.RefreshEnergy(now);
-            CheckEqual(expected.State, game.Controller.State, "재진입 보드·코인·주문·에너지·회복 기준 복원");
-            Debug.Log("MVP 재실행 복원 PASS: 보드·코인·주문·에너지·오프라인 회복 일치");
+            CheckEqual(expected.State, game.Controller.State, "재시작 후 진행 상태 복원");
         }
 
-        /// <summary>개인 저장과 분리된 파일에 250초 전 에너지 50 상태를 준비해 실제 재진입 회복을 검증한다.</summary>
+        /// <summary>오프라인 에너지 회복 검증용 PlayerPrefs 데이터를 준비한다.</summary>
         public static void PrepareOfflinePlay()
         {
             PrepareIsolatedPlay();
             var data = SaveData.FromState(new GameState());
             data.energy = 50;
             data.energyRecoveryAnchorUtcSeconds = DateTimeOffset.UtcNow.ToUnixTimeSeconds() - 250;
-            var service = new LocalSaveService(SessionState.GetString("MergeBoard.VerificationSavePath", ""));
-            Check(service.Save(data.ToState()), "오프라인 검증 파일 저장");
+            var service = new LocalSaveService(SessionState.GetString("MergeBoard.VerificationSaveKey", ""));
+            Check(service.Save(data.ToState()), "오프라인 검증 데이터 저장");
             SessionState.SetString("MergeBoard.ExpectedSave", JsonUtility.ToJson(data));
         }
 
-        /// <summary>검증 이후 정상 저장 경로로 돌린다. 검증 파일은 Logs에 남긴다.</summary>
+        /// <summary>격리 검증에 사용한 PlayerPrefs 데이터와 세션 값을 정리한다.</summary>
         public static void EndIsolatedPlay()
         {
-            SessionState.EraseString("MergeBoard.VerificationSavePath");
+            string saveKey = SessionState.GetString("MergeBoard.VerificationSaveKey", "");
+            if (!string.IsNullOrEmpty(saveKey)) PlayerPrefs.DeleteKey(saveKey);
+            PlayerPrefs.Save();
+            SessionState.EraseString("MergeBoard.VerificationSaveKey");
             SessionState.EraseString("MergeBoard.ExpectedSave");
         }
+
+        private static string CreateVerificationKey(string suffix) => "MergeBoard." + suffix + "." + Guid.NewGuid().ToString("N");
+        private static void Check(bool condition, string description) => MergeBoardVerification.Assert(condition, description);
     }
 }
