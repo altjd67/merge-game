@@ -40,7 +40,7 @@
 
 사용자 확정에 따라 세 주문 모두 보드에 요구 수량이 있으면 Get 버튼을 활성화한다. Order03은 꽃 2개 이상일 때 활성화한다. 클릭 시 가장 작은 칸 인덱스부터 필요한 수량만 함께 소비한다. 한 주문 완료 후 다른 주문의 활성화 여부도 즉시 다시 계산한다. 보드 아이템을 주문 카드에 드롭하는 제출과 누적 제출은 사용하지 않는다. 드래그 중에는 Get 클릭을 막아 드래그 표시와 소비 대상이 충돌하지 않게 한다.
 
-클릭 반응, 합성 확대, 제출 비행 및 보상 피드백은 Animator가 재생하는 AnimationClip으로 구동한다. UI Toolkit 표시에는 Animator가 제어하는 MonoBehaviour의 진행도·배율 값을 전달한다. 비행 시작점과 주문 슬롯 목적지는 View에서 계산하며 Controller는 소비한 칸 목록만 반환한다. 애니메이션은 표시 전용이므로 종료 콜백에서 아이템이나 코인을 변경하지 않는다. 재시작 시에는 이미 저장된 완료 상태를 즉시 표시한다.
+클릭 반응, 합성 확대, 제출 비행 및 보상 피드백은 Animator가 재생하는 AnimationClip으로 구동한다. uGUI RectTransform 배율은 Animator 클립에서 직접 제어한다. 비행은 Animator가 제어하는 진행도를 View가 시작점·목적지 좌표에 적용한다. 비행 시작점과 주문 슬롯 목적지는 View에서 계산하며 Controller는 소비한 칸 목록만 반환한다. 애니메이션은 표시 전용이므로 종료 콜백에서 아이템이나 코인을 변경하지 않는다. 재시작 시에는 이미 저장된 완료 상태를 즉시 표시한다.
 
 Controller는 시간 값을 받아 생성 가능 여부를 판정한다. View의 프레임 갱신은 남은 시간을 표시하기만 한다. 최초 실행 및 복원 직후 생성기는 사용 가능한 상태로 시작하는 안을 제안한다. 애니메이션 중에도 판정은 최신 모델에 따르며, 중복 주문 보상이 발생하지 않도록 완료 여부를 먼저 검사한다.
 
@@ -53,7 +53,7 @@ Controller는 시간 값을 받아 생성 가능 여부를 판정한다. View의
 | Model | 칸과 단계, 고정 주문 데이터, 완료 여부, 코인 등 게임 상태와 조회. MonoBehaviour·UI·파일 접근에 의존하지 않는다. |
 | SaveService | JSON 직렬화, 파일 읽기·쓰기, 저장 데이터 유효성 검사, 기본 상태 복원 및 실패 결과 전달. UI에 직접 접근하지 않는다. |
 
-진입용 MonoBehaviour가 Controller와 SaveService를 구성하고 View를 연결한다. 이미 제공되는 UI Toolkit을 사용해 외부 패키지 추가 없이 보드와 카드를 구성한다. 포인터 이벤트는 칸 인덱스, Get 클릭은 주문 ID로 변환해 Controller에 전달한다. 한 사용처뿐인 인터페이스나 범용 이벤트 버스는 도입하지 않는다. UI 배치는 참조 Game 씬의 1080×1920 기준 상단 HUD, 보드 위 가로 주문 영역, 중앙·하단 보드 배치를 따른다. 참조 씬의 RectTransform 배치만 확인하며 코드·구조·에셋은 재사용하지 않는다. MVP 밖의 상점·로비 버튼은 추가하지 않는다.
+진입용 MonoBehaviour가 Controller와 SaveService를 구성하고 View를 연결한다. 사용자가 승인한 공식 com.unity.ugui 2.0.0으로 Canvas·RectTransform·Button 및 EventSystem을 구성한다. 장면에 UI 계층을 저장해 Inspector에서 편집할 수 있게 한다. uGUI 드래그 이벤트는 칸 인덱스, Get 클릭은 주문 ID로 변환해 Controller에 전달한다. 한 사용처뿐인 인터페이스나 범용 이벤트 버스는 도입하지 않는다. UI 배치는 참조 Game 씬의 1080×1920 기준 상단 HUD, 보드 위 가로 주문 영역, 중앙·하단 보드 배치를 따른다. 참조 씬의 RectTransform 배치만 확인하며 코드·구조·에셋은 재사용하지 않는다. MVP 밖의 상점·로비 버튼은 추가하지 않는다.
 
 ## 추가·수정할 파일 목록과 각 파일의 책임
 
@@ -71,9 +71,14 @@ Controller는 시간 값을 받아 생성 가능 여부를 판정한다. View의
 | Assets/MergeBoard/Scripts/View/BoardView.cs | 63칸 표시, 드래그 표시·입력, 합성 피드백. |
 | Assets/MergeBoard/Scripts/View/OrderView.cs | 주문 카드 3개, 제출 입력, 완료 표시. |
 | Assets/MergeBoard/Scripts/View/HUDView.cs | 코인·생성기·대기시간·안내와 플로팅 텍스트. |
-| Assets/MergeBoard/Scripts/View/AnimatorFeedback.cs | Animator가 제어하는 진행도·배율을 UI 표시로 전달하고 종료 시 표시를 정리한다. |
+| Assets/MergeBoard/Scripts/View/AnimatorFeedback.cs | Animator의 비행 진행도를 동적 목적지에 적용하고 표시를 정리한다. |
+| Assets/MergeBoard/Scripts/View/CellView.cs | 한 칸의 아이템·이름과 uGUI 드래그 이벤트 전달. |
+| Assets/MergeBoard/Scripts/View/ItemGraphic.cs | 외부 아트 없이 씨앗·새싹·꽃을 그리는 uGUI Graphic. |
+| Assets/MergeBoard/Scripts/View/UIFactory.cs | 장면 생성에 반복되는 uGUI 요소 구성. |
+| Assets/MergeBoard/Resources/KoreanFont.fontsettings | PC 한국어 동적 글꼴 설정. |
+| Packages/manifest.json, Packages/packages-lock.json | 사용자가 승인한 공식 uGUI 패키지 선언·해결 결과. |
 | Assets/MergeBoard/Animations/ | 클릭·합성·비행·보상 AnimationClip과 AnimatorController. 모두 .meta를 포함한다. |
-| Assets/MergeBoard/Scripts/MergeGameBootstrap.cs | 런타임 UI 및 서비스 구성, 초기 복원, 입력 연결. |
+| Assets/MergeBoard/Scripts/MergeGameBootstrap.cs | 장면 UI 구성과 서비스 초기화, 최초 복원, 입력 연결. |
 | Assets/MergeBoard/Scenes/MergeBoard.unity | 실행 진입 컴포넌트를 가진 MVP 장면. |
 | Assets/MergeBoard/Editor/MergeBoardVerification.cs | 외부 테스트 패키지 없이 규칙·저장 실패 경로를 재현하는 Editor 검증 진입점. |
 | ProjectSettings/EditorBuildSettings.asset | MVP 장면을 실행 장면 목록에 등록한다. |
@@ -111,7 +116,7 @@ C# 변경 후에는 unity-verify의 status → editor refresh --compile → cons
 
 - Order03은 보드에 꽃 2개가 있으면 Get을 활성화하고 클릭 시 함께 소비·비행하는 방식으로 사용자 확정됐다. 동일한 제출 방식을 세 주문에 적용한다.
 - 초기 아이템은 첫 행의 씨앗 4개, 코인은 0, 생성기 대기시간은 실행마다 초기화하는 안이다. 기획에 명시되지 않은 초기값임을 구현 전에 알린다.
-- UI Toolkit, JSON 파일, 프로그램으로 구성하는 UI는 패키지를 추가하지 않는 구현 선택이다. 실제 Editor에서 한국어 글꼴 표시와 포인터 동작을 확인하며, 필요한 외부 에셋·패키지가 생기면 별도 승인을 받는다.
+- UI는 사용자 요청에 따라 uGUI로 확정했고 공식 패키지 추가도 승인됐다. JSON 로컬 파일을 사용하고, Editor 생성 도구로 만든 UI를 장면에 저장한다. 실제 Editor에서 한국어 글꼴 표시와 포인터 동작을 확인하며, 필요한 외부 에셋·패키지가 생기면 별도 승인을 받는다.
 - 기획의 `빈 보드 처리`는 빈 보드의 생성 성공과 생성기 절의 가득 찬 보드 거절을 모두 검증한다.
 - 저장 포맷 버전 1 이전 데이터는 없으며 알 수 없는 버전은 기본 상태로 시작한다. 향후 마이그레이션 기능은 이번 범위에서 제외한다.
 - 최초 설계 시 Unity 연결이 없었으나 사용자 요구사항 확정 후 D:/merge-game의 Unity 6000.3.21f1 연결이 ready임을 확인했다. 구현 및 unity-verify를 진행한다.

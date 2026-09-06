@@ -77,6 +77,7 @@
 
 ## 6. UI와 피드백
 
+- UI는 uGUI의 Canvas, RectTransform, Button으로 구현하며 클릭·합성·제출 피드백은 Animator를 사용한다.
 - 상단: 현재 코인 수
 - 중앙: 7×9 보드
 - 하단: 생성기 버튼과 재사용 대기시간

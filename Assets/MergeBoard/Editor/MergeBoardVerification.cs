@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.EventSystems;
 
 namespace MergeBoard.Editor
 {
@@ -46,7 +46,25 @@ namespace MergeBoard.Editor
             Assert(!controller.Move(3, 3).Success && !controller.Move(3, -1).Success && !controller.Move(0, 1).Success, "자기 칸·보드 밖·빈 원본 거절");
             var flowerCells = new ItemStage[63]; flowerCells[0] = flowerCells[1] = ItemStage.Flower;
             Assert(!new MergeGameController(new BoardModel(flowerCells)).Move(0, 1).Success, "최종 단계 합성 거절");
-            Debug.Log("MVP 규칙 검증 PASS: 보드·좌표·이동·2단계 합성·잘못된 드롭·최종 단계 거절");
+            var generator = new MergeGameController(new BoardModel(new ItemStage[63]));
+            Assert(generator.Generate(0).Success && generator.Board.FindCells(ItemStage.Seed).Count == 1, "빈 보드 생성");
+            Assert(!generator.Generate(1.99).Success && generator.Generate(2).Success, "2초 쿨다운 경계");
+            var fullCells = new ItemStage[63];
+            for (int index = 0; index < fullCells.Length; index++) fullCells[index] = ItemStage.Seed;
+            var fullBoard = new MergeGameController(new BoardModel(fullCells));
+            Assert(!fullBoard.Generate(0).Success && fullBoard.CooldownRemaining(0) == 0, "가득 찬 보드 거절과 대기시간 유지");
+            var orderCells = new ItemStage[63];
+            orderCells[0] = ItemStage.Sprout;
+            orderCells[1] = orderCells[2] = orderCells[3] = ItemStage.Flower;
+            var orders = new MergeGameController(new BoardModel(orderCells));
+            Assert(orders.CanSubmit(0) && orders.CanSubmit(1) && orders.CanSubmit(2), "주문 세 개 활성 조건");
+            Assert(orders.SubmitOrder(0).Reward == 20 && orders.SubmitOrder(1).Reward == 60 && orders.SubmitOrder(2).Reward == 150, "정확한 주문 보상");
+            Assert(orders.State.Coins == 230 && orders.Board.FindCells(ItemStage.Empty).Count == 63, "총 보상과 수량 소비");
+            Assert(!orders.SubmitOrder(2).Success && orders.State.Coins == 230, "중복 보상 방지");
+            var insufficientCells = new ItemStage[63]; insufficientCells[0] = ItemStage.Flower;
+            var insufficient = new MergeGameController(new BoardModel(insufficientCells));
+            Assert(!insufficient.CanSubmit(2) && !insufficient.SubmitOrder(2).Success && insufficient.Board[0] == ItemStage.Flower, "수량 부족 시 소비 없음");
+            Debug.Log("MVP 규칙 검증 PASS: 보드·이동·합성·실패 복귀·생성기·2초 경계·가득 찬 보드·주문·수량 부족·중복 방지·230코인");
         }
 
         /// <summary>검증 조건을 만족하지 않으면 항목 이름을 담은 예외를 발생시킨다.</summary>
@@ -78,14 +96,30 @@ namespace MergeBoard.Editor
         /// <summary>실제 UI 이벤트 경로를 사용해 검증용 드래그를 한 번 수행한다.</summary>
         public static void Drag(MergeGameBootstrap game, int source, int destination)
         {
-            Vector2 start = game.BoardView.Cells[source].worldBound.center;
-            Vector2 end = destination < 0 ? game.ScreenRoot.worldBound.min : game.BoardView.Cells[destination].worldBound.center;
-            using (var evt = PointerDownEvent.GetPooled(new Event { type = EventType.MouseDown, mousePosition = start, button = 0 }))
-                game.BoardView.Cells[source].SendEvent(evt);
-            using (var evt = PointerMoveEvent.GetPooled(new Event { type = EventType.MouseDrag, mousePosition = end, button = 0 }))
-                game.BoardView.Root.SendEvent(evt);
-            using (var evt = PointerUpEvent.GetPooled(new Event { type = EventType.MouseUp, mousePosition = end, button = 0 }))
-                game.BoardView.Root.SendEvent(evt);
+            Canvas.ForceUpdateCanvases();
+            var cell = game.BoardView.Cells[source];
+            Vector2 start = RectTransformUtility.WorldToScreenPoint(null, cell.Rect.TransformPoint(cell.Rect.rect.center));
+            Vector2 end = destination < 0 ? new Vector2(-100, -100) : RectTransformUtility.WorldToScreenPoint(null, game.BoardView.Cells[destination].Rect.TransformPoint(game.BoardView.Cells[destination].Rect.rect.center));
+            var evt = new PointerEventData(EventSystem.current) { position = start, button = PointerEventData.InputButton.Left, pointerId = -1 };
+            ExecuteEvents.Execute(cell.gameObject, evt, ExecuteEvents.beginDragHandler);
+            evt.position = end;
+            ExecuteEvents.Execute(cell.gameObject, evt, ExecuteEvents.dragHandler);
+            ExecuteEvents.Execute(cell.gameObject, evt, ExecuteEvents.endDragHandler);
+        }
+
+        /// <summary>최초 uGUI 전환 시 글꼴과 편집 가능한 UI 계층을 현재 MVP 장면에 저장한다.</summary>
+        public static void PrepareUGUI()
+        {
+            const string fontPath = "Assets/MergeBoard/Resources/KoreanFont.fontsettings";
+            if (AssetDatabase.LoadAssetAtPath<Font>(fontPath) == null)
+                AssetDatabase.CreateAsset(Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Arial" }, 32), fontPath);
+            var game = UnityEngine.Object.FindFirstObjectByType<MergeGameBootstrap>();
+            Assert(!Application.isPlaying && game != null, "MVP 장면 준비");
+            game.BuildUI();
+            EditorUtility.SetDirty(game);
+            EditorSceneManager.MarkSceneDirty(game.gameObject.scene);
+            EditorSceneManager.SaveScene(game.gameObject.scene);
+            AssetDatabase.SaveAssets();
         }
     }
 }
