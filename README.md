@@ -6,6 +6,17 @@ Unity uGUI로 만든 7 × 9 머지 보드 MVP입니다. 아이템을 생성하�
 
 ![플레이 흐름: 씨앗 생성, 합성, Get 주문 제출, 반복 주문](docs/media/merge-board-mvp.gif)
 
+## 기술 스택
+
+| 구분 | 사용 기술 |
+| --- | --- |
+| 엔진·언어 | Unity 6000.3.21f1, C# |
+| UI | uGUI 2.0.0, TextMeshPro 5.0.0, Animator |
+| 비동기 | UniTask — 로컬라이제이션 초기화와 UI 피드백 대기 |
+| 다국어 | Unity Localization 1.5.9 — 한국어·영어 String Table |
+| 저장 | PlayerPrefs, JsonUtility |
+| 검증 | Unity Test Framework, unity-cli Connector |
+
 ## 핵심 기능
 
 - 63칸 보드에서 아이템 드래그 이동 및 3단계 합성
