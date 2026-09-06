@@ -38,12 +38,15 @@ namespace MergeBoard
 #endif
             var saveService = new LocalSaveService(savePath);
             Controller = new MergeGameController(saveService.Load(), saveService);
+            string loadMessage = Controller.SaveMessage;
+            Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             boardView.Dropped += HandleDrop;
             boardView.DragStateChanged += _ => RefreshViews();
             hud.GenerateClicked += HandleGenerate;
             orderView.GetClicked += HandleOrder;
             RefreshViews();
-            if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
+            if (loadMessage.Length > 0) hud.ShowMessage(loadMessage);
+            else if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
 #if DEVELOPMENT_BUILD
             Debug.Log("MVP_RESTORED " + JsonUtility.ToJson(SaveData.FromState(Controller.State)));
 #endif
@@ -62,7 +65,7 @@ namespace MergeBoard
         private void HandleGenerate()
         {
             if (boardView.IsDragging) return;
-            var result = Controller.Generate(Time.unscaledTimeAsDouble);
+            var result = Controller.Generate(Board.FindCells(ItemStage.SeedPack)[0], System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             if (result.Success) AnimatorFeedback.PlayScale(hud.GenerateButton.transform, "Click");
             RefreshViews();
             ShowResult(result.Message);
@@ -101,12 +104,14 @@ namespace MergeBoard
                 var order = Controller.State.Orders[index];
                 orderView.Render(index, order, Board.FindCells(order.RequiredStage).Count, !boardView.IsDragging && Controller.CanSubmit(index));
             }
-            hud.Render(Controller.State.Coins, Controller.CooldownRemaining(Time.unscaledTimeAsDouble), !boardView.IsDragging);
+            hud.Render(Controller.State.Coins, 0, !boardView.IsDragging && Controller.State.Energy > 0);
         }
 
         private void Update()
         {
-            if (Controller != null) hud.Render(Controller.State.Coins, Controller.CooldownRemaining(Time.unscaledTimeAsDouble), !boardView.IsDragging);
+            if (Controller == null) return;
+            Controller.RefreshEnergy(System.DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            hud.Render(Controller.State.Coins, 0, !boardView.IsDragging && Controller.State.Energy > 0);
         }
 
         private void OnApplicationFocus(bool hasFocus) { if (!hasFocus) boardView?.CancelDrag(); }

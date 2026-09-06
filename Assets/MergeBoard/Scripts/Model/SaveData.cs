@@ -2,13 +2,15 @@ using System;
 
 namespace MergeBoard
 {
-    /// <summary>버전 1의 로컬 JSON 포맷이다. 배열은 모델 복사본이며 표시 상태는 저장하지 않는다.</summary>
+    /// <summary>버전 2의 로컬 JSON 포맷이다. 버전 1의 유효한 진행 상태도 변환한다.</summary>
     [Serializable]
     public sealed class SaveData
     {
         public int version;
         public int[] cells;
         public int coins;
+        public int energy;
+        public long energyRecoveryAnchorUtcSeconds;
         public string[] orderIds;
         public bool[] completedOrders;
 
@@ -17,7 +19,8 @@ namespace MergeBoard
         {
             var data = new SaveData
             {
-                version = 1, cells = new int[BoardModel.CellCount], coins = state.Coins,
+                version = 2, cells = new int[BoardModel.CellCount], coins = state.Coins,
+                energy = state.Energy, energyRecoveryAnchorUtcSeconds = state.EnergyRecoveryAnchorUtcSeconds,
                 orderIds = new string[state.Orders.Count], completedOrders = new bool[state.Orders.Count]
             };
             for (int index = 0; index < data.cells.Length; index++) data.cells[index] = (int)state.Board[index];
@@ -32,11 +35,27 @@ namespace MergeBoard
         /// <summary>포맷·값·주문 보상 일관성을 검증한다. 손상된 데이터는 예외로 거절한다.</summary>
         public GameState ToState()
         {
-            if (version != 1 || cells == null || cells.Length != BoardModel.CellCount || orderIds == null || orderIds.Length != 3 || completedOrders == null || completedOrders.Length != 3)
+            if ((version != 1 && version != 2) || cells == null || cells.Length != BoardModel.CellCount || orderIds == null || orderIds.Length != 3 || completedOrders == null || completedOrders.Length != 3)
                 throw new ArgumentException("지원하지 않거나 불완전한 저장 데이터입니다.");
             var stages = new ItemStage[BoardModel.CellCount];
             for (int index = 0; index < stages.Length; index++) stages[index] = (ItemStage)cells[index];
             var state = new GameState(new BoardModel(stages));
+            if (version == 1)
+            {
+                if (state.Board.FindCells(ItemStage.SeedPack).Count != 0) throw new ArgumentException("구버전 아이템 값이 올바르지 않습니다.");
+                int destination = state.Board.FindNearestEmptyCell(BoardModel.InitialGeneratorIndex);
+                if (destination < 0) throw new ArgumentException("구버전 변환에 필요한 빈 칸이 없습니다.");
+                state.Board.SetCell(destination, ItemStage.SeedPack);
+            }
+            else
+            {
+                if (state.Board.FindCells(ItemStage.SeedPack).Count != 1 || energy < 0 || energy > GameState.MaxEnergy ||
+                    energyRecoveryAnchorUtcSeconds < 0 || energyRecoveryAnchorUtcSeconds > MergeGameController.MaximumUtcSeconds ||
+                    (energy == GameState.MaxEnergy ? energyRecoveryAnchorUtcSeconds != 0 : energyRecoveryAnchorUtcSeconds == 0))
+                    throw new ArgumentException("생성기 또는 에너지 저장 상태가 올바르지 않습니다.");
+                state.Energy = energy;
+                state.EnergyRecoveryAnchorUtcSeconds = energyRecoveryAnchorUtcSeconds;
+            }
             int expectedCoins = 0;
             for (int index = 0; index < state.Orders.Count; index++)
             {

@@ -9,6 +9,9 @@ namespace MergeBoard
         public BoardModel Board { get; }
         public IReadOnlyList<OrderModel> Orders { get; }
         public int Coins { get; internal set; }
+        public const int MaxEnergy = 100;
+        public int Energy { get; internal set; } = MaxEnergy;
+        public long EnergyRecoveryAnchorUtcSeconds { get; internal set; }
 
         /// <summary>지정 보드 또는 기본 보드와 미완료 주문, 0코인으로 시작한다.</summary>
         public GameState(BoardModel board = null)

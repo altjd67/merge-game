@@ -23,11 +23,10 @@ namespace MergeBoard
     /// <summary>UI에 의존하지 않고 이동과 합성의 게임 규칙 및 상태 변경을 처리한다.</summary>
     public sealed class MergeGameController
     {
-        public const double GeneratorCooldown = 2;
+        public const long EnergyRecoverySeconds = 120;
+        public const long MaximumUtcSeconds = 253402300799;
         public GameState State { get; }
         public BoardModel Board => State.Board;
-        private readonly Random random = new Random();
-        private double nextGenerationTime;
         private readonly LocalSaveService saveService;
         public string SaveMessage => saveService?.LastError ?? "";
 
@@ -40,21 +39,47 @@ namespace MergeBoard
             this.saveService = saveService;
         }
 
-        /// <summary>호출자가 전달한 단조 증가 시각으로 생성기 대기시간을 계산한다.</summary>
-        public double CooldownRemaining(double now) => Math.Max(0, nextGenerationTime - now);
-
-        /// <summary>무작위 빈 칸에 씨앗을 생성한다. 실패 시 보드와 대기시간을 유지한다.</summary>
-        public MoveResult Generate(double now)
+        /// <summary>UTC 경과 시간으로 실행·종료 중 에너지를 회복하고 남은 초를 보존한다. 실제 변경 시에만 저장한다.</summary>
+        public bool RefreshEnergy(long now)
         {
-            if (double.IsNaN(now) || double.IsInfinity(now)) return new MoveResult(false, false, "잘못된 시간입니다.");
-            if (CooldownRemaining(now) > 0) return new MoveResult(false, false, "생성기 충전을 기다려주세요.");
-            var emptyCells = Board.FindCells(ItemStage.Empty);
-            if (emptyCells.Count == 0) return new MoveResult(false, false, "보드에 빈 칸이 없습니다.");
-            Board.SetCell(emptyCells[random.Next(emptyCells.Count)], ItemStage.Seed);
-            nextGenerationTime = now + GeneratorCooldown;
+            if (!IsValidTime(now) || State.Energy == GameState.MaxEnergy) return false;
+            long anchor = State.EnergyRecoveryAnchorUtcSeconds;
+            if (anchor == 0 || now < anchor)
+            {
+                State.EnergyRecoveryAnchorUtcSeconds = now;
+                Persist();
+                return true;
+            }
+            int recovered = (int)Math.Min(GameState.MaxEnergy - State.Energy, (now - anchor) / EnergyRecoverySeconds);
+            if (recovered == 0) return false;
+            State.Energy += recovered;
+            State.EnergyRecoveryAnchorUtcSeconds = State.Energy == GameState.MaxEnergy ? 0 : anchor + recovered * EnergyRecoverySeconds;
+            Persist();
+            return true;
+        }
+
+        /// <summary>회복 갱신 후 HUD에 표시할 다음 회복까지의 초를 반환한다. 최대치에서는 0이다.</summary>
+        public long RecoveryRemaining(long now) => State.Energy == GameState.MaxEnergy ? 0 :
+            Math.Max(0, Math.Min(EnergyRecoverySeconds, EnergyRecoverySeconds - (now - State.EnergyRecoveryAnchorUtcSeconds)));
+
+        /// <summary>씨앗팩 근처 빈 칸에 씨앗을 만들고 성공당 에너지 1을 차감한다. 생성 쿨타임은 없다.</summary>
+        public MoveResult Generate(int generatorIndex, long now)
+        {
+            if (!IsValidTime(now)) return new MoveResult(false, false, "잘못된 시간입니다.");
+            if (!BoardModel.IsValidIndex(generatorIndex) || Board[generatorIndex] != ItemStage.SeedPack)
+                return new MoveResult(false, false, "씨앗팩을 눌러주세요.");
+            RefreshEnergy(now);
+            int destination = Board.FindNearestEmptyCell(generatorIndex);
+            if (destination < 0) return new MoveResult(false, false, "보드 가득 참");
+            if (State.Energy == 0) return new MoveResult(false, false, "에너지가 부족합니다.");
+            Board.SetCell(destination, ItemStage.Seed);
+            if (State.Energy == GameState.MaxEnergy) State.EnergyRecoveryAnchorUtcSeconds = now;
+            State.Energy--;
             Persist();
             return new MoveResult(true, false, "씨앗이 자랄 준비를 마쳤어요.");
         }
+
+        private static bool IsValidTime(long now) => now > 0 && now <= MaximumUtcSeconds;
 
         /// <summary>미완료 주문에 필요한 수량이 보드에 모였는지 판정한다.</summary>
         public bool CanSubmit(int orderIndex)

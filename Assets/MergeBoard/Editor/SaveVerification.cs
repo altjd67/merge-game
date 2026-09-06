@@ -17,7 +17,7 @@ namespace MergeBoard.Editor
             var service = new LocalSaveService(Path.Combine(root, "progress.json"));
             var game = new MergeGameController(service.Load(), service);
             Check(service.Load().Board.FindCells(ItemStage.Seed).Count == 4, "누락 파일 초기 배치");
-            game.Generate(0); CheckEqual(game.State, service.Load(), "생성 직후 저장");
+            game.Generate(31, 1000); CheckEqual(game.State, service.Load(), "생성 직후 에너지 포함 저장");
             int empty = game.Board.FindCells(ItemStage.Empty)[0];
             game.Move(0, empty); CheckEqual(game.State, service.Load(), "이동 직후 저장");
             game.Move(empty, 1); CheckEqual(game.State, service.Load(), "합성 직후 저장");
@@ -30,7 +30,7 @@ namespace MergeBoard.Editor
             // 임시 파일 자리에 디렉터리를 만들어 쓰기 실패를 재현한다.
             Directory.CreateDirectory(service.FilePath + ".tmp");
             Check(!service.Save(game.State) && File.ReadAllText(service.FilePath) == before && service.LastError.Length > 0, "쓰기 실패 시 기존 파일 보존");
-            game.Generate(2);
+            game.Generate(31, 1002);
             Check(game.Board.FindCells(ItemStage.Seed).Count == 4 && game.SaveMessage.Length > 0, "저장 실패 시 현재 플레이 유지와 안내");
 
             File.WriteAllText(service.FilePath, "잘못된 JSON");
@@ -42,7 +42,40 @@ namespace MergeBoard.Editor
             data = SaveData.FromState(new GameState()); data.coins = -1; CheckRejected(service, data, "음수 코인");
             data = SaveData.FromState(new GameState()); data.orderIds[0] = "unknown"; CheckRejected(service, data, "알 수 없는 주문");
             data = SaveData.FromState(new GameState()); data.completedOrders[0] = true; CheckRejected(service, data, "코인·완료 상태 불일치");
+            data = SaveData.FromState(new GameState()); data.energy = -1; CheckRejected(service, data, "음수 에너지");
+            data = SaveData.FromState(new GameState()); data.energy = 101; CheckRejected(service, data, "최대 초과 에너지");
+            data = SaveData.FromState(new GameState()); data.energy = 99; CheckRejected(service, data, "회복 기준 누락");
+            data = SaveData.FromState(new GameState()); data.energyRecoveryAnchorUtcSeconds = 1000; CheckRejected(service, data, "최대 에너지 기준 불일치");
+            data = SaveData.FromState(new GameState()); data.cells[31] = 0; CheckRejected(service, data, "씨앗팩 누락");
+            data = SaveData.FromState(new GameState()); data.cells[32] = 4; CheckRejected(service, data, "씨앗팩 중복");
+            VerifyOfflineAndMigration(root);
             Debug.Log("MVP 저장 검증 PASS: 변경 직후 파일 일치·실패 불변·손상 복원·버전·수량·단계·주문·쓰기 실패 보존");
+        }
+
+        /// <summary>구버전 진행 보존과 종료 시간별 회복·재접속 중복 방지를 독립 파일로 검사한다.</summary>
+        private static void VerifyOfflineAndMigration(string root)
+        {
+            var service = new LocalSaveService(Path.Combine(root, "offline.json"));
+            var legacy = SaveData.FromState(new GameState());
+            legacy.version = 1; legacy.cells[31] = 1; legacy.cells[10] = 3;
+            legacy.completedOrders[0] = true; legacy.coins = 20;
+            File.WriteAllText(service.FilePath, JsonUtility.ToJson(legacy));
+            var restored = service.Load();
+            Check(restored.Board[31] == ItemStage.Seed && restored.Board[10] == ItemStage.Flower &&
+                restored.Board[23] == ItemStage.SeedPack && restored.Coins == 20 && restored.Orders[0].Completed && restored.Energy == 100, "구버전 진행 보존과 최근접 씨앗팩");
+            var data = SaveData.FromState(restored);
+            data.energy = 50; data.energyRecoveryAnchorUtcSeconds = 1000;
+            foreach (long elapsed in new long[] { 119, 120, 250 })
+            {
+                service.Save(data.ToState());
+                var game = new MergeGameController(service.Load(), service);
+                game.RefreshEnergy(1000 + elapsed);
+                Check(game.State.Energy == 50 + elapsed / 120 && game.RecoveryRemaining(1000 + elapsed) == 120 - elapsed % 120, "오프라인 경계와 남은 초");
+                CheckEqual(game.State, service.Load(), "회복 직후 저장");
+                var reopened = new MergeGameController(service.Load(), service);
+                Check(!reopened.RefreshEnergy(1000 + elapsed), "같은 시각 재접속 이중 회복 없음");
+            }
+            Debug.Log("MVP 오프라인·버전 변환 PASS: 119/120/250초·남은 초·반복 재접속·기존 진행 보존");
         }
 
         private static void CheckRejected(LocalSaveService service, SaveData data, string description)
