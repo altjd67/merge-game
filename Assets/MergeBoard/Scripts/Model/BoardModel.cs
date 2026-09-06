@@ -3,38 +3,45 @@ using System.Collections.Generic;
 
 namespace MergeBoard
 {
+    /// <summary>빈 칸과 하나의 아이템 계열에 속한 세 단계를 구분한다.</summary>
     public enum ItemStage { Empty, Seed, Sprout, Flower }
 
+    /// <summary>좌측 상단 기준 7열 × 9행의 칸 상태를 보관한다.</summary>
     public sealed class BoardModel
     {
-        public const int 열수 = 7;
-        public const int 행수 = 9;
-        public const int 칸수 = 열수 * 행수;
-        private readonly ItemStage[] 칸;
-        public ItemStage this[int 위치] => 칸[위치];
+        public const int Columns = 7;
+        public const int Rows = 9;
+        public const int CellCount = Columns * Rows;
+        private readonly ItemStage[] cells;
+        public ItemStage this[int index] => cells[index];
 
-        public BoardModel() : this(new ItemStage[칸수])
+        /// <summary>첫 행의 앞 4칸에 씨앗을 배치한 초기 보드를 만든다.</summary>
+        public BoardModel() : this(new ItemStage[CellCount])
         {
-            for (int 위치 = 0; 위치 < 4; 위치++) 칸[위치] = ItemStage.Seed;
+            for (int index = 0; index < 4; index++) cells[index] = ItemStage.Seed;
         }
 
-        public BoardModel(ItemStage[] 원본)
+        /// <summary>63칸과 단계 범위를 검증하고 전달된 배열을 복사한다.</summary>
+        public BoardModel(ItemStage[] source)
         {
-            if (원본 == null || 원본.Length != 칸수) throw new ArgumentException("보드는 63칸이어야 합니다.");
-            foreach (var 단계 in 원본)
-                if (단계 < ItemStage.Empty || 단계 > ItemStage.Flower) throw new ArgumentException("알 수 없는 단계입니다.");
-            칸 = (ItemStage[])원본.Clone();
+            if (source == null || source.Length != CellCount) throw new ArgumentException("보드는 63칸이어야 합니다.");
+            foreach (var stage in source)
+                if (stage < ItemStage.Empty || stage > ItemStage.Flower) throw new ArgumentException("알 수 없는 단계입니다.");
+            cells = (ItemStage[])source.Clone();
         }
 
-        public static bool 유효위치(int 위치) => 위치 >= 0 && 위치 < 칸수;
-        public static int 좌표변환(int 열, int 행) => 열 >= 0 && 열 < 열수 && 행 >= 0 && 행 < 행수 ? 행 * 열수 + 열 : -1;
-        public ItemStage[] 복사() => (ItemStage[])칸.Clone();
-        internal void 설정(int 위치, ItemStage 단계) => 칸[위치] = 단계;
-        public List<int> 찾기(ItemStage 단계)
+        public static bool IsValidIndex(int index) => index >= 0 && index < CellCount;
+        /// <summary>열·행을 인덱스로 변환하며, 보드 밖 좌표는 -1을 반환한다.</summary>
+        public static int ToIndex(int column, int row) => column >= 0 && column < Columns && row >= 0 && row < Rows ? row * Columns + column : -1;
+        /// <summary>저장과 검증에 사용할 독립된 칸 배열을 반환한다.</summary>
+        public ItemStage[] CopyCells() => (ItemStage[])cells.Clone();
+        internal void SetCell(int index, ItemStage stage) => cells[index] = stage;
+        /// <summary>요청 단계의 칸을 인덱스 오름차순으로 반환한다. Empty는 빈 칸 검색이다.</summary>
+        public List<int> FindCells(ItemStage stage)
         {
-            var 결과 = new List<int>();
-            for (int 위치 = 0; 위치 < 칸수; 위치++) if (칸[위치] == 단계) 결과.Add(위치);
-            return 결과;
+            var result = new List<int>();
+            for (int index = 0; index < CellCount; index++) if (cells[index] == stage) result.Add(index);
+            return result;
         }
     }
 }

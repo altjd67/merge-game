@@ -3,60 +3,79 @@ using UnityEngine.UIElements;
 
 namespace MergeBoard
 {
+    /// <summary>게임의 진입점으로 Controller와 UI를 생성하고 입력·표시를 연결한다.</summary>
     public sealed class MergeGameBootstrap : MonoBehaviour
     {
-        public BoardModel 보드 { get; private set; }
-        public BoardView 보드화면 { get; private set; }
-        public VisualElement 화면 { get; private set; }
-        private PanelSettings 패널;
-        private Font 글꼴;
+        public BoardModel Board { get; private set; }
+        public BoardView BoardView { get; private set; }
+        public VisualElement ScreenRoot { get; private set; }
+        public MergeGameController Controller { get; private set; }
+        private Label messageLabel;
+        private PanelSettings panelSettings;
+        private Font font;
 
         private void OnEnable()
         {
-            보드 = new BoardModel();
-            패널 = ScriptableObject.CreateInstance<PanelSettings>();
-            패널.scaleMode = PanelScaleMode.ConstantPixelSize;
-            패널.themeStyleSheet = Resources.Load<ThemeStyleSheet>("MergeTheme");
-            var 문서 = GetComponent<UIDocument>() ?? gameObject.AddComponent<UIDocument>();
-            문서.panelSettings = 패널;
-            var 루트 = 문서.rootVisualElement;
-            루트.Clear();
-            루트.style.flexGrow = 1;
-            루트.style.backgroundColor = (Color)new Color32(27, 42, 38, 255);
-            화면 = new VisualElement { name = "머지화면" };
-            화면.style.position = Position.Absolute;
-            화면.style.width = 480;
-            화면.style.height = 854;
-            화면.style.backgroundColor = (Color)new Color32(244, 242, 225, 255);
-            화면.style.color = (Color)new Color32(47, 65, 51, 255);
-            글꼴 = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Arial" }, 32);
-            화면.style.unityFontDefinition = FontDefinition.FromFont(글꼴);
-            화면.style.transformOrigin = new TransformOrigin(0, 0);
-            루트.Add(화면);
-            루트.RegisterCallback<GeometryChangedEvent>(_ => 크기맞춤(루트));
-            보드화면 = new BoardView();
-            화면.Add(보드화면.루트);
-            var 제목 = new Label("작은 정원");
-            제목.style.fontSize = 26;
-            제목.style.left = 24;
-            제목.style.top = 20;
-            제목.style.position = Position.Absolute;
-            화면.Add(제목);
-            보드화면.표시(보드);
+            Controller = new MergeGameController();
+            Board = Controller.Board;
+            panelSettings = ScriptableObject.CreateInstance<PanelSettings>();
+            panelSettings.scaleMode = PanelScaleMode.ConstantPixelSize;
+            panelSettings.themeStyleSheet = Resources.Load<ThemeStyleSheet>("MergeTheme");
+            var document = GetComponent<UIDocument>() ?? gameObject.AddComponent<UIDocument>();
+            document.panelSettings = panelSettings;
+            var Root = document.rootVisualElement;
+            Root.Clear();
+            Root.style.flexGrow = 1;
+            Root.style.backgroundColor = (Color)new Color32(27, 42, 38, 255);
+            ScreenRoot = new VisualElement { name = "머지화면" };
+            ScreenRoot.style.position = Position.Absolute;
+            ScreenRoot.style.width = 480;
+            ScreenRoot.style.height = 854;
+            ScreenRoot.style.backgroundColor = (Color)new Color32(244, 242, 225, 255);
+            ScreenRoot.style.color = (Color)new Color32(47, 65, 51, 255);
+            font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Arial" }, 32);
+            ScreenRoot.style.unityFontDefinition = FontDefinition.FromFont(font);
+            ScreenRoot.style.transformOrigin = new TransformOrigin(0, 0);
+            Root.Add(ScreenRoot);
+            Root.RegisterCallback<GeometryChangedEvent>(_ => FitScreen(Root));
+            BoardView = new BoardView();
+            ScreenRoot.Add(BoardView.Root);
+            var title = new Label("작은 정원");
+            title.style.fontSize = 26;
+            title.style.left = 24;
+            title.style.top = 20;
+            title.style.position = Position.Absolute;
+            ScreenRoot.Add(title);
+            messageLabel = new Label("씨앗을 드래그해 같은 씨앗과 합쳐보세요.");
+            messageLabel.style.position = Position.Absolute;
+            messageLabel.style.top = 202;
+            messageLabel.style.left = 20;
+            messageLabel.style.fontSize = 12;
+            ScreenRoot.Add(messageLabel);
+            BoardView.Dropped += (source, destination) =>
+            {
+                var result = Controller.Move(source, destination);
+                BoardView.Render(Board);
+                messageLabel.text = result.Merged ? BoardView.StageName(Board[destination]) + " 합성!" : result.Message;
+            };
+            BoardView.Render(Board);
         }
 
-        private void 크기맞춤(VisualElement 루트)
+        private void FitScreen(VisualElement Root)
         {
-            float 배율 = Mathf.Min(루트.resolvedStyle.width / 480, 루트.resolvedStyle.height / 854);
-            화면.style.scale = new Scale(new Vector3(배율, 배율, 1));
-            화면.style.left = (루트.resolvedStyle.width - 480 * 배율) / 2;
-            화면.style.top = (루트.resolvedStyle.height - 854 * 배율) / 2;
+            float scale = Mathf.Min(Root.resolvedStyle.width / 480, Root.resolvedStyle.height / 854);
+            ScreenRoot.style.scale = new Scale(new Vector3(scale, scale, 1));
+            ScreenRoot.style.left = (Root.resolvedStyle.width - 480 * scale) / 2;
+            ScreenRoot.style.top = (Root.resolvedStyle.height - 854 * scale) / 2;
         }
 
         private void OnDisable()
         {
-            if (패널 != null) Destroy(패널);
-            if (글꼴 != null) Destroy(글꼴);
+            BoardView?.CancelDrag();
+            if (panelSettings != null) Destroy(panelSettings);
+            if (font != null) Destroy(font);
         }
+
+        private void OnApplicationFocus(bool hasFocus) { if (!hasFocus) BoardView?.CancelDrag(); }
     }
 }
