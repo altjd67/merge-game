@@ -48,7 +48,8 @@ namespace MergeBoard.Editor
             Assert(controller.Move(2, 3).Merged && controller.Move(1, 3).Merged && controller.Board[3] == ItemStage.Flower, "꽃 합성");
             Assert(!controller.Move(3, 3).Success && !controller.Move(3, -1).Success && !controller.Move(0, 1).Success, "자기 칸·보드 밖·빈 원본 거절");
             var flowerCells = new ItemStage[63]; flowerCells[0] = flowerCells[1] = ItemStage.Flower;
-            Assert(!new MergeGameController(new BoardModel(flowerCells)).Move(0, 1).Success, "최종 단계 합성 거절");
+            var maximumLevelRejected = new MergeGameController(new BoardModel(flowerCells)).Move(0, 1);
+            Assert(!maximumLevelRejected.Success && maximumLevelRejected.Message == "꽃은 최대 레벨입니다.", "최종 단계 합성 거절 안내");
             var generatorCells = new ItemStage[63]; generatorCells[31] = ItemStage.SeedPack;
             var generator = new MergeGameController(new BoardModel(generatorCells));
             Assert(generator.Generate(31, 1000).Success && generator.Board[23] == ItemStage.Seed, "체비쇼프 대각선과 동률 인덱스");

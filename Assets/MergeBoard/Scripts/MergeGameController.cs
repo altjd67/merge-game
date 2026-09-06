@@ -142,6 +142,8 @@ namespace MergeBoard
             var stage = Board[source];
             if (stage == ItemStage.Empty) return new MoveResult(false, false, "빈 칸은 이동할 수 없습니다.");
             if (source == destination) return new MoveResult(false, false, "");
+            if (stage == ItemStage.Flower && Board[destination] == ItemStage.Flower)
+                return new MoveResult(false, false, "꽃은 최대 레벨입니다.");
             bool merged = Board[destination] == stage && stage < ItemStage.Flower;
             if (Board[destination] != ItemStage.Empty && !merged)
                 return new MoveResult(false, false, "같은 단계의 씨앗이나 새싹을 겹쳐주세요.");
