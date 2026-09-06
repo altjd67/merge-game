@@ -46,11 +46,26 @@ namespace MergeBoard
             var pool = UIFeedbackPool.GetOrCreate(overlay);
             var text = pool.AcquireReward();
             text.font = font;
+            text.fontSize = 22;
             text.text = "+" + reward + " 코인";
             text.color = new Color32(174, 109, 29, 255);
             var position = (Vector2)overlay.InverseTransformPoint(targetWorld);
             return StartMotion(text.GetComponent<AnimatorFeedback>(), pool, text.rectTransform,
                 position, position + Vector2.up * 54, "Reward", true);
+        }
+
+        /// <summary>특정 보드 칸 위에 실패 안내를 띄우고 위로 이동시키며 서서히 사라지게 한다.</summary>
+        public static AnimatorFeedback ShowFloatingMessage(RectTransform overlay, Vector3 targetWorld, string message, TMP_FontAsset font)
+        {
+            var pool = UIFeedbackPool.GetOrCreate(overlay);
+            var text = pool.AcquireReward();
+            text.font = font;
+            text.fontSize = 15;
+            text.text = message;
+            text.color = new Color32(155, 68, 57, 255);
+            var position = (Vector2)overlay.InverseTransformPoint(targetWorld) + Vector2.up * 38;
+            return StartMotion(text.GetComponent<AnimatorFeedback>(), pool, text.rectTransform,
+                position, position + Vector2.up * 32, "Reward", true);
         }
 
         private static AnimatorFeedback StartMotion(AnimatorFeedback feedback, UIFeedbackPool pool, RectTransform target, Vector2 from, Vector2 to, string state, bool fade, float speed = 1f)

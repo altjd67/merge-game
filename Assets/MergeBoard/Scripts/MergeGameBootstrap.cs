@@ -63,7 +63,11 @@ namespace MergeBoard
         {
             var result = Controller.Move(source, destination);
             RefreshViews();
-            ShowResult(result.Message);
+            if (!result.Success && result.Message.Length > 0)
+            {
+                if (Controller.SaveMessage.Length > 0) hud.ShowMessage(Controller.SaveMessage);
+                else AnimatorFeedback.ShowFloatingMessage(screenRoot, ItemWorldCenter(BoardModel.IsValidIndex(destination) ? destination : source), result.Message, textFont);
+            }
             if (result.Merged) AnimatorFeedback.PlayScale(boardView.Cells[destination].Icon.transform, "Merge");
         }
 
